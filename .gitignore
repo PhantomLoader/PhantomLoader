@@ -1,0 +1,16 @@
+# Gradle
+.gradle
+build/
+
+# IntelliJ Idea
+.idea
+*.iws
+*.iml
+*.ipr
+
+# VS Code
+.vscode/
+
+# Directories
+.DS_Store
+.directory

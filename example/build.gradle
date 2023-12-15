@@ -1,0 +1,22 @@
+plugins {
+    id 'java'
+}
+
+dependencies {
+    implementation project(':library-common')
+    annotationProcessor project(':processor')
+}
+
+tasks.register('buildForge', Jar) {
+    from sourceSets.main.output
+    archiveClassifier = 'forge'
+    exclude '**/fabric'
+}
+
+tasks.register('buildFabric', Jar) {
+    from sourceSets.main.output
+    archiveClassifier = 'fabric'
+    exclude '**/forge'
+}
+
+build.dependsOn 'buildForge', 'buildFabric'

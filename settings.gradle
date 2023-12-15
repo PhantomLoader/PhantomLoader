@@ -1,0 +1,5 @@
+rootProject.name = 'AbstractLoader'
+
+include('processor')
+include('library-common', 'library-forge', 'library-fabric')
+include('example')
