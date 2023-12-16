@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "test",
+  "version": "${version}",
+  "name": "Test Library Fabric",
+  "description": "Description goes here",
+  "authors": [
+    "HexagonNico"
+  ],
+  "contact": {
+    "homepage": "https://example.com",
+    "sources": "https://example.com"
+  },
+  "license": "All rights reserved",
+  "icon": "icon.png",
+  "entrypoints": {
+    "main": [
+      "absloader.library.TestFabric"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.14.23",
+    "minecraft": "~1.20.1",
+    "java": ">=17"
+  }
+}

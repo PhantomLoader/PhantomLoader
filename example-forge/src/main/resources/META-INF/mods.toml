@@ -1,0 +1,35 @@
+# TODO: Auto generate this file
+modLoader="javafml"
+loaderVersion="[47,)"
+license="All rights reserved"
+#issueTrackerURL="https://github.com/HexagonNico"
+
+[[mods]]
+modId="generated"
+version="${file.jarVersion}"
+displayName="Auto generated mod"
+#updateJSONURL="https://mcforge.readthedocs.io/en/latest/gettingstarted/autoupdate/"
+#displayURL="https://github.com/HexagonNico"
+logoFile="logo.png"
+#credits="Additional credits go here"
+authors="HexagonNico"
+description="This is a description"
+
+[[dependencies.generated]]
+    modId="forge"
+    mandatory=true
+    versionRange="[47,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.generated]]
+    modId="test"
+    mandatory=true
+    versionRange="[0.1,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.generated]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.20.1,1.21)"
+    ordering="NONE"
+    side="BOTH"

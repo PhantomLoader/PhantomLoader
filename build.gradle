@@ -1,0 +1,4 @@
+allprojects {
+    group = 'absloader'
+    version = '0.1'
+}

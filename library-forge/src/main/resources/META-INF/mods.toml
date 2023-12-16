@@ -1,0 +1,28 @@
+modLoader="javafml"
+loaderVersion="[47,)"
+license="All rights reserved"
+#issueTrackerURL="https://github.com/HexagonNico"
+
+[[mods]]
+modId="test"
+version="${file.jarVersion}"
+displayName="Test Library Forge"
+#updateJSONURL="https://mcforge.readthedocs.io/en/latest/gettingstarted/autoupdate/"
+#displayURL="https://github.com/HexagonNico"
+logoFile="logo.png"
+#credits="Additional credits go here"
+authors="HexagonNico"
+description="This is a description"
+
+[[dependencies.test]]
+    modId="forge"
+    mandatory=true
+    versionRange="[47,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.test]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.20.1,1.21)"
+    ordering="NONE"
+    side="BOTH"
