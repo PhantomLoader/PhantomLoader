@@ -15,9 +15,9 @@ public class ExampleMod {
 
 	private static final ModRegistry REGISTRY = RegistryManager.create(ID);
 
-	public static final Supplier<Item> TEST_ITEM = REGISTRY.registerItem("test_item", () -> new Item(new Item.Properties()));
+	public static final Supplier<Item> TEST_ITEM = REGISTRY.registerItem("test_item");
 
-	public static final Supplier<Block> TEST_BLOCK = REGISTRY.registerBlockAndItem("test_block", () -> new Block(BlockBehaviour.Properties.of()));
+	public static final Supplier<Block> TEST_BLOCK = REGISTRY.registerBlockAndItem("test_block");
 
 	@Mod(
 			id = ID,
