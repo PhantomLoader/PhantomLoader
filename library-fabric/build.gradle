@@ -4,12 +4,6 @@ plugins {
     id 'fabric-loom' version '0.12-SNAPSHOT'
 }
 
-java {
-    toolchain {
-        JavaLanguageVersion.of(17)
-    }
-}
-
 dependencies {
     minecraft "com.mojang:minecraft:1.20.1"
     mappings loom.officialMojangMappings()
@@ -37,17 +31,6 @@ processResources {
 }
 
 jar {
-    manifest {
-        attributes([
-                "Specification-Title": 'test',
-                "Specification-Vendor": 'HexagonNico',
-                "Specification-Version": project.version,
-                "Implementation-Title": project.name,
-                "Implementation-Version": project.jar.archiveVersion,
-                "Implementation-Vendor": 'HexagonNico',
-                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
-        ])
-    }
     destinationDirectory.set(file('../run/mods'))
     archiveClassifier = 'fabric'
 }

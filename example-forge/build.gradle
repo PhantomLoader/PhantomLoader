@@ -8,12 +8,6 @@ base {
     archivesName = 'example'
 }
 
-java {
-    toolchain {
-        JavaLanguageVersion.of(17)
-    }
-}
-
 minecraft {
     mappings channel: 'official', version: '1.20.1'
 
@@ -35,14 +29,6 @@ minecraft {
 
 sourceSets.main.resources.srcDir 'src/generated/resources'
 
-repositories {
-    maven {
-        // JEI
-        name = "Progwml6 maven"
-        url = "https://dvs1.progwml6.com/files/maven/"
-    }
-}
-
 dependencies {
     minecraft "net.minecraftforge:forge:1.20.1-47.2.0"
     api project(":example-common")
@@ -58,18 +44,9 @@ processResources {
 }
 
 jar {
-    manifest {
-        attributes([
-                "Specification-Title": 'test',
-                "Specification-Vendor": 'HexagonNico',
-                "Specification-Version": project.version,
-                "Implementation-Title": project.name,
-                "Implementation-Version": project.jar.archiveVersion,
-                "Implementation-Vendor": 'HexagonNico',
-                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
-        ])
-    }
     archiveClassifier = 'forge'
 }
+
+build.finalizedBy('genIntellijRuns')
 
 jar.finalizedBy('reobfJar')
