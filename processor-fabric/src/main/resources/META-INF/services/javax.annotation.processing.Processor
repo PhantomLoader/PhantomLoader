@@ -1,1 +1,1 @@
-absloader.processor.fabric.FabricAnnotationProcessor
+io.github.hexagonnico.phantom.processor.fabric.FabricAnnotationProcessor

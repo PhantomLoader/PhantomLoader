@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "id": "test",
-  "version": "${version}",
-  "name": "Test Library Fabric",
-  "description": "Description goes here",
+  "id": "phantom",
+  "version": "0.1",
+  "name": "Phantom Library",
+  "description": "A library to automate part of the process of creating mods for multiple loaders",
   "authors": [
     "HexagonNico"
   ],
@@ -11,11 +11,11 @@
     "homepage": "https://example.com",
     "sources": "https://example.com"
   },
-  "license": "All rights reserved",
+  "license": "Apache-2.0 license",
   "icon": "icon.png",
   "entrypoints": {
     "main": [
-      "absloader.library.TestFabric"
+      "io.github.hexagonnico.phantom.library.fabric.FabricLibraryInitializer"
     ]
   },
   "depends": {

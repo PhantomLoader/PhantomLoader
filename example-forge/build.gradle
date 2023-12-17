@@ -5,7 +5,7 @@ plugins {
 }
 
 base {
-    archivesName = 'example'
+    archivesName = 'phantom-example'
 }
 
 minecraft {
@@ -13,13 +13,12 @@ minecraft {
 
     runs {
         client {
-            workingDirectory this.file('../run')
+            workingDirectory this.file('../.minecraft')
             ideaModule "${rootProject.name}.${project.name}.main"
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
-            property 'forge.enabledGameTestNamespaces', 'example'
             mods {
-                test {
+                runClient {
                     source this.sourceSets.main
                 }
             }

@@ -3,6 +3,10 @@ plugins {
     id 'java-library'
 }
 
+base {
+    archivesName = 'phantom-processor'
+}
+
 dependencies {
     api project(':library-common')
 }

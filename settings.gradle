@@ -16,7 +16,7 @@ pluginManagement {
     }
 }
 
-rootProject.name = 'AbstractLoader'
+rootProject.name = 'PhantomLoader'
 
 include 'processor-common', 'processor-forge', 'processor-fabric'
 include 'library-common', 'library-forge', 'library-fabric'

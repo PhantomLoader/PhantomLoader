@@ -1,18 +1,18 @@
 modLoader="javafml"
 loaderVersion="[47,)"
-license="All rights reserved"
+license="Apache-2.0 license"
 #issueTrackerURL="https://github.com/HexagonNico"
 
 [[mods]]
-modId="test"
+modId="phantom"
 version="${file.jarVersion}"
-displayName="Test Library Forge"
+displayName="Phantom Library"
 #updateJSONURL="https://mcforge.readthedocs.io/en/latest/gettingstarted/autoupdate/"
 #displayURL="https://github.com/HexagonNico"
 logoFile="logo.png"
 #credits="Additional credits go here"
 authors="HexagonNico"
-description="This is a description"
+description="A library to automate part of the process of creating mods for multiple loaders"
 
 [[dependencies.test]]
     modId="forge"

@@ -15,5 +15,5 @@ build/
 .DS_Store
 .directory
 
-# Other
-run/
+# Minecraft
+.minecraft/

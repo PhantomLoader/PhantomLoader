@@ -4,18 +4,21 @@ plugins {
     id 'net.minecraftforge.gradle' version '[6.0,6.2)'
 }
 
+base {
+    archivesName = 'phantom-library'
+}
+
 minecraft {
     mappings channel: 'official', version: '1.20.1'
 
     runs {
         client {
-            workingDirectory this.file('../run')
+            workingDirectory this.file('../.minecraft')
             ideaModule "${rootProject.name}.${project.name}.main"
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
-            property 'forge.enabledGameTestNamespaces', 'test'
             mods {
-                test {
+                runClient {
                     source this.sourceSets.main
                 }
             }
@@ -41,6 +44,6 @@ processResources {
 
 jar {
     // TODO: Temporary workaround until I figure out how to make it work as a dependency
-    destinationDirectory.set(file('../run/mods'))
+    destinationDirectory.set(file('../.minecraft/mods'))
     archiveClassifier = 'forge'
 }

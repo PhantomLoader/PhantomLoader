@@ -1,7 +1,7 @@
 subprojects {
     apply plugin: 'java'
 
-    group = 'absloader'
+    group = 'io.github.hexagonnico'
     version = '0.1'
 
     java {
