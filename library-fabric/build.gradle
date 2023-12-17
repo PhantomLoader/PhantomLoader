@@ -31,6 +31,7 @@ processResources {
 }
 
 jar {
+    // TODO: Temporary workaround until I figure out how to make it work as a dependency
     destinationDirectory.set(file('../run/mods'))
     archiveClassifier = 'fabric'
 }
