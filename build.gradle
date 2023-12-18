@@ -1,5 +1,7 @@
 subprojects {
     apply plugin: 'java'
+    apply plugin: 'maven-publish'
+    apply plugin: 'signing'
 
     group = 'io.github.hexagonnico'
     version = '0.1'
@@ -22,5 +24,46 @@ subprojects {
                     "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
             ])
         }
+    }
+
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                from components.java
+                pom {
+                    name = 'Phantom Loader'
+                    description = 'Automates part of the process of creating mods for multiple loaders by generating code at build time'
+                    url = 'set url here'
+                    licenses {
+                        license {
+                            name = 'Apache-2.0 license'
+                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = 'HexagonNico'
+                            name = 'Nicholas Amigoni'
+                            email = 'nico.hex6@gmail.com'
+                        }
+                    }
+                    scm {
+                        connection = 'git@github.com:HexagonNico/PhantomLoader.git'
+                        url = 'https://github.com/HexagonNico/PhantomLoader'
+                    }
+                }
+            }
+        }
+        repositories {
+            maven {
+                def releasesRepoUrl = 'https://s01.oss.sonatype.org/service/local/staging/deploy/maven2'
+                def snapshotsRepoUrl = 'https://s01.oss.sonatype.org/content/repositories/snapshots/'
+                url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+            }
+        }
+    }
+
+    signing {
+        sign publishing.publications.mavenJava
     }
 }
