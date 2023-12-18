@@ -4,7 +4,7 @@ plugins {
 }
 
 base {
-    archivesName = 'phantom-library'
+    archivesName = 'library'
 }
 
 minecraft {
@@ -13,8 +13,4 @@ minecraft {
 
 dependencies {
     compileOnly 'org.spongepowered:mixin:0.8.5'
-}
-
-jar {
-    archiveClassifier = 'common'
 }

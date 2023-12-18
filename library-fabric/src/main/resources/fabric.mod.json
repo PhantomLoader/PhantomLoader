@@ -15,7 +15,7 @@
   "icon": "icon.png",
   "entrypoints": {
     "main": [
-      "io.github.hexagonnico.phantom.library.fabric.FabricLibraryInitializer"
+      "io.github.phantomloader.library.fabric.FabricInitializer"
     ]
   },
   "depends": {

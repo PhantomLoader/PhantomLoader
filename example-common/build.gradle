@@ -16,7 +16,3 @@ dependencies {
     compileOnly 'org.spongepowered:mixin:0.8.5'
     api project(':library-common')
 }
-
-jar {
-    archiveClassifier = 'common'
-}

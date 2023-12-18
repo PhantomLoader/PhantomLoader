@@ -5,7 +5,7 @@ plugins {
 }
 
 base {
-    archivesName = 'phantom-example'
+    archivesName = 'example-forge'
 }
 
 minecraft {
@@ -40,10 +40,6 @@ tasks.withType(JavaCompile).configureEach {
 
 processResources {
     from project(":example-common").sourceSets.main.resources
-}
-
-jar {
-    archiveClassifier = 'forge'
 }
 
 build.finalizedBy('genIntellijRuns')

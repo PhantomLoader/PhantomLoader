@@ -4,13 +4,9 @@ plugins {
 }
 
 base {
-    archivesName = 'phantom-processor'
+    archivesName = 'processor-fabric'
 }
 
 dependencies {
     api project(':processor-common')
-}
-
-jar {
-    archiveClassifier = 'fabric'
 }

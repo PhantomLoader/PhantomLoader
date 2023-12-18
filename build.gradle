@@ -3,7 +3,7 @@ subprojects {
     apply plugin: 'maven-publish'
     apply plugin: 'signing'
 
-    group = 'io.github.hexagonnico'
+    group = 'io.github.phantomloader'
     version = '0.1'
 
     java {
@@ -24,6 +24,20 @@ subprojects {
                     "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
             ])
         }
+    }
+
+    tasks.register('javadocJar', Jar) {
+        archiveClassifier = 'javadoc'
+        from javadoc
+    }
+
+    tasks.register('sourcesJar', Jar) {
+        archiveClassifier = 'sources'
+        from sourceSets.main.allSource
+    }
+
+    artifacts {
+        archives javadocJar, sourcesJar
     }
 
     publishing {
@@ -48,8 +62,8 @@ subprojects {
                         }
                     }
                     scm {
-                        connection = 'git@github.com:HexagonNico/PhantomLoader.git'
-                        url = 'https://github.com/HexagonNico/PhantomLoader'
+                        connection = 'git@github.com:PhantomLoader/PhantomLoader.git'
+                        url = 'https://github.com/PhantomLoader/PhantomLoader'
                     }
                 }
             }
@@ -59,6 +73,10 @@ subprojects {
                 def releasesRepoUrl = 'https://s01.oss.sonatype.org/service/local/staging/deploy/maven2'
                 def snapshotsRepoUrl = 'https://s01.oss.sonatype.org/content/repositories/snapshots/'
                 url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+                credentials {
+                    username = ossrhUsername
+                    password = ossrhPassword
+                }
             }
         }
     }

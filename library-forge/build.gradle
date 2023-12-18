@@ -5,7 +5,7 @@ plugins {
 }
 
 base {
-    archivesName = 'phantom-library'
+    archivesName = 'library-forge'
 }
 
 minecraft {
@@ -45,5 +45,4 @@ processResources {
 jar {
     // TODO: Temporary workaround until I figure out how to make it work as a dependency
     destinationDirectory.set(file('../.minecraft/mods'))
-    archiveClassifier = 'forge'
 }
