@@ -10,6 +10,7 @@ import javax.tools.JavaFileObject;
 import javax.tools.StandardLocation;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Set;
 
 public class ForgeAnnotationProcessor extends ModAnnotationProcessor {
 
@@ -40,8 +41,9 @@ public class ForgeAnnotationProcessor extends ModAnnotationProcessor {
 			}
 			FileObject modFile = filer.createResource(StandardLocation.CLASS_OUTPUT, "", "META-INF/mods.toml");
 			try(PrintWriter writer = new PrintWriter(modFile.openWriter())) {
+				String forgeVersion = this.forgeVersion();
 				writer.println("modLoader=\"javafml\"");
-				writer.println("loaderVersion=\"[47,)\""); // TODO: How to determine forge version?
+				writer.println("loaderVersion=\"" + forgeVersion + "\"");
 				writer.println(tomlLine("license", mod.license()));
 				writer.println(tomlLine("issueTrackerURL", mod.issues()));
 				writer.println();
@@ -58,19 +60,19 @@ public class ForgeAnnotationProcessor extends ModAnnotationProcessor {
 				writer.println("[[dependencies." + mod.id() + "]]");
 				writer.println("    modId=\"forge\"");
 				writer.println("    mandatory=true");
-				writer.println("    versionRange=\"[47,)\"");
+				writer.println("    versionRange=\"" + forgeVersion + "\"");
 				writer.println("    ordering=\"NONE\"");
 				writer.println("    side=\"BOTH\"");
 				writer.println("[[dependencies." + mod.id() + "]]");
 				writer.println("    modId=\"phantom\"");
 				writer.println("    mandatory=true");
-				writer.println("    versionRange=\"[0.1,)\"");
+				writer.println("    versionRange=\"" + this.phantomVersion() + "\"");
 				writer.println("    ordering=\"NONE\"");
 				writer.println("    side=\"BOTH\"");
 				writer.println("[[dependencies." + mod.id() + "]]");
 				writer.println("    modId=\"minecraft\"");
 				writer.println("    mandatory=true");
-				writer.println("    versionRange=\"[1.20.1,1.21)\""); // TODO: How to determine minecraft version?
+				writer.println("    versionRange=\"" + this.minecraftVersion() + "\"");
 				writer.println("    ordering=\"NONE\"");
 				writer.println("    side=\"BOTH\"");
 			}
@@ -96,5 +98,47 @@ public class ForgeAnnotationProcessor extends ModAnnotationProcessor {
 			return "#" + option + "=";
 		}
 		return option + "=\"" + String.join(", ", values) + "\"";
+	}
+
+	@Override
+	public Set<String> getSupportedOptions() {
+		return Set.of("forgeVersion", "phantomVersion", "minecraftVersion");
+	}
+
+	private String forgeVersion() {
+		String forgeVersion = this.processingEnv.getOptions().get("forgeVersion");
+		if(forgeVersion != null && !(forgeVersion.isEmpty() || forgeVersion.isBlank())) {
+			String[] split = forgeVersion.split("\\.");
+			if(split.length > 0) {
+				return "[" + split[0] + ",)";
+			}
+		}
+		throw new RuntimeException(); // TODO: Better error handling
+	}
+
+	private String phantomVersion() {
+		String version = this.processingEnv.getOptions().get("phantomVersion");
+		if(version != null && !(version.isEmpty() || version.isBlank())) {
+			String[] split = version.split("\\.");
+			if(split.length > 0) try {
+				return "[" + version + "," + (Integer.parseInt(split[0]) + 1) + ".0)";
+			} catch (NumberFormatException e) {
+				throw new RuntimeException(e);
+			}
+		}
+		throw new RuntimeException(); // TODO: Better error handling
+	}
+
+	private String minecraftVersion() {
+		String version = this.processingEnv.getOptions().get("minecraftVersion");
+		if(version != null && !(version.isEmpty() || version.isBlank())) {
+			String[] split = version.split("\\.");
+			if(split.length > 1) try {
+				return "[" + version + ",1." + (Integer.parseInt(split[1]) + 1) + ")";
+			} catch (NumberFormatException e) {
+				throw new RuntimeException(e);
+			}
+		}
+		throw new RuntimeException(); // TODO: Better error handling
 	}
 }

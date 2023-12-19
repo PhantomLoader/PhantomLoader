@@ -54,9 +54,10 @@ public interface ModRegistry {
 		return this.registerBlockAndItem(name, () -> new Block(properties));
 	}
 
-	default Supplier<Block> registerBlockAndItem(String name) {
-		return this.registerBlockAndItem(name, BlockBehaviour.Properties.of());
-	}
+	// FIXME: This using this method in forge causes a crash for unknown reasons
+//	default Supplier<Block> registerBlockAndItem(String name) {
+//		return this.registerBlockAndItem(name, BlockBehaviour.Properties.of());
+//	}
 
 	default Supplier<Block> registerBlockVariant(String name, Supplier<? extends Block> base) {
 		return this.registerBlock(name, () -> new Block(BlockBehaviour.Properties.copy(base.get())));

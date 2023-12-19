@@ -11,6 +11,7 @@ import javax.tools.StandardLocation;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Arrays;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class FabricAnnotationProcessor extends ModAnnotationProcessor {
@@ -59,13 +60,29 @@ public class FabricAnnotationProcessor extends ModAnnotationProcessor {
 				writer.println("    ]");
 				writer.println("  },");
 				writer.println("  \"depends\": {");
-				writer.println("    \"phantom\": \">=0.1\",");
-				writer.println("    \"fabricloader\": \">=0.14.23\","); // TODO: Get versions?
-				writer.println("    \"minecraft\": \"~1.20.1\",");
+				writer.println("    \"phantom\": \">=" + this.getPropertyOrThrow("phantomVersion") + "\",");
+				writer.println("    \"fabricloader\": \">=" + this.getPropertyOrThrow("fabricVersion") + "\","); // TODO: Get versions?
+				writer.println("    \"minecraft\": \"~" + this.getPropertyOrThrow("minecraftVersion") + "\",");
 				writer.println("    \"java\": \">=17\"");
 				writer.println("  }");
 				writer.println("}");
 			}
 		}
+	}
+
+	@Override
+	public Set<String> getSupportedOptions() {
+		return Set.of("phantomVersion", "fabricVersion", "minecraftVersion");
+	}
+
+	private String getPropertyOrThrow(String property) {
+		String value = this.processingEnv.getOptions().get(property);
+		if(value != null) {
+			if(!value.isEmpty() && !value.isBlank()) {
+				return value;
+			}
+			throw new RuntimeException("Property " + property + " returned an empty or blank string");
+		}
+		throw new RuntimeException("Cannot get property " + property + ". Add compiler options using `options.compilerArgs.add \"-A" + property + "=${variable}` in gradle's compileJava task.");
 	}
 }
