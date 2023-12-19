@@ -24,14 +24,41 @@ import net.minecraftforge.registries.ForgeRegistries;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
+/**
+ * <p>
+ *     Forge implementation of {@link ModRegistry}.
+ * </p>
+ * <p>
+ *     Note that registries should not be instantiated directly, one should call {@link ModRegistry#instantiate(String)}
+ *     from the common module instead.
+ * </p>
+ *
+ * @author Nico
+ */
 public class ForgeRegistry extends ModRegistry {
 
+	/** Deferred register for items */
 	private final DeferredRegister<Item> items;
+	/** Deferred register for blocks */
 	private final DeferredRegister<Block> blocks;
+	/** Deferred register for block entities */
 	private final DeferredRegister<BlockEntityType<?>> blockEntities;
+	/** Deferred register for entities */
 	private final DeferredRegister<EntityType<?>> entities;
+	/** Deferred register for features */
 	private final DeferredRegister<Feature<?>> features;
 
+	/**
+	 * <p>
+	 *     Creates a {@code ForgeRegistry}.
+	 * </p>
+	 * <p>
+	 *     Note that registries should not be instantiated directly, one should call {@link ModRegistry#instantiate(String)}
+	 *     from the common module instead.
+	 * </p>
+	 *
+	 * @param mod Id of the mod that instantiated this registry.
+	 */
 	public ForgeRegistry(String mod) {
 		super(mod);
 		this.items = DeferredRegister.create(ForgeRegistries.ITEMS, mod);

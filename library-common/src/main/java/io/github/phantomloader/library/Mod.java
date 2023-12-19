@@ -23,6 +23,8 @@ import java.lang.annotation.Target;
  *     The annotated method will be the first one to be called when the mod is created and should be used for
  *     initialization and should call {@link ModRegistry#register()}.
  * </p>
+ *
+ * @author Nico
  */
 @Target(ElementType.METHOD)
 public @interface Mod {
@@ -92,9 +94,9 @@ public @interface Mod {
 	 * <p>
 	 *     Additional credits for your mod can go here.
 	 * </p>
-	 * <o>
+	 * <p>
 	 *     Will be used in Forge's {@code META-INF/mods.toml} file.
-	 * </o>
+	 * </p>
 	 *
 	 * @return Additional credits for your mod
 	 */

@@ -18,12 +18,40 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
+/**
+ * <p>
+ *     Fabric implementation of {@link ModRegistry}.
+ * </p>
+ * <p>
+ *     Note that registries should not be instantiated directly, one should call {@link ModRegistry#instantiate(String)}
+ *     from the common module instead.
+ * </p>
+ *
+ * @author Nico
+ */
 public class FabricRegistry extends ModRegistry {
 
+	/**
+	 * <p>
+	 *     Creates a {@code FabricRegistry}.
+	 * </p>
+	 * <p>
+	 *     Note that registries should not be instantiated directly, one should call {@link ModRegistry#instantiate(String)}
+	 *     from the common module instead.
+	 * </p>
+	 *
+	 * @param mod Id of the mod that instantiated this registry.
+	 */
 	public FabricRegistry(String mod) {
 		super(mod);
 	}
 
+	/**
+	 * Helper function used to create a {@link ResourceLocation}.
+	 *
+	 * @param name Identifier name.
+	 * @return A {@code ResourceLocation} identifier.
+	 */
 	private ResourceLocation identifier(String name) {
 		return new ResourceLocation(this.mod, name);
 	}

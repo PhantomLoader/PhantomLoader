@@ -1,10 +1,9 @@
 package io.github.phantomloader.example;
 
-import io.github.phantomloader.library.ModRegistry;
 import io.github.phantomloader.library.Mod;
+import io.github.phantomloader.library.ModRegistry;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 
 import java.util.function.Supplier;
 
@@ -16,7 +15,7 @@ public class ExampleMod {
 
 	public static final Supplier<Item> TEST_ITEM = REGISTRY.registerItem("test_item");
 
-	public static final Supplier<Block> TEST_BLOCK = REGISTRY.registerBlockAndItem("test_block", BlockBehaviour.Properties.of());
+	public static final Supplier<Block> TEST_BLOCK = REGISTRY.registerBlockAndItem("test_block");
 
 	@Mod(
 			id = ID,
