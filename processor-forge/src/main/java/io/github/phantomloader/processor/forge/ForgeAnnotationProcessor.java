@@ -33,6 +33,7 @@ public class ForgeAnnotationProcessor extends ModAnnotationProcessor {
 				writer.println("@Mod(\"" + mod.id() + "\")");
 				writer.println("public class ForgeInitializer {");
 				writer.println();
+				// TODO: Differentiate between static and non static
 				writer.println("	public ForgeInitializer() {");
 				writer.println("		" + className + "." + modMethod.getSimpleName() + "();");
 				writer.println("		MinecraftForge.EVENT_BUS.register(this);");
@@ -45,7 +46,7 @@ public class ForgeAnnotationProcessor extends ModAnnotationProcessor {
 				writer.println("modLoader=\"javafml\"");
 				writer.println("loaderVersion=\"" + forgeVersion + "\"");
 				writer.println(tomlLine("license", mod.license()));
-				writer.println(tomlLine("issueTrackerURL", mod.issues()));
+				writer.println(tomlLine("issueTrackerURL", mod.issueTracker()));
 				writer.println();
 				writer.println("[[mods]]");
 				writer.println(tomlLine("    modId", mod.id()));

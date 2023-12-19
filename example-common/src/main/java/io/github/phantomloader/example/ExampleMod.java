@@ -1,8 +1,7 @@
 package io.github.phantomloader.example;
 
-import io.github.phantomloader.library.Mod;
 import io.github.phantomloader.library.ModRegistry;
-import io.github.phantomloader.library.RegistryManager;
+import io.github.phantomloader.library.Mod;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -13,7 +12,7 @@ public class ExampleMod {
 
 	public static final String ID = "example_mod";
 
-	private static final ModRegistry REGISTRY = RegistryManager.create(ID);
+	private static final ModRegistry REGISTRY = ModRegistry.instantiate(ID);
 
 	public static final Supplier<Item> TEST_ITEM = REGISTRY.registerItem("test_item");
 

@@ -33,6 +33,7 @@ public class FabricAnnotationProcessor extends ModAnnotationProcessor {
 				writer.println();
 				writer.println("public class FabricInitializer implements ModInitializer {");
 				writer.println();
+				// TODO: Differentiate between static and non static
 				writer.println("	@Override");
 				writer.println("	public void onInitialize() {");
 				writer.println("		" + className + "." + modMethod.getSimpleName() + "();");

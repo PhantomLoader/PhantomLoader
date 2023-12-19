@@ -26,19 +26,20 @@ subprojects {
         }
     }
 
-    tasks.register('javadocJar', Jar) {
-        archiveClassifier = 'javadoc'
-        from javadoc
-    }
+    // FIXME: This is making the build fail
+//    tasks.register('javadocJar', Jar) {
+//        archiveClassifier = 'javadoc'
+//        from javadoc
+//    }
 
     tasks.register('sourcesJar', Jar) {
         archiveClassifier = 'sources'
         from sourceSets.main.allSource
     }
 
-    artifacts {
-        archives javadocJar, sourcesJar
-    }
+//    artifacts {
+//        archives javadocJar, sourcesJar
+//    }
 
     publishing {
         publications {

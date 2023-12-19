@@ -1,7 +1,6 @@
 package io.github.phantomloader.library.forge;
 
 import io.github.phantomloader.library.ModRegistry;
-import io.github.phantomloader.library.RegistryManager;
 import io.github.phantomloader.library.forge.items.BlockEntityItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
@@ -25,13 +24,22 @@ import net.minecraftforge.registries.ForgeRegistries;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
-public class ForgeRegistry implements ModRegistry {
+public class ForgeRegistry extends ModRegistry {
 
-	private final DeferredRegister<Item> items = DeferredRegister.create(ForgeRegistries.ITEMS, RegistryManager.modId());
-	private final DeferredRegister<Block> blocks = DeferredRegister.create(ForgeRegistries.BLOCKS, RegistryManager.modId());
-	private final DeferredRegister<BlockEntityType<?>> blockEntities = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, RegistryManager.modId());
-	private final DeferredRegister<EntityType<?>> entities = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, RegistryManager.modId());
-	private final DeferredRegister<Feature<?>> features = DeferredRegister.create(ForgeRegistries.FEATURES, RegistryManager.modId());
+	private final DeferredRegister<Item> items;
+	private final DeferredRegister<Block> blocks;
+	private final DeferredRegister<BlockEntityType<?>> blockEntities;
+	private final DeferredRegister<EntityType<?>> entities;
+	private final DeferredRegister<Feature<?>> features;
+
+	public ForgeRegistry(String mod) {
+		super(mod);
+		this.items = DeferredRegister.create(ForgeRegistries.ITEMS, mod);
+		this.blocks = DeferredRegister.create(ForgeRegistries.BLOCKS, mod);
+		this.blockEntities = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, mod);
+		this.entities = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, mod);
+		this.features = DeferredRegister.create(ForgeRegistries.FEATURES, mod);
+	}
 
 	@Override
 	public <T extends Item> Supplier<T> registerItem(String name, Supplier<T> item) {

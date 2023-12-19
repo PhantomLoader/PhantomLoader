@@ -1,7 +1,6 @@
 package io.github.phantomloader.library.fabric;
 
 import io.github.phantomloader.library.ModRegistry;
-import io.github.phantomloader.library.RegistryManager;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
@@ -19,10 +18,14 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
-public class FabricRegistry implements ModRegistry {
+public class FabricRegistry extends ModRegistry {
+
+	public FabricRegistry(String mod) {
+		super(mod);
+	}
 
 	private ResourceLocation identifier(String name) {
-		return new ResourceLocation(RegistryManager.modId(), name);
+		return new ResourceLocation(this.mod, name);
 	}
 
 	@Override
