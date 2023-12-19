@@ -22,9 +22,10 @@ import java.util.function.Supplier;
 public abstract class ModRegistry {
 
 	public static ModRegistry instantiate(String mod) {
-		// TODO: Better error handling
-		RegistryProvider provider = ServiceLoader.load(RegistryProvider.class).findFirst().orElseThrow();
-		return provider.instantiate(mod);
+		return ServiceLoader.load(RegistryProvider.class)
+				.findFirst()
+				.orElseThrow(() -> new IllegalStateException("No registry has been defined in META-INF/services. Make sure you are using the correct version of the library mod for your mod loader."))
+				.instantiate(mod);
 	}
 
 	public final String mod;
