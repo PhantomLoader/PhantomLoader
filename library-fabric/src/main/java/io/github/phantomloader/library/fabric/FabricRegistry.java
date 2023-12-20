@@ -11,6 +11,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -72,7 +73,9 @@ public class FabricRegistry extends ModRegistry {
 
 	@Override
 	public Supplier<BlockItem> registerBlockItem(String name, Supplier<? extends Block> block) {
-		FabricClientInitializer.registerEntityBlockRenderer(block.get());
+		if(block.get() instanceof EntityBlock) {
+			FabricClientInitializer.registerEntityBlockRenderer(block.get());
+		}
 		return super.registerBlockItem(name, block);
 	}
 
