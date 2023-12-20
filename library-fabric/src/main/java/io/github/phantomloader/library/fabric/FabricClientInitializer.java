@@ -1,7 +1,7 @@
 package io.github.phantomloader.library.fabric;
 
 import io.github.phantomloader.library.CreativeTabs;
-import io.github.phantomloader.library.ModRenderers;
+import io.github.phantomloader.library.RenderersRegistry;
 import io.github.phantomloader.library.fabric.renderers.BlockEntityItemRenderer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
@@ -40,7 +40,7 @@ public class FabricClientInitializer implements ClientModInitializer {
 	public void onInitializeClient() {
 		ENTITY_BLOCKS.forEach(block -> BuiltinItemRendererRegistry.INSTANCE.register(block, new BlockEntityItemRenderer(block)));
 		CreativeTabs.allTabs().forEach(resourceKey -> ItemGroupEvents.modifyEntriesEvent(resourceKey).register(listener -> CreativeTabs.accept(resourceKey, supplier -> listener.accept(supplier.get()))));
-		ModRenderers.registerEntityRenderers(EntityRendererRegistry::register);
-		ModRenderers.registerBlockEntityRenderers(BlockEntityRenderers::register);
+		RenderersRegistry.registerEntityRenderers(EntityRendererRegistry::register);
+		RenderersRegistry.registerBlockEntityRenderers(BlockEntityRenderers::register);
 	}
 }

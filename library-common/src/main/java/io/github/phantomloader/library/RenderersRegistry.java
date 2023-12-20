@@ -17,13 +17,13 @@ import java.util.function.Supplier;
  *     Static class used to store {@link Entity} and {@link BlockEntity} renderers.
  * </p>
  * <p>
- *     Renderers may be added by calling {@link ModRenderers#registerEntityRenderer(Supplier, EntityRendererProvider)} and {@link ModRenderers#registerBlockEntityRenderer(Supplier, BlockEntityRendererProvider)} from the common module.
+ *     Renderers may be added by calling {@link RenderersRegistry#registerEntityRenderer(Supplier, EntityRendererProvider)} and {@link RenderersRegistry#registerBlockEntityRenderer(Supplier, BlockEntityRendererProvider)} from the common module.
  *     The Phantom library will then query those values for each mod loader to register renderers.
  * </p>
  *
  * @author Nico
  */
-public class ModRenderers {
+public class RenderersRegistry {
 
 	/** Entities to register */
 	private static final HashMap<Supplier<?>, EntityRendererProvider<?>> ENTITIES = new HashMap<>();
@@ -58,7 +58,7 @@ public class ModRenderers {
 
 	/**
 	 * <p>
-	 *     Queries all entity renderers added with {@link ModRenderers#registerEntityRenderer(Supplier, EntityRendererProvider)} and registers them.
+	 *     Queries all entity renderers added with {@link RenderersRegistry#registerEntityRenderer(Supplier, EntityRendererProvider)} and registers them.
 	 *     Called from the loader-specific modules of the Phantom library.
 	 * </p>
 	 *
@@ -72,7 +72,7 @@ public class ModRenderers {
 
 	/**
 	 * <p>
-	 *     Queries all block entity renderers added with {@link ModRenderers#registerBlockEntityRenderer(Supplier, BlockEntityRendererProvider)} and registers them.
+	 *     Queries all block entity renderers added with {@link RenderersRegistry#registerBlockEntityRenderer(Supplier, BlockEntityRendererProvider)} and registers them.
 	 *     Called from the loader-specific modules of the Phantom library.
 	 * </p>
 	 *
