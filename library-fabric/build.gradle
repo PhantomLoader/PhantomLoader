@@ -4,7 +4,7 @@ plugins {
 }
 
 base {
-    archivesName = 'library-fabric'
+    archivesName = 'library'
 }
 
 dependencies {
@@ -34,4 +34,8 @@ tasks.withType(JavaCompile).configureEach {
 
 processResources {
     from project(':library-common').sourceSets.main.resources
+}
+
+jar {
+    archiveClassifier = 'fabric'
 }

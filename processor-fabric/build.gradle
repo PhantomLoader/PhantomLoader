@@ -3,7 +3,7 @@ plugins {
 }
 
 base {
-    archivesName = 'processor-fabric'
+    archivesName = 'processor'
 }
 
 dependencies {
@@ -17,4 +17,8 @@ tasks.withType(JavaCompile).configureEach {
 
 processResources {
     from project(":processor-common").sourceSets.main.resources
+}
+
+jar {
+    archiveClassifier = 'fabric'
 }

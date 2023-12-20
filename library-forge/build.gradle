@@ -5,7 +5,7 @@ plugins {
 }
 
 base {
-    archivesName = 'library-forge'
+    archivesName = 'library'
 }
 
 minecraft {
@@ -40,4 +40,9 @@ tasks.withType(JavaCompile).configureEach {
 
 processResources {
     from project(':library-common').sourceSets.main.resources
+}
+
+jar {
+    archiveClassifier = 'forge'
+    finalizedBy 'reobfJar'
 }
