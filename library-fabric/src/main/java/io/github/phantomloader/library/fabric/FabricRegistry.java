@@ -8,6 +8,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -15,6 +16,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
 
+import java.util.Collection;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
@@ -69,9 +71,15 @@ public class FabricRegistry extends ModRegistry {
 	}
 
 	@Override
-	public <T extends BlockEntity> Supplier<BlockEntityType<? extends T>> registerBlockEntity(String name, Supplier<? extends Block> block, BiFunction<BlockPos, BlockState, T> blockEntity) {
+	public Supplier<BlockItem> registerBlockItem(String name, Supplier<? extends Block> block) {
+		FabricClientInitializer.registerEntityBlockRenderer(block.get());
+		return super.registerBlockItem(name, block);
+	}
+
+	@Override
+	public <T extends BlockEntity> Supplier<BlockEntityType<? extends T>> registerBlockEntity(String name, BiFunction<BlockPos, BlockState, T> blockEntity, Collection<Supplier<? extends Block>> blocks) {
 		// Block entity types must be created here because BlockEntityType.BlockEntitySupplier has private access in the common module
-		BlockEntityType<T> registered = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, this.identifier(name), FabricBlockEntityTypeBuilder.create(blockEntity::apply, block.get()).build());
+		BlockEntityType<T> registered = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, this.identifier(name), FabricBlockEntityTypeBuilder.create(blockEntity::apply, blocks.stream().map(Supplier::get).toArray(Block[]::new)).build());
 		return () -> registered;
 	}
 

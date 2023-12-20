@@ -16,8 +16,22 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
+/**
+ * <p>
+ *     Extension of {@link BlockItem} that implements Forge's method
+ *     {@link net.minecraft.world.item.Item#initializeClient(Consumer)} needed to render block entity items.
+ * </p>
+ *
+ * @author Nico
+ */
 public class BlockEntityItem extends BlockItem {
 
+	/**
+	 * Constructs a {@code BlockEntityItem}.
+	 *
+	 * @param block The block corresponding to this item
+	 * @param properties Item properties
+	 */
 	public BlockEntityItem(Block block, Properties properties) {
 		super(block, properties);
 	}

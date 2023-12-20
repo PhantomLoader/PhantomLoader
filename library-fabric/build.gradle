@@ -1,6 +1,5 @@
 plugins {
     id 'java'
-    id 'java-library'
     id 'fabric-loom' version '0.12-SNAPSHOT'
 }
 
@@ -13,7 +12,7 @@ dependencies {
     mappings loom.officialMojangMappings()
     modImplementation "net.fabricmc:fabric-loader:${fabricVersion}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${fabricApiVersion}+${minecraftVersion}"
-    api project(":library-common")
+    implementation project(':library-common')
 }
 
 loom {
@@ -28,16 +27,11 @@ loom {
 }
 
 tasks.withType(JavaCompile).configureEach {
-    source project(":library-common").sourceSets.main.allSource
+    source project(':library-common').sourceSets.main.allSource
 }
 
 // TODO: fabric.mod.json cannot get ${version}
 
 processResources {
-    from project(":library-common").sourceSets.main.resources
-}
-
-jar {
-    // TODO: Temporary workaround until I figure out how to make it work as a dependency
-    destinationDirectory.set(file('../.minecraft/mods'))
+    from project(':library-common').sourceSets.main.resources
 }

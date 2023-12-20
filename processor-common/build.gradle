@@ -1,6 +1,5 @@
 plugins {
     id 'java'
-    id 'java-library'
 }
 
 base {
@@ -8,5 +7,5 @@ base {
 }
 
 dependencies {
-    api project(':library-common')
+    implementation project(':library-common')
 }

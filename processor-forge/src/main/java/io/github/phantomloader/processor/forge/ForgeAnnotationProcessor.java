@@ -5,7 +5,6 @@ import io.github.phantomloader.processor.ModAnnotationProcessor;
 
 import javax.annotation.processing.Filer;
 import javax.lang.model.element.Element;
-import javax.lang.model.element.Modifier;
 import javax.tools.Diagnostic;
 import javax.tools.FileObject;
 import javax.tools.JavaFileObject;
@@ -35,12 +34,7 @@ public class ForgeAnnotationProcessor extends ModAnnotationProcessor {
 			writer.println("public class ForgeInitializer {");
 			writer.println();
 			writer.println("	public ForgeInitializer() {");
-			if(!modMethod.getModifiers().contains(Modifier.STATIC)) {
-				this.processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, "The annotated method should be static", modMethod);
-				writer.println("		new " + className + "()." + modMethod.getSimpleName() + "();");
-			} else {
-				writer.println("		" + className + "." + modMethod.getSimpleName() + "();");
-			}
+			writer.println("		" + className + "." + modMethod.getSimpleName() + "();");
 			writer.println("		MinecraftForge.EVENT_BUS.register(this);");
 			writer.println("	}");
 			writer.println("}");

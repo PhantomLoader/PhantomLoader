@@ -1,6 +1,5 @@
 plugins {
     id 'java'
-    id 'java-library'
 }
 
 base {
@@ -8,5 +7,14 @@ base {
 }
 
 dependencies {
-    api project(':processor-common')
+    implementation project(':library-common')
+    implementation project(':processor-common')
+}
+
+tasks.withType(JavaCompile).configureEach {
+    source project(":processor-common").sourceSets.main.allSource
+}
+
+processResources {
+    from project(":processor-common").sourceSets.main.resources
 }

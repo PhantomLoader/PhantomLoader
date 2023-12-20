@@ -1,7 +1,7 @@
 plugins {
     id 'idea'
-    id 'java-library'
     id 'net.minecraftforge.gradle' version '[6.0,6.2)'
+    id 'org.spongepowered.mixin' version "0.7.+"
 }
 
 base {
@@ -30,19 +30,14 @@ sourceSets.main.resources.srcDir 'src/generated/resources'
 
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraftVersion}-${forgeVersion}"
-    api project(":library-common")
+    implementation project(':library-common')
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 
 tasks.withType(JavaCompile).configureEach {
-    source project(":library-common").sourceSets.main.allSource
+    source project(':library-common').sourceSets.main.allSource
 }
 
 processResources {
-    from project(":library-common").sourceSets.main.resources
-}
-
-jar {
-    // TODO: Temporary workaround until I figure out how to make it work as a dependency
-    destinationDirectory.set(file('../.minecraft/mods'))
+    from project(':library-common').sourceSets.main.resources
 }

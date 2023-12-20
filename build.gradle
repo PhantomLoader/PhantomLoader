@@ -1,7 +1,6 @@
 subprojects {
     apply plugin: 'java'
     apply plugin: 'maven-publish'
-    apply plugin: 'signing'
 
     group = 'io.github.phantomloader'
     version = '0.1'
@@ -12,10 +11,16 @@ subprojects {
         }
     }
 
+    repositories {
+        maven {
+            url = "https://www.cursemaven.com"
+        }
+    }
+
     jar {
         manifest {
             attributes([
-                    "Specification-Title": 'test',
+                    "Specification-Title": rootProject.name,
                     "Specification-Vendor": 'HexagonNico',
                     "Specification-Version": project.version,
                     "Implementation-Title": project.name,
@@ -26,63 +31,16 @@ subprojects {
         }
     }
 
-    // FIXME: This is making the build fail
-    tasks.register('javadocJar', Jar) {
-        archiveClassifier = 'javadoc'
-        from javadoc
-    }
-
-    tasks.register('sourcesJar', Jar) {
-        archiveClassifier = 'sources'
-        from sourceSets.main.allSource
-    }
-
-    artifacts {
-        archives javadocJar, sourcesJar
-    }
-
     publishing {
         publications {
-            mavenJava(MavenPublication) {
-                from components.java
-                pom {
-                    name = 'Phantom Loader'
-                    description = 'Automates part of the process of creating mods for multiple loaders by generating code at build time'
-                    url = 'set url here'
-                    licenses {
-                        license {
-                            name = 'Apache-2.0 license'
-                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                        }
-                    }
-                    developers {
-                        developer {
-                            id = 'HexagonNico'
-                            name = 'Nicholas Amigoni'
-                            email = 'nico.hex6@gmail.com'
-                        }
-                    }
-                    scm {
-                        connection = 'git@github.com:PhantomLoader/PhantomLoader.git'
-                        url = 'https://github.com/PhantomLoader/PhantomLoader'
-                    }
-                }
+            register('mavenJava', MavenPublication) {
+                artifact jar
             }
         }
         repositories {
             maven {
-                def releasesRepoUrl = 'https://s01.oss.sonatype.org/service/local/staging/deploy/maven2'
-                def snapshotsRepoUrl = 'https://s01.oss.sonatype.org/content/repositories/snapshots/'
-                url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
-                credentials {
-                    username = ossrhUsername
-                    password = ossrhPassword
-                }
+                url "file://${project.projectDir}/mcmodsrepo"
             }
         }
-    }
-
-    signing {
-        sign publishing.publications.mavenJava
     }
 }

@@ -14,8 +14,10 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
 
+import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.ServiceLoader;
+import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -138,7 +140,6 @@ public abstract class ModRegistry {
 	 * @return A supplier returning the registered block.
 	 */
 	public Supplier<Block> registerBlock(String name) {
-		// FIXME: Using this method in forge causes a crash for unknown reasons
 		return this.registerBlock(name, BlockBehaviour.Properties.of());
 	}
 
@@ -199,7 +200,6 @@ public abstract class ModRegistry {
 	 * @return A supplier returning the registered block.
 	 */
 	public Supplier<Block> registerBlockAndItem(String name) {
-		// FIXME: Using this method in forge causes a crash for unknown reasons
 		return this.registerBlockAndItem(name, BlockBehaviour.Properties.of());
 	}
 
@@ -279,7 +279,41 @@ public abstract class ModRegistry {
 		return this.registerBlockAndItem(name, () -> constructor.apply(BlockBehaviour.Properties.copy(base.get())));
 	}
 
-	public abstract <T extends BlockEntity> Supplier<BlockEntityType<? extends T>> registerBlockEntity(String name, Supplier<? extends Block> block, BiFunction<BlockPos, BlockState, T> blockEntity);
+	/**
+	 * <p>
+	 *     Registers a {@link BlockEntityType}.
+	 * </p>
+	 * <p>
+	 *     Classes extending {@link BlockEntity} must declare a constructor that takes in a {@link BlockPos} and a {@link BlockState}.
+	 *     The constructor should be passed to this method as a method reference to register the block entity.
+	 * </p>
+	 *
+	 * @param name The block entity's registry name.
+	 * @param blockEntity The block entity's constructor.
+	 * @param blocks A collection of blocks that use this block entity.
+	 * @return A supplier returning the registered block entity type.
+	 * @param <T> The block entity's class.
+	 */
+	public abstract <T extends BlockEntity> Supplier<BlockEntityType<? extends T>> registerBlockEntity(String name, BiFunction<BlockPos, BlockState, T> blockEntity, Collection<Supplier<? extends Block>> blocks);
+
+	/**
+	 * <p>
+	 *     Registers a {@link BlockEntityType}.
+	 * </p>
+	 * <p>
+	 *     Classes extending {@link BlockEntity} must declare a constructor that takes in a {@link BlockPos} and a {@link BlockState}.
+	 *     The constructor should be passed to this method as a method reference to register the block entity.
+	 * </p>
+	 *
+	 * @param name The block entity's registry name.
+	 * @param blockEntity The block entity's constructor.
+	 * @param block The block that uses this block entity.
+	 * @return A supplier returning the registered block entity type.
+	 * @param <T> The block entity's class.
+	 */
+	public <T extends BlockEntity> Supplier<BlockEntityType<? extends T>> registerBlockEntity(String name, BiFunction<BlockPos, BlockState, T> blockEntity, Supplier<? extends Block> block) {
+		return this.registerBlockEntity(name, blockEntity, Set.of(block));
+	}
 
 	/**
 	 * <p>
@@ -315,8 +349,10 @@ public abstract class ModRegistry {
 	public abstract <T extends Feature<?>> Supplier<T> registerFeature(String name, Supplier<T> feature);
 
 	/**
-	 * Finalizes the registry process.
-	 * Must be called from the method annotated with the {@link Mod} annotation.
+	 * <p>
+	 *     Finalizes the registry process.
+	 *     Must be called from the method annotated with the {@link Mod} annotation.
+	 * </p>
 	 */
 	public abstract void register();
 }
