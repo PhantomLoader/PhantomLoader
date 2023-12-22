@@ -1,5 +1,6 @@
-package io.github.phantomloader.library;
+package io.github.phantomloader.library.utils;
 
+import io.github.phantomloader.library.registry.ModRegistry;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -14,11 +15,11 @@ import java.util.function.Supplier;
  * </p>
  * <p>
  *     A {@link LivingEntity} needs its attributes registered to be spawned in the game.
- *     This class can store an {@link AttributeSupplier} for every entity with {@link AttributesRegistry#registerAttributes(Supplier, AttributeSupplier)}.
+ *     This class can store an {@link AttributeSupplier} for every entity with {@link ModEntityAttributes#registerAttributes(Supplier, AttributeSupplier)}.
  *     The Phantom library will then query the stored values for each mod loader to register attributes.
  * </p>
  */
-public class AttributesRegistry {
+public class ModEntityAttributes {
 
 	/** Entity-attributes map */
 	private static final HashMap<Supplier<EntityType<? extends LivingEntity>>, AttributeSupplier> ENTITIES = new HashMap<>();
@@ -49,7 +50,7 @@ public class AttributesRegistry {
 
 	/**
 	 * <p>
-	 *     Queries all attributes added with {@link AttributesRegistry#registerAttributes(Supplier, AttributeSupplier)} and registers them.
+	 *     Queries all attributes added with {@link ModEntityAttributes#registerAttributes(Supplier, AttributeSupplier)} and registers them.
 	 *     Called from the loader-specific modules of the Phantom library.
 	 * </p>
 	 *

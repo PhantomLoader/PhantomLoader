@@ -1,5 +1,6 @@
-package io.github.phantomloader.library;
+package io.github.phantomloader.library.utils;
 
+import io.github.phantomloader.library.registry.ModRegistry;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.world.entity.Entity;
@@ -17,13 +18,13 @@ import java.util.function.Supplier;
  *     Static class used to store {@link Entity} and {@link BlockEntity} renderers.
  * </p>
  * <p>
- *     Renderers may be added by calling {@link RenderersRegistry#registerEntityRenderer(Supplier, EntityRendererProvider)} and {@link RenderersRegistry#registerBlockEntityRenderer(Supplier, BlockEntityRendererProvider)} from the common module.
+ *     Renderers may be added by calling {@link ModRenderers#registerEntityRenderer(Supplier, EntityRendererProvider)} and {@link ModRenderers#registerBlockEntityRenderer(Supplier, BlockEntityRendererProvider)} from the common module.
  *     The Phantom library will then query those values for each mod loader to register renderers.
  * </p>
  *
  * @author Nico
  */
-public class RenderersRegistry {
+public class ModRenderers {
 
 	/** Entities to register */
 	private static final HashMap<Supplier<?>, EntityRendererProvider<?>> ENTITIES = new HashMap<>();
@@ -58,7 +59,7 @@ public class RenderersRegistry {
 
 	/**
 	 * <p>
-	 *     Queries all entity renderers added with {@link RenderersRegistry#registerEntityRenderer(Supplier, EntityRendererProvider)} and registers them.
+	 *     Queries all entity renderers added with {@link ModRenderers#registerEntityRenderer(Supplier, EntityRendererProvider)} and registers them.
 	 *     Called from the loader-specific modules of the Phantom library.
 	 * </p>
 	 *
@@ -72,7 +73,7 @@ public class RenderersRegistry {
 
 	/**
 	 * <p>
-	 *     Queries all block entity renderers added with {@link RenderersRegistry#registerBlockEntityRenderer(Supplier, BlockEntityRendererProvider)} and registers them.
+	 *     Queries all block entity renderers added with {@link ModRenderers#registerBlockEntityRenderer(Supplier, BlockEntityRendererProvider)} and registers them.
 	 *     Called from the loader-specific modules of the Phantom library.
 	 * </p>
 	 *

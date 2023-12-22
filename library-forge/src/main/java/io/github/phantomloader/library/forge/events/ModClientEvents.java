@@ -1,7 +1,7 @@
 package io.github.phantomloader.library.forge.events;
 
-import io.github.phantomloader.library.CreativeTabs;
-import io.github.phantomloader.library.RenderersRegistry;
+import io.github.phantomloader.library.utils.CreativeTabs;
+import io.github.phantomloader.library.utils.ModRenderers;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
@@ -40,7 +40,7 @@ public class ModClientEvents {
 	 */
 	@SubscribeEvent
 	public static void registerRenders(EntityRenderersEvent.RegisterRenderers event) {
-		RenderersRegistry.registerEntityRenderers(event::registerEntityRenderer);
-		RenderersRegistry.registerBlockEntityRenderers(event::registerBlockEntityRenderer);
+		ModRenderers.registerEntityRenderers(event::registerEntityRenderer);
+		ModRenderers.registerBlockEntityRenderers(event::registerBlockEntityRenderer);
 	}
 }

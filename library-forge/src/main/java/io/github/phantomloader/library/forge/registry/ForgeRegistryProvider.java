@@ -1,7 +1,7 @@
-package io.github.phantomloader.library.forge;
+package io.github.phantomloader.library.forge.registry;
 
-import io.github.phantomloader.library.ModRegistry;
-import io.github.phantomloader.library.RegistryProvider;
+import io.github.phantomloader.library.registry.ModRegistry;
+import io.github.phantomloader.library.registry.RegistryProvider;
 
 /**
  * <p>

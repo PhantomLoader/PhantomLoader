@@ -1,6 +1,6 @@
-package io.github.phantomloader.library.forge;
+package io.github.phantomloader.library.forge.registry;
 
-import io.github.phantomloader.library.ModRegistry;
+import io.github.phantomloader.library.registry.ModRegistry;
 import io.github.phantomloader.library.forge.items.BlockEntityItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;

@@ -1,5 +1,7 @@
 package io.github.phantomloader.library;
 
+import io.github.phantomloader.library.registry.ModRegistry;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Target;
 

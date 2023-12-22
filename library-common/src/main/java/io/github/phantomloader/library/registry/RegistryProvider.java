@@ -1,4 +1,4 @@
-package io.github.phantomloader.library;
+package io.github.phantomloader.library.registry;
 
 /**
  * <p>

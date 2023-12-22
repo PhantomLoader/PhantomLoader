@@ -1,6 +1,7 @@
-package io.github.phantomloader.library.fabric;
+package io.github.phantomloader.library.fabric.registry;
 
-import io.github.phantomloader.library.ModRegistry;
+import io.github.phantomloader.library.fabric.FabricClientInitializer;
+import io.github.phantomloader.library.registry.ModRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;

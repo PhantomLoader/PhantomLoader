@@ -1,6 +1,6 @@
 package io.github.phantomloader.library.forge.events;
 
-import io.github.phantomloader.library.AttributesRegistry;
+import io.github.phantomloader.library.utils.ModEntityAttributes;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -11,6 +11,6 @@ public class ModEvents {
 
 	@SubscribeEvent
 	public static void createAttributes(EntityAttributeCreationEvent event) {
-		AttributesRegistry.registerAttributes(event::put);
+		ModEntityAttributes.registerAttributes(event::put);
 	}
 }

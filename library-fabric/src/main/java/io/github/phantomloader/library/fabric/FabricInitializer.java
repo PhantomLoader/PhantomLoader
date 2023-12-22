@@ -1,6 +1,6 @@
 package io.github.phantomloader.library.fabric;
 
-import io.github.phantomloader.library.AttributesRegistry;
+import io.github.phantomloader.library.utils.ModEntityAttributes;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 
@@ -13,6 +13,6 @@ public class FabricInitializer implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		AttributesRegistry.registerAttributes(FabricDefaultAttributeRegistry::register);
+		ModEntityAttributes.registerAttributes(FabricDefaultAttributeRegistry::register);
 	}
 }
