@@ -20,4 +20,4 @@ rootProject.name = 'PhantomLoader'
 
 include 'processor-common', 'processor-forge', 'processor-fabric'
 include 'library-common', 'library-forge', 'library-fabric'
-include 'example-common', 'example-forge'
+include 'example-common', 'example-forge', 'example-fabric'

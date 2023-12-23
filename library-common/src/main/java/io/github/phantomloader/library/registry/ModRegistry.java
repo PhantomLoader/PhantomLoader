@@ -15,7 +15,6 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
 
-import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.ServiceLoader;
 import java.util.Set;
@@ -291,11 +290,11 @@ public abstract class ModRegistry {
 	 *
 	 * @param name The block entity's registry name.
 	 * @param blockEntity The block entity's constructor.
-	 * @param blocks A collection of blocks that use this block entity.
+	 * @param blocks A set of blocks that use this block entity. Can be passed using {@link Set#of(Object[])}.
 	 * @return A supplier returning the registered block entity type.
 	 * @param <T> The block entity's class.
 	 */
-	public abstract <T extends BlockEntity> Supplier<BlockEntityType<? extends T>> registerBlockEntity(String name, BiFunction<BlockPos, BlockState, T> blockEntity, Collection<Supplier<? extends Block>> blocks);
+	public abstract <T extends BlockEntity> Supplier<BlockEntityType<? extends T>> registerBlockEntity(String name, BiFunction<BlockPos, BlockState, T> blockEntity, Set<Supplier<? extends Block>> blocks);
 
 	/**
 	 * <p>

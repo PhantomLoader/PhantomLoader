@@ -1,7 +1,7 @@
 package io.github.phantomloader.library.forge.registry;
 
-import io.github.phantomloader.library.registry.ModRegistry;
 import io.github.phantomloader.library.forge.items.BlockEntityItem;
+import io.github.phantomloader.library.registry.ModRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -21,7 +21,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.Collection;
+import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
@@ -92,7 +92,7 @@ public class ForgeRegistry extends ModRegistry {
 
 	@Override
 	@SuppressWarnings("DataFlowIssue")
-	public <T extends BlockEntity> Supplier<BlockEntityType<? extends T>> registerBlockEntity(String name, BiFunction<BlockPos, BlockState, T> blockEntity, Collection<Supplier<? extends Block>> blocks) {
+	public <T extends BlockEntity> Supplier<BlockEntityType<? extends T>> registerBlockEntity(String name, BiFunction<BlockPos, BlockState, T> blockEntity, Set<Supplier<? extends Block>> blocks) {
 		// Block entity types must be created here because BlockEntityType.BlockEntitySupplier has private access in the common module
 		return this.blockEntities.register(name, () -> BlockEntityType.Builder.of(blockEntity::apply, blocks.stream().map(Supplier::get).toArray(Block[]::new)).build(null));
 	}

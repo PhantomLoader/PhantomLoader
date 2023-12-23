@@ -4,6 +4,7 @@ import io.github.phantomloader.example.block.ModChestBlock;
 import io.github.phantomloader.example.block.ModChestBlockEntity;
 import io.github.phantomloader.library.Mod;
 import io.github.phantomloader.library.registry.ModRegistry;
+import io.github.phantomloader.library.utils.CreativeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -36,5 +37,9 @@ public class ExampleMod {
 	)
 	public static void initialize() {
 		REGISTRY.register();
+		CreativeTabs.addItemToCreativeTab(CreativeTabs.INGREDIENTS, TEST_ITEM);
+		CreativeTabs.addItemToCreativeTab(CreativeTabs.BUILDING_BLOCKS, TEST_BLOCK);
+		CreativeTabs.addItemsToCreativeTab(CreativeTabs.FUNCTIONAL_BLOCKS, Set.of(CHEST_1, CHEST_2));
+		ExampleConfig.BUILDER.register("example");
 	}
 }

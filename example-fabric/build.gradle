@@ -1,0 +1,53 @@
+plugins {
+    id 'java'
+    id 'fabric-loom' version '0.12-SNAPSHOT'
+}
+
+base {
+    archivesName = 'example'
+}
+
+repositories {
+    flatDir {
+        dir '../library-fabric/build/libs'
+    }
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${minecraftVersion}"
+    mappings loom.officialMojangMappings()
+    modImplementation "net.fabricmc:fabric-loader:${fabricVersion}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabricApiVersion}+${minecraftVersion}"
+    implementation project(':example-common')
+    modImplementation "io.github.phantomloader:library:${phantomVersion}" // TODO: Fabric is not adding the classifier
+    annotationProcessor project(':processor-fabric')
+}
+
+loom {
+    runs {
+        client {
+            client()
+            setConfigName("fabric-1.20")
+            ideConfigGenerated(true)
+            runDir("../.minecraft")
+        }
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    source project(':example-common').sourceSets.main.allSource
+    options.compilerArgs.add "-AminecraftVersion=${minecraftVersion}"
+    options.compilerArgs.add "-AphantomVersion=${phantomVersion}"
+    options.compilerArgs.add "-AfabricVersion=${fabricVersion}"
+    options.compilerArgs.add "-AfabricApiVersion=${fabricApiVersion}"
+}
+
+// TODO: fabric.mod.json cannot get ${version}
+
+processResources {
+    from project(':example-common').sourceSets.main.resources
+}
+
+jar {
+    archiveClassifier = 'fabric'
+}

@@ -1,18 +1,21 @@
 package io.github.phantomloader.library.fabric.config;
 
-import com.google.gson.reflect.TypeToken;
 import com.google.gson.GsonBuilder;
-import io.github.phantomloader.library.config.ConfigFile;
+import com.google.gson.reflect.TypeToken;
+import io.github.phantomloader.library.config.ConfigBuilder;
 import net.fabricmc.loader.api.FabricLoader;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.UncheckedIOException;
+import java.io.Writer;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.function.Supplier;
 
-public class FabricConfigFile implements ConfigFile {
+public class FabricConfigBuilder implements ConfigBuilder {
 
 	private HashMap<String, Object> config = new HashMap<>();
 
@@ -50,6 +53,8 @@ public class FabricConfigFile implements ConfigFile {
 		this.config.put(key, defaultValue);
 		return () -> this.config.get(key).toString();
 	}
+
+	// TODO: Add ranges
 
 	@Override
 	public void endCategory() {

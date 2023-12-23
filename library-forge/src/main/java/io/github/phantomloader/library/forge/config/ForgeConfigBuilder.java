@@ -1,13 +1,13 @@
 package io.github.phantomloader.library.forge.config;
 
-import io.github.phantomloader.library.config.ConfigFile;
+import io.github.phantomloader.library.config.ConfigBuilder;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
 
 import java.util.function.Supplier;
 
-public class ForgeConfigFile implements ConfigFile {
+public class ForgeConfigBuilder implements ConfigBuilder {
 
 	private final ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
 
@@ -33,7 +33,7 @@ public class ForgeConfigFile implements ConfigFile {
 	}
 
 	@Override
-	public Supplier<Integer> define(String key, int defaultValue, int max, int min, String... comment) {
+	public Supplier<Integer> define(String key, int defaultValue, int min, int max, String... comment) {
 		if(comment != null && comment.length > 0) {
 			this.builder.comment(comment);
 		}
@@ -49,7 +49,7 @@ public class ForgeConfigFile implements ConfigFile {
 	}
 
 	@Override
-	public Supplier<Double> define(String key, double defaultValue, double max, double min, String... comment) {
+	public Supplier<Double> define(String key, double defaultValue, double min, double max, String... comment) {
 		if(comment != null && comment.length > 0) {
 			this.builder.comment(comment);
 		}
@@ -65,7 +65,7 @@ public class ForgeConfigFile implements ConfigFile {
 	}
 
 	@Override
-	public Supplier<Long> define(String key, long defaultValue, long max, long min, String... comment) {
+	public Supplier<Long> define(String key, long defaultValue, long min, long max, String... comment) {
 		if(comment != null && comment.length > 0) {
 			this.builder.comment(comment);
 		}

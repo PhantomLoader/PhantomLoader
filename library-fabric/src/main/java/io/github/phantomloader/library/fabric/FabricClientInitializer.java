@@ -40,6 +40,7 @@ public class FabricClientInitializer implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
 		ENTITY_BLOCKS.forEach(block -> BuiltinItemRendererRegistry.INSTANCE.register(block, new BlockEntityItemRenderer(block)));
+		// TODO: Creative tabs don't work
 		CreativeTabs.allTabs().forEach(resourceKey -> ItemGroupEvents.modifyEntriesEvent(resourceKey).register(listener -> CreativeTabs.accept(resourceKey, supplier -> listener.accept(supplier.get()))));
 		ModRenderers.registerEntityRenderers(EntityRendererRegistry::register);
 		ModRenderers.registerBlockEntityRenderers(BlockEntityRenderers::register);
