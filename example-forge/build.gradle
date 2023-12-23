@@ -1,0 +1,59 @@
+plugins {
+    id 'idea'
+    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
+    id 'org.spongepowered.mixin' version "0.7.+"
+}
+
+base {
+    archivesName = 'example'
+}
+
+minecraft {
+    mappings channel: 'official', version: minecraftVersion
+
+    runs {
+        client {
+            workingDirectory this.file('../.minecraft')
+            ideaModule "${rootProject.name}.${project.name}.main"
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+            mods {
+                runClient {
+                    source this.sourceSets.main
+                }
+            }
+        }
+    }
+}
+
+sourceSets.main.resources.srcDir 'src/generated/resources'
+
+repositories {
+    flatDir {
+        dir '../library-forge/build/libs'
+    }
+}
+
+dependencies {
+    minecraft "net.minecraftforge:forge:${minecraftVersion}-${forgeVersion}"
+    implementation project(':example-common')
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+    implementation fg.deobf("io.github.phantomloader:library:${phantomVersion}:forge")
+    annotationProcessor project(':processor-forge')
+}
+
+tasks.withType(JavaCompile).configureEach {
+    source project(':example-common').sourceSets.main.allSource
+    options.compilerArgs.add "-AminecraftVersion=${minecraftVersion}"
+    options.compilerArgs.add "-AphantomVersion=${phantomVersion}"
+    options.compilerArgs.add "-AforgeVersion=${forgeVersion}"
+}
+
+processResources {
+    from project(':example-common').sourceSets.main.resources
+}
+
+jar {
+    archiveClassifier = 'forge'
+    finalizedBy 'reobfJar'
+}
