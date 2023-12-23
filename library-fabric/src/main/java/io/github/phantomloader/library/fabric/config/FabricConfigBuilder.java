@@ -13,52 +13,86 @@ import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
+import java.util.Stack;
 import java.util.function.Supplier;
 
 public class FabricConfigBuilder implements ConfigBuilder {
 
 	private HashMap<String, Object> config = new HashMap<>();
+	private final Stack<HashMap<String, Object>> currentCategory = new Stack<>();
+
+	public FabricConfigBuilder() {
+		this.currentCategory.push(this.config);
+	}
 
 	@Override
 	public void beginCategory(String category) {
-		// TODO: Add categories
+		HashMap<String, Object> map = new HashMap<>();
+		this.currentCategory.peek().put(category, map);
+		this.currentCategory.push(map);
 	}
 
 	@Override
 	public Supplier<Boolean> define(String key, boolean defaultValue, String... comment) {
-		this.config.put(key, defaultValue);
-		return () -> (Boolean) this.config.get(key);
+		HashMap<String, Object> category = this.currentCategory.peek();
+		category.put(key, defaultValue);
+		return () -> (Boolean) category.get(key);
 	}
 
 	@Override
 	public Supplier<Integer> define(String key, int defaultValue, String... comment) {
-		this.config.put(key, defaultValue);
-		return () -> (Integer) this.config.get(key);
+		HashMap<String, Object> category = this.currentCategory.peek();
+		category.put(key, defaultValue);
+		return () -> (Integer) category.get(key);
+	}
+
+	@Override
+	public Supplier<Integer> define(String key, int defaultValue, int min, int max, String... comment) {
+		this.define(key, defaultValue, comment);
+		HashMap<String, Object> category = this.currentCategory.peek();
+		return () -> Math.max(min, Math.min(max, (Integer) category.get(key)));
 	}
 
 	@Override
 	public Supplier<Double> define(String key, double defaultValue, String... comment) {
-		this.config.put(key, defaultValue);
-		return () -> (Double) this.config.get(key);
+		HashMap<String, Object> category = this.currentCategory.peek();
+		category.put(key, defaultValue);
+		return () -> (Double) category.get(key);
+	}
+
+	@Override
+	public Supplier<Double> define(String key, double defaultValue, double min, double max, String... comment) {
+		this.define(key, defaultValue, comment);
+		HashMap<String, Object> category = this.currentCategory.peek();
+		return () -> Math.max(min, Math.min(max, (Double) category.get(key)));
 	}
 
 	@Override
 	public Supplier<Long> define(String key, long defaultValue, String... comment) {
-		this.config.put(key, defaultValue);
-		return () -> (Long) this.config.get(key);
+		HashMap<String, Object> category = this.currentCategory.peek();
+		category.put(key, defaultValue);
+		return () -> (Long) category.get(key);
+	}
+
+	@Override
+	public Supplier<Long> define(String key, long defaultValue, long min, long max, String... comment) {
+		this.define(key, defaultValue, comment);
+		HashMap<String, Object> category = this.currentCategory.peek();
+		return () -> Math.max(min, Math.min(max, (Long) category.get(key)));
 	}
 
 	@Override
 	public Supplier<String> define(String key, String defaultValue, String... comment) {
-		this.config.put(key, defaultValue);
-		return () -> this.config.get(key).toString();
+		HashMap<String, Object> category = this.currentCategory.peek();
+		category.put(key, defaultValue);
+		return () -> category.get(key).toString();
 	}
-
-	// TODO: Add ranges
 
 	@Override
 	public void endCategory() {
-
+		if(!this.currentCategory.isEmpty()) {
+			this.currentCategory.pop();
+		}
 	}
 
 	@Override
