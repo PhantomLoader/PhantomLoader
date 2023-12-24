@@ -7,8 +7,16 @@ import net.minecraftforge.fml.config.ModConfig;
 
 import java.util.function.Supplier;
 
+/**
+ * <p>
+ *     Forge implementation of a {@link ConfigBuilder}.
+ * </p>
+ *
+ * @author Nico
+ */
 public class ForgeConfigBuilder implements ConfigBuilder {
 
+	/** Forge's config builder */
 	private final ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
 
 	@Override

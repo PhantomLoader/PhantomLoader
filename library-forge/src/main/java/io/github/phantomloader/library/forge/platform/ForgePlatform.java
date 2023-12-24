@@ -4,6 +4,13 @@ import io.github.phantomloader.library.platform.Platform;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLLoader;
 
+/**
+ * <p>
+ *     Forge implementation of {@link Platform}.
+ * </p>
+ *
+ * @author Nico
+ */
 public class ForgePlatform implements Platform {
 
 	@Override

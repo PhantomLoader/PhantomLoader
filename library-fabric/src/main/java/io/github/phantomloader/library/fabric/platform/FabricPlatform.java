@@ -3,6 +3,13 @@ package io.github.phantomloader.library.fabric.platform;
 import io.github.phantomloader.library.platform.Platform;
 import net.fabricmc.loader.api.FabricLoader;
 
+/**
+ * <p>
+ *     Fabric implementation of {@link Platform}.
+ * </p>
+ *
+ * @author Nico
+ */
 public class FabricPlatform implements Platform {
 
 	@Override

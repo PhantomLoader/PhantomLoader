@@ -16,11 +16,26 @@ import java.util.HashMap;
 import java.util.Stack;
 import java.util.function.Supplier;
 
+/**
+ * <p>
+ *     Fabric implementation of a {@link ConfigBuilder}.
+ * </p>
+ *
+ * @author Nico
+ */
 public class FabricConfigBuilder implements ConfigBuilder {
 
+	/** Config json representation */
 	private HashMap<String, Object> config = new HashMap<>();
+	/** Stack used to implement categories */
 	private final Stack<HashMap<String, Object>> currentCategory = new Stack<>();
 
+	/**
+	 * <p>
+	 *     Constructs a new {@code FabricConfigBuilder}.
+	 *     Sets the current category to the root json object.
+	 * </p>
+	 */
 	public FabricConfigBuilder() {
 		this.currentCategory.push(this.config);
 	}

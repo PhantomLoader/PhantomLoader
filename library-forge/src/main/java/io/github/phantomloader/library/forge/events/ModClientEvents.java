@@ -10,7 +10,7 @@ import net.minecraftforge.fml.common.Mod;
 
 /**
  * <p>
- *     Forge event handler used for client events.
+ *     Forge event handler used for mod client events.
  * </p>
  *
  * @author Nico
