@@ -5,6 +5,7 @@ import io.github.phantomloader.example.block.ModChestBlockEntity;
 import io.github.phantomloader.library.Mod;
 import io.github.phantomloader.library.registry.ModRegistry;
 import io.github.phantomloader.library.utils.CreativeTabs;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -26,6 +27,8 @@ public class ExampleMod {
 
 	public static final Supplier<BlockEntityType<? extends ModChestBlockEntity>> CHEST_BLOCK_ENTITY = REGISTRY.registerBlockEntity("chest", ModChestBlockEntity::new, Set.of(CHEST_1, CHEST_2));
 
+	public static final Supplier<CreativeModeTab> CREATIVE_MODE_TAB = REGISTRY.registerCreativeTab("john", TEST_ITEM, "John");
+
 	@Mod(
 			id = "example",
 			name = "Example Mod",
@@ -37,9 +40,7 @@ public class ExampleMod {
 	)
 	public static void initialize() {
 		REGISTRY.register();
-		CreativeTabs.addItemToCreativeTab(CreativeTabs.INGREDIENTS, TEST_ITEM);
-		CreativeTabs.addItemToCreativeTab(CreativeTabs.BUILDING_BLOCKS, TEST_BLOCK);
-		CreativeTabs.addItemsToCreativeTab(CreativeTabs.FUNCTIONAL_BLOCKS, Set.of(CHEST_1, CHEST_2));
+		CreativeTabs.addToTab("example", "john", TEST_BLOCK);
 		ExampleConfig.BUILDER.register("example");
 	}
 }

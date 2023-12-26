@@ -2,12 +2,15 @@ package io.github.phantomloader.library.registry;
 
 import io.github.phantomloader.library.Mod;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.SpawnEggItem;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -15,6 +18,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
 
+import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.ServiceLoader;
 import java.util.Set;
@@ -313,6 +317,90 @@ public abstract class ModRegistry {
 	 */
 	public <T extends BlockEntity> Supplier<BlockEntityType<? extends T>> registerBlockEntity(String name, BiFunction<BlockPos, BlockState, T> blockEntity, Supplier<? extends Block> block) {
 		return this.registerBlockEntity(name, blockEntity, Set.of(block));
+	}
+
+	/**
+	 * <p>
+	 *     Registers a {@link CreativeModeTab}.
+	 * </p>
+	 * <p>
+	 *     This function is used to create creative tabs for mods. Items to display in that tab should be passed here.
+	 *     Alternatively, the {@link io.github.phantomloader.library.utils.CreativeTabs#addToTab(String, String, Supplier)} method can be used.
+	 * </p>
+	 * <p>
+	 *     Items can be added to vanilla creative tabs with {@link io.github.phantomloader.library.utils.CreativeTabs#addToTab(String, Supplier)}.
+	 * </p>
+	 *
+	 * @param name The creative tab's registry name. Note that this is different from the tab's title.
+	 * @param icon The icon to display in the creative tab.
+	 * @param title The creative tab's display name, the one that appears in the creative mode tab.
+	 * @param items A {@link Collection} of the items to display in the creative tab.
+	 * @return A supplier returning the registered creative tab.
+	 */
+	public abstract Supplier<CreativeModeTab> registerCreativeTab(String name, Supplier<? extends ItemLike> icon, Component title, Collection<Supplier<? extends ItemLike>> items);
+
+	/**
+	 * <p>
+	 *     Registers a {@link CreativeModeTab}.
+	 * </p>
+	 * <p>
+	 *     This function is used to create creative tabs for mods.
+	 *     Items can be added to the tab with {@link io.github.phantomloader.library.utils.CreativeTabs#addToTab(String, String, Supplier)}.
+	 * </p>
+	 * <p>
+	 *     Items can be added to vanilla creative tabs with {@link io.github.phantomloader.library.utils.CreativeTabs#addToTab(String, Supplier)}.
+	 * </p>
+	 *
+	 * @param name The creative tab's registry name. Note that this is different from the tab's title.
+	 * @param icon The icon to display in the creative tab.
+	 * @param title The creative tab's display name, the one that appears in the creative mode tab.
+	 * @return A supplier returning the registered creative tab.
+	 */
+	public Supplier<CreativeModeTab> registerCreativeTab(String name, Supplier<? extends ItemLike> icon, Component title) {
+		return this.registerCreativeTab(name, icon, title, Set.of());
+	}
+
+	/**
+	 * <p>
+	 *     Registers a {@link CreativeModeTab}.
+	 * </p>
+	 * <p>
+	 *     This function is used to create creative tabs for mods. Items to display in that tab should be passed here.
+	 *     Alternatively, the {@link io.github.phantomloader.library.utils.CreativeTabs#addToTab(String, String, Supplier)} method can be used.
+	 * </p>
+	 * <p>
+	 *     Items can be added to vanilla creative tabs with {@link io.github.phantomloader.library.utils.CreativeTabs#addToTab(String, Supplier)}.
+	 * </p>
+	 *
+	 * @param name The creative tab's registry name. Note that this is different from the tab's title.
+	 * @param icon The icon to display in the creative tab.
+	 * @param title The creative tab's display name, the one that appears in the creative mode tab. Can be a translatable string.
+	 * @param items A {@link Collection} of the items to display in the creative tab.
+	 * @return A supplier returning the registered creative tab.
+	 */
+	public Supplier<CreativeModeTab> registerCreativeTab(String name, Supplier<? extends ItemLike> icon, String title, Collection<Supplier<? extends ItemLike>> items) {
+		return this.registerCreativeTab(name, icon, Component.translatable(title), items);
+	}
+
+	/**
+	 * <p>
+	 *     Registers a {@link CreativeModeTab}.
+	 * </p>
+	 * <p>
+	 *     This function is used to create creative tabs for mods.
+	 *     Items can be added to the tab with {@link io.github.phantomloader.library.utils.CreativeTabs#addToTab(String, String, Supplier)}.
+	 * </p>
+	 * <p>
+	 *     Items can be added to vanilla creative tabs with {@link io.github.phantomloader.library.utils.CreativeTabs#addToTab(String, Supplier)}.
+	 * </p>
+	 *
+	 * @param name The creative tab's registry name. Note that this is different from the tab's title.
+	 * @param icon The icon to display in the creative tab.
+	 * @param title The creative tab's display name, the one that appears in the creative mode tab. Can be a translatable string.
+	 * @return A supplier returning the registered creative tab.
+	 */
+	public Supplier<CreativeModeTab> registerCreativeTab(String name, Supplier<? extends ItemLike> icon, String title) {
+		return this.registerCreativeTab(name, icon, title, Set.of());
 	}
 
 	/**

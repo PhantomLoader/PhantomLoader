@@ -3,12 +3,13 @@ package io.github.phantomloader.library.forge.registry;
 import io.github.phantomloader.library.forge.items.BlockEntityItem;
 import io.github.phantomloader.library.registry.ModRegistry;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.SpawnEggItem;
+import net.minecraft.world.item.*;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -21,6 +22,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.Collection;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
@@ -44,6 +46,8 @@ public class ForgeRegistry extends ModRegistry {
 	private final DeferredRegister<Block> blocks;
 	/** Deferred register for block entities */
 	private final DeferredRegister<BlockEntityType<?>> blockEntities;
+	/** Deferred register for creative tabs */
+	private final DeferredRegister<CreativeModeTab> creativeTabs;
 	/** Deferred register for entities */
 	private final DeferredRegister<EntityType<?>> entities;
 	/** Deferred register for features */
@@ -65,6 +69,7 @@ public class ForgeRegistry extends ModRegistry {
 		this.items = DeferredRegister.create(ForgeRegistries.ITEMS, mod);
 		this.blocks = DeferredRegister.create(ForgeRegistries.BLOCKS, mod);
 		this.blockEntities = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, mod);
+		this.creativeTabs = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, mod);
 		this.entities = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, mod);
 		this.features = DeferredRegister.create(ForgeRegistries.FEATURES, mod);
 	}
@@ -98,6 +103,16 @@ public class ForgeRegistry extends ModRegistry {
 	}
 
 	@Override
+	public Supplier<CreativeModeTab> registerCreativeTab(String name, Supplier<? extends ItemLike> icon, Component title, Collection<Supplier<? extends ItemLike>> items) {
+		return this.creativeTabs.register(name, () -> CreativeModeTab.builder()
+				.title(title)
+				.icon(() -> new ItemStack(icon.get()))
+				.displayItems((params, output) -> items.forEach(item -> output.accept(item.get())))
+				.build()
+		);
+	}
+
+	@Override
 	public <T extends Entity> Supplier<EntityType<T>> registerEntity(String name, EntityType.Builder<T> builder) {
 		return this.entities.register(name, () -> builder.build(name));
 	}
@@ -118,6 +133,7 @@ public class ForgeRegistry extends ModRegistry {
 		this.items.register(eventBus);
 		this.blocks.register(eventBus);
 		this.blockEntities.register(eventBus);
+		this.creativeTabs.register(eventBus);
 		this.entities.register(eventBus);
 		this.features.register(eventBus);
 	}

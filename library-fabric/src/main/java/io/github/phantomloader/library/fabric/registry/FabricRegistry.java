@@ -6,11 +6,15 @@ import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityT
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -18,6 +22,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
 
+import java.util.Collection;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
@@ -84,6 +89,17 @@ public class FabricRegistry extends ModRegistry {
 	public <T extends BlockEntity> Supplier<BlockEntityType<? extends T>> registerBlockEntity(String name, BiFunction<BlockPos, BlockState, T> blockEntity, Set<Supplier<? extends Block>> blocks) {
 		// Block entity types must be created here because BlockEntityType.BlockEntitySupplier has private access in the common module
 		BlockEntityType<T> registered = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, this.identifier(name), FabricBlockEntityTypeBuilder.create(blockEntity::apply, blocks.stream().map(Supplier::get).toArray(Block[]::new)).build());
+		return () -> registered;
+	}
+
+	@Override
+	public Supplier<CreativeModeTab> registerCreativeTab(String name, Supplier<? extends ItemLike> icon, Component title, Collection<Supplier<? extends ItemLike>> items) {
+		CreativeModeTab registered = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, this.identifier(name), CreativeModeTab.builder(CreativeModeTab.Row.TOP, 0)
+				.title(title)
+				.icon(() -> new ItemStack(icon.get()))
+				.displayItems((params, output) -> items.forEach(item -> output.accept(item.get())))
+				.build()
+		);
 		return () -> registered;
 	}
 
