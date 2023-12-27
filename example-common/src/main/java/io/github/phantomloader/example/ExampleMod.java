@@ -2,7 +2,7 @@ package io.github.phantomloader.example;
 
 import io.github.phantomloader.example.block.ModChestBlock;
 import io.github.phantomloader.example.block.ModChestBlockEntity;
-import io.github.phantomloader.library.Mod;
+import io.github.phantomloader.library.ModInitializer;
 import io.github.phantomloader.library.registry.ModRegistry;
 import io.github.phantomloader.library.utils.CreativeTabs;
 import net.minecraft.world.item.CreativeModeTab;
@@ -29,18 +29,13 @@ public class ExampleMod {
 
 	public static final Supplier<CreativeModeTab> CREATIVE_MODE_TAB = REGISTRY.registerCreativeTab("john", TEST_ITEM, "John");
 
-	@Mod(
-			id = "example",
-			name = "Example Mod",
-			description = "This an auto-generated mod create with Phantom Loader",
-			authors = {"HexagonNico"},
-			homepage = "https://example.com",
-			sources = "https://github.com/PhantomLoader/PhantomLoader",
-			license = "CC BY-NC-ND 4.0"
-	)
+	@ModInitializer
 	public static void initialize() {
 		REGISTRY.register();
+	}
+
+	@ModInitializer(type = "client")
+	public static void initializeClient() {
 		CreativeTabs.addToTab("example", "john", TEST_BLOCK);
-		ExampleConfig.BUILDER.register("example");
 	}
 }

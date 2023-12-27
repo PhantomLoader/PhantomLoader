@@ -18,9 +18,10 @@ dependencies {
     mappings loom.officialMojangMappings()
     modImplementation "net.fabricmc:fabric-loader:${fabricVersion}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${fabricApiVersion}+${minecraftVersion}"
-    implementation project(':example-common')
-    modImplementation "io.github.phantomloader:library:${phantomVersion}" // TODO: Fabric is not adding the classifier
-    annotationProcessor project(':processor-fabric')
+    // TODO: Fabric is broken again...
+//    implementation project(':example-common')
+//    modImplementation "io.github.phantomloader:library:${phantomVersion}" // TODO: Fabric is not adding the classifier
+//    annotationProcessor project(':processor-fabric')
 }
 
 loom {
@@ -35,7 +36,7 @@ loom {
 }
 
 tasks.withType(JavaCompile).configureEach {
-    source project(':example-common').sourceSets.main.allSource
+//    source project(':example-common').sourceSets.main.allSource
     options.compilerArgs.add "-AminecraftVersion=${minecraftVersion}"
     options.compilerArgs.add "-AphantomVersion=${phantomVersion}"
     options.compilerArgs.add "-AfabricVersion=${fabricVersion}"
@@ -45,7 +46,7 @@ tasks.withType(JavaCompile).configureEach {
 // TODO: fabric.mod.json cannot get ${version}
 
 processResources {
-    from project(':example-common').sourceSets.main.resources
+//    from project(':example-common').sourceSets.main.resources
 }
 
 jar {

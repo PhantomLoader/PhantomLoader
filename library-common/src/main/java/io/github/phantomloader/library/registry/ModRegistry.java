@@ -1,6 +1,6 @@
 package io.github.phantomloader.library.registry;
 
-import io.github.phantomloader.library.Mod;
+import io.github.phantomloader.library.ModInitializer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
@@ -50,7 +50,7 @@ public abstract class ModRegistry {
 	 *     to work, therefore the library mod for the correct loader must be present at runtime.
 	 * </p>
 	 *
-	 * @param mod Mod id of the mod needed to instantiate the {@link ModRegistry#ModRegistry(String)}
+	 * @param mod ModInitializer id of the mod needed to instantiate the {@link ModRegistry#ModRegistry(String)}
 	 * @return An instance of {@code ModRegistry} for the current platform
 	 * @throws NoSuchElementException If no registry has been defined in {@code META-INF/services}
 	 */
@@ -439,7 +439,7 @@ public abstract class ModRegistry {
 	/**
 	 * <p>
 	 *     Finalizes the registry process.
-	 *     Must be called from the method annotated with the {@link Mod} annotation.
+	 *     Must be called from the method annotated with the {@link ModInitializer} annotation.
 	 * </p>
 	 */
 	public abstract void register();
