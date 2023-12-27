@@ -87,7 +87,7 @@ public class ForgeAnnotationProcessor extends ModAnnotationProcessor {
 			writer.println(tomlLine("modId", this.processingEnv.getOptions().get("modId")));
 			writer.println(tomlLine("version", this.processingEnv.getOptions().get("modVersion"), "${file.jarVersion}"));
 			writer.println(tomlLine("displayName", this.processingEnv.getOptions().get("modName"), "Unnamed"));
-			writer.println(tomlLine("displayURL", this.processingEnv.getOptions().get("modUrl")));
+			writer.println(tomlLine("displayURL", this.processingEnv.getOptions().get("modUrl"), this.processingEnv.getOptions().get("modSource")));
 			writer.println(tomlLine("logoFile", this.processingEnv.getOptions().get("modLogo"), "logo.png"));
 			writer.println(tomlLine("credits", this.processingEnv.getOptions().get("modCredits")));
 			writer.println(tomlLine("authors", this.processingEnv.getOptions().get("modAuthors")));
@@ -131,7 +131,7 @@ public class ForgeAnnotationProcessor extends ModAnnotationProcessor {
 
 	@Override
 	public Set<String> getSupportedOptions() {
-		return Set.of("forgeVersion", "phantomVersion", "minecraftVersion", "modId", "modGroupId", "modVersion", "modName", "modLicense", "modAuthors", "modCredits", "modDescription", "modUrl", "modLogo", "issueTracker");
+		return Set.of("forgeVersion", "phantomVersion", "minecraftVersion", "modId", "modGroupId", "modVersion", "modName", "modLicense", "modAuthors", "modCredits", "modDescription", "modUrl", "modSource", "modLogo", "issueTracker");
 	}
 
 	private String forgeVersion() {

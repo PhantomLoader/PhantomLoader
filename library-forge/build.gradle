@@ -5,7 +5,7 @@ plugins {
 }
 
 base {
-    archivesName = 'library'
+    archivesName = 'library-forge'
 }
 
 minecraft {
@@ -43,6 +43,5 @@ processResources {
 }
 
 jar {
-    archiveClassifier = 'forge'
     finalizedBy 'reobfJar'
 }

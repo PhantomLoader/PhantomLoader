@@ -5,7 +5,7 @@ plugins {
 }
 
 base {
-    archivesName = 'example'
+    archivesName = 'example-forge'
 }
 
 minecraft {
@@ -38,7 +38,7 @@ dependencies {
     minecraft "net.minecraftforge:forge:${minecraftVersion}-${forgeVersion}"
     implementation project(':example-common')
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
-    implementation fg.deobf("io.github.phantomloader:library:${phantomVersion}:forge")
+    implementation fg.deobf("io.github.phantomloader:library-forge:${phantomVersion}")
     annotationProcessor project(':processor-forge')
 }
 
@@ -60,6 +60,5 @@ processResources {
 }
 
 jar {
-    archiveClassifier = 'forge'
     finalizedBy 'reobfJar'
 }

@@ -4,7 +4,7 @@ plugins {
 }
 
 base {
-    archivesName = 'library'
+    archivesName = 'library-fabric'
 }
 
 dependencies {
@@ -30,13 +30,6 @@ tasks.withType(JavaCompile).configureEach {
     source project(':library-common').sourceSets.main.allSource
 }
 
-// TODO: fabric.mod.json cannot get ${version}
-
 processResources {
     from project(':library-common').sourceSets.main.resources
-}
-
-jar {
-    // TODO: Fabric is not adding the classifier
-    archiveClassifier = 'fabric'
 }
