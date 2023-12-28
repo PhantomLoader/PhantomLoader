@@ -31,11 +31,13 @@ public class ExampleMod {
 
 	@ModEntryPoint
 	public static void initialize() {
+		// TODO: Suddenly stopped working in Forge...
 		REGISTRY.register();
 	}
 
 	@ModEntryPoint(side = ModEntryPoint.Side.CLIENT)
 	public static void initializeClient() {
+		// TODO: Suddenly stopped working in both loaders...
 		CreativeTabs.addToTab("example", "john", TEST_BLOCK);
 	}
 }

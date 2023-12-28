@@ -1,6 +1,7 @@
 package io.github.phantomloader.processor.fabric;
 
 import io.github.phantomloader.library.ModEntryPoint;
+import io.github.phantomloader.library.integration.FabricCustomEntryPoint;
 import io.github.phantomloader.processor.ModAnnotationProcessor;
 
 import javax.lang.model.element.Element;
@@ -11,6 +12,7 @@ import java.io.UncheckedIOException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -40,11 +42,12 @@ public class FabricAnnotationProcessor extends ModAnnotationProcessor {
 		this.generateFabricInitializer(ModEntryPoint.Side.COMMON, "FabricInitializer", "net.fabricmc.api.ModInitializer");
 		this.generateFabricInitializer(ModEntryPoint.Side.CLIENT, "FabricClientInitializer", "net.fabricmc.api.ClientModInitializer");
 		this.generateFabricInitializer(ModEntryPoint.Side.SERVER, "FabricServerInitializer", "net.fabricmc.api.DedicatedServerModInitializer");
+		this.generateCustomInitializers();
 	}
 
 	/**
 	 * <p>
-	 *     Generates a mod entry point for Fabric.
+	 *     Generates a mod entry point for Fabric if any method for the given {@link ModEntryPoint.Side} exists.
 	 * </p>
 	 *
 	 * @param side The side of this entry point.
@@ -57,9 +60,11 @@ public class FabricAnnotationProcessor extends ModAnnotationProcessor {
 			try(PrintWriter writer = new PrintWriter(this.processingEnv.getFiler().createSourceFile(packageName + "." + className).openWriter())) {
 				writer.println("package " + packageName + ";");
 				for(Element method : this.annotatedMethods.get(side)) {
-					String methodClass = method.getEnclosingElement().getSimpleName().toString();
-					String methodPackage = this.processingEnv.getElementUtils().getPackageOf(method).getQualifiedName().toString();
-					writer.println("import static " + methodPackage + "." + methodClass + "." + method.getSimpleName() + ";");
+					if(method.getAnnotation(FabricCustomEntryPoint.class) == null) {
+						String methodClass = method.getEnclosingElement().getSimpleName().toString();
+						String methodPackage = this.processingEnv.getElementUtils().getPackageOf(method).getQualifiedName().toString();
+						writer.println("import static " + methodPackage + "." + methodClass + "." + method.getSimpleName() + ";");
+					}
 				}
 				writer.println("public class " + className + " implements " + interfaceName + " {");
 				Method[] interfaceMethods = Class.forName(interfaceName).getMethods();
@@ -67,7 +72,9 @@ public class FabricAnnotationProcessor extends ModAnnotationProcessor {
 					writer.println("	@Override");
 					writer.println("	public void " + interfaceMethods[0].getName() + "() {");
 					for(Element method : this.annotatedMethods.get(side)) {
-						writer.println("		" + method.getSimpleName() + "();");
+						if(method.getAnnotation(FabricCustomEntryPoint.class) == null) {
+							writer.println("		" + method.getSimpleName() + "();");
+						}
 					}
 					writer.println("	}");
 				}
@@ -79,6 +86,71 @@ public class FabricAnnotationProcessor extends ModAnnotationProcessor {
 			}
 			this.fabricInitializers.put(sideName(side), packageName + "." + className);
 		}
+	}
+
+	/**
+	 * <p>
+	 *     Generates custom initializers for methods annotated with {@link FabricCustomEntryPoint}.
+	 * </p>
+	 */
+	private void generateCustomInitializers() {
+		HashMap<NameInterfacePair, HashSet<Element>> customInitializers = new HashMap<>();
+		for(ModEntryPoint.Side side : this.annotatedMethods.keySet()) {
+			for(Element method : this.annotatedMethods.get(side)) {
+				FabricCustomEntryPoint customEntryPoint = method.getAnnotation(FabricCustomEntryPoint.class);
+				if(customEntryPoint != null) {
+					NameInterfacePair pair = new NameInterfacePair(customEntryPoint.name(), customEntryPoint.interfaceName());
+					if(customInitializers.containsKey(pair)) {
+						customInitializers.get(pair).add(method);
+					} else {
+						HashSet<Element> set = new HashSet<>();
+						set.add(method);
+						customInitializers.put(pair, set);
+					}
+				}
+			}
+		}
+		for(NameInterfacePair pair : customInitializers.keySet()) {
+			this.generateCustomInitializer(pair.name(), pair.interfaceName(), customInitializers.get(pair));
+		}
+	}
+
+	/**
+	 * <p>
+	 *     Generate a custom mod entry point.
+	 * </p>
+	 *
+	 * @param name Name of the entry point.
+	 * @param interfaceName Name of the interface to implement.
+	 * @param methods Set of methods to call from this initializer.
+	 */
+	private void generateCustomInitializer(String name, String interfaceName, HashSet<Element> methods) {
+		String packageName = this.processingEnv.getOptions().get("modGroupId") + ".fabric.integration";
+		String className = name.substring(0, 1).toUpperCase() + name.substring(1) + "Initializer";
+		try(PrintWriter writer = new PrintWriter(this.processingEnv.getFiler().createSourceFile(packageName + "." + className).openWriter())) {
+			writer.println("package " + packageName + ";");
+			for(Element method : methods) {
+				String methodClass = method.getEnclosingElement().getSimpleName().toString();
+				String methodPackage = this.processingEnv.getElementUtils().getPackageOf(method).getQualifiedName().toString();
+				writer.println("import static " + methodPackage + "." + methodClass + "." + method.getSimpleName() + ";");
+			}
+			writer.println("public class " + className + " implements " + interfaceName + " {");
+			Method[] interfaceMethods = Class.forName(interfaceName).getMethods();
+			if(interfaceMethods.length > 0) {
+				writer.println("	@Override");
+				writer.println("	public void " + interfaceMethods[0].getName() + "() {");
+				for(Element method : methods) {
+					writer.println("		" + method.getSimpleName() + "();");
+				}
+				writer.println("	}");
+			}
+			writer.println("}");
+		} catch (IOException e) {
+			throw new UncheckedIOException("Could not generate class " + packageName + "." + className, e);
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException("Could not find class " + interfaceName, e);
+		}
+		this.fabricInitializers.put(name, packageName + "." + className);
 	}
 
 	/**
@@ -152,5 +224,9 @@ public class FabricAnnotationProcessor extends ModAnnotationProcessor {
 	@Override
 	public Set<String> getSupportedOptions() {
 		return Set.of("fabricVersion", "phantomVersion", "minecraftVersion", "modId", "modGroupId", "modVersion", "modName", "modLicense", "modAuthors", "modDescription", "modUrl", "modSource", "modIcon");
+	}
+
+	private record NameInterfacePair(String name, String interfaceName) {
+
 	}
 }

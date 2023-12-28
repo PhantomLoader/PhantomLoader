@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "phantom",
-  "version": "${version}",
+  "version": "0.1",
   "name": "Phantom Library",
   "description": "A library to automate part of the process of creating mods for multiple loaders",
   "authors": [
