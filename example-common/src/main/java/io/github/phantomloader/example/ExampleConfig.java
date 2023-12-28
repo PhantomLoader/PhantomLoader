@@ -1,6 +1,6 @@
 package io.github.phantomloader.example;
 
-import io.github.phantomloader.library.ModInitializer;
+import io.github.phantomloader.library.ModEntryPoint;
 import io.github.phantomloader.library.config.ConfigBuilder;
 
 import java.util.function.Supplier;
@@ -29,7 +29,7 @@ public class ExampleConfig {
 		STRING_OPTION = BUILDER.define("string", "Hello", "This is a string option outside of any section");
 	}
 
-	@ModInitializer
+	@ModEntryPoint
 	public static void register() {
 		BUILDER.register("example");
 	}

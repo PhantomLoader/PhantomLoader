@@ -45,7 +45,7 @@ public class CreativeTabs {
 	 *     Adds an item to the creative tab with the given key.
 	 * </p>
 	 *
-	 * @param mod ModInitializer id of the mod the tab belongs to.
+	 * @param mod Mod id of the mod the tab belongs to.
 	 * @param key The creative tab's registry key, the one passed to {@link io.github.phantomloader.library.registry.ModRegistry#registerCreativeTab(String, Supplier, String)}.
 	 * @param item A supplier returning the registered item to add, the one returned by {@link io.github.phantomloader.library.registry.ModRegistry#registerItem(String)}.
 	 */
@@ -82,7 +82,7 @@ public class CreativeTabs {
 	 *     Adds a {@link Collection} of items to the creative tab with the given key.
 	 * </p>
 	 *
-	 * @param mod ModInitializer id of the mod the tab belongs to.
+	 * @param mod Mod id of the mod the tab belongs to.
 	 * @param key The creative tab's registry key, the one passed to {@link io.github.phantomloader.library.registry.ModRegistry#registerCreativeTab(String, Supplier, String)}.
 	 * @param items A collection of item suppliers, the ones returned by {@link io.github.phantomloader.library.registry.ModRegistry#registerItem(String)}. Can be created using {@link Set#of(Object[])} or {@link java.util.List#of(Object[])}.
 	 */

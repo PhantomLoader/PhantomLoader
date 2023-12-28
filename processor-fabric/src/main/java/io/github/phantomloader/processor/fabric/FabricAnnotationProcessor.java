@@ -1,6 +1,6 @@
 package io.github.phantomloader.processor.fabric;
 
-import io.github.phantomloader.library.ModInitializer;
+import io.github.phantomloader.library.ModEntryPoint;
 import io.github.phantomloader.processor.ModAnnotationProcessor;
 
 import javax.lang.model.element.Element;
@@ -8,76 +8,93 @@ import javax.tools.StandardLocation;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UncheckedIOException;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * <p>
+ *     Implementation of {@link ModAnnotationProcessor} for Fabric.
+ * </p>
+ *
+ * @author Nico
+ */
 public class FabricAnnotationProcessor extends ModAnnotationProcessor {
 
+	/**
+	 * <p>
+	 *     Stores the generated classes so that they can be added as entry points in the {@code fabric.mod.json} file.
+	 * </p>
+	 */
 	private final HashMap<String, String> fabricInitializers = new HashMap<>();
 
 	@Override
-	protected ModInitializer.Loader loader() {
-		return ModInitializer.Loader.FABRIC;
+	protected ModEntryPoint.Loader loader() {
+		return ModEntryPoint.Loader.FABRIC;
 	}
 
 	@Override
 	protected void generateModClass() {
-		this.generateModInitializer();
-		this.generateClientInitializer();
+		this.generateFabricInitializer(ModEntryPoint.Side.COMMON, "FabricInitializer", "net.fabricmc.api.ModInitializer");
+		this.generateFabricInitializer(ModEntryPoint.Side.CLIENT, "FabricClientInitializer", "net.fabricmc.api.ClientModInitializer");
+		this.generateFabricInitializer(ModEntryPoint.Side.SERVER, "FabricServerInitializer", "net.fabricmc.api.DedicatedServerModInitializer");
 	}
 
-	private void generateModInitializer() {
-		if(this.annotatedMethods.containsKey("main")) {
+	/**
+	 * <p>
+	 *     Generates a mod entry point for Fabric.
+	 * </p>
+	 *
+	 * @param side The side of this entry point.
+	 * @param className The simple name of the class to generate.
+	 * @param interfaceName The fully qualified name of the interface to implement.
+	 */
+	private void generateFabricInitializer(ModEntryPoint.Side side, String className, String interfaceName) {
+		if(this.annotatedMethods.containsKey(side)) {
 			String packageName = this.processingEnv.getOptions().get("modGroupId") + ".fabric";
-			try(PrintWriter writer = new PrintWriter(this.processingEnv.getFiler().createSourceFile(packageName + ".FabricInitializer").openWriter())) {
+			try(PrintWriter writer = new PrintWriter(this.processingEnv.getFiler().createSourceFile(packageName + "." + className).openWriter())) {
 				writer.println("package " + packageName + ";");
-				writer.println("import net.fabricmc.api.ModInitializer;");
-				for(Element method : this.annotatedMethods.get("main")) {
-					String className = method.getEnclosingElement().getSimpleName().toString();
-					String basePackage = this.processingEnv.getElementUtils().getPackageOf(method).getQualifiedName().toString();
-					writer.println("import static " + basePackage + "." + className + "." + method.getSimpleName() + ";");
+				for(Element method : this.annotatedMethods.get(side)) {
+					String methodClass = method.getEnclosingElement().getSimpleName().toString();
+					String methodPackage = this.processingEnv.getElementUtils().getPackageOf(method).getQualifiedName().toString();
+					writer.println("import static " + methodPackage + "." + methodClass + "." + method.getSimpleName() + ";");
 				}
-				writer.println("public class FabricInitializer implements ModInitializer {");
-				writer.println("	@Override");
-				writer.println("	public void onInitialize() {");
-				for(Element method : this.annotatedMethods.get("main")) {
-					writer.println("		" + method.getSimpleName() + "();");
+				writer.println("public class " + className + " implements " + interfaceName + " {");
+				Method[] interfaceMethods = Class.forName(interfaceName).getMethods();
+				if(interfaceMethods.length > 0) {
+					writer.println("	@Override");
+					writer.println("	public void " + interfaceMethods[0].getName() + "() {");
+					for(Element method : this.annotatedMethods.get(side)) {
+						writer.println("		" + method.getSimpleName() + "();");
+					}
+					writer.println("	}");
 				}
-				writer.println("	}");
 				writer.println("}");
 			} catch (IOException e) {
-				throw new UncheckedIOException("Could not generate fabric mod initializer", e);
+				throw new UncheckedIOException("Could not generate class " + packageName + "." + className, e);
+			} catch (ClassNotFoundException e) {
+				throw new RuntimeException("Could not find class " + interfaceName, e);
 			}
-			this.fabricInitializers.put("main", packageName + ".FabricInitializer");
+			this.fabricInitializers.put(sideName(side), packageName + "." + className);
 		}
 	}
 
-	private void generateClientInitializer() {
-		if(this.annotatedMethods.containsKey("client")) {
-			String packageName = this.processingEnv.getOptions().get("modGroupId") + ".fabric";
-			try(PrintWriter writer = new PrintWriter(this.processingEnv.getFiler().createSourceFile(packageName + ".FabricClientInitializer").openWriter())) {
-				writer.println("package " + packageName + ";");
-				writer.println("import net.fabricmc.api.ClientModInitializer;");
-				for(Element method : this.annotatedMethods.get("client")) {
-					String className = method.getEnclosingElement().getSimpleName().toString();
-					String basePackage = this.processingEnv.getElementUtils().getPackageOf(method).getQualifiedName().toString();
-					writer.println("import static " + basePackage + "." + className + "." + method.getSimpleName() + ";");
-				}
-				writer.println("public class FabricClientInitializer implements ClientModInitializer {");
-				writer.println("	@Override");
-				writer.println("	public void onInitializeClient() {");
-				for(Element method : this.annotatedMethods.get("client")) {
-					writer.println("		" + method.getSimpleName() + "();");
-				}
-				writer.println("	}");
-				writer.println("}");
-			} catch (IOException e) {
-				throw new UncheckedIOException("Could not generate fabric client initializer", e);
-			}
-			this.fabricInitializers.put("client", packageName + ".FabricClientInitializer");
-		}
+	/**
+	 * <p>
+	 *     Converts the {@link ModEntryPoint.Side} enum into the string used by Fabric.
+	 * </p>
+	 *
+	 * @param side Mod entry point side.
+	 * @return The string value used by Fabric.
+	 */
+	private static String sideName(ModEntryPoint.Side side) {
+		return switch (side) {
+			case COMMON -> "main";
+			case CLIENT -> "client";
+			case SERVER -> "server";
+		};
 	}
 
 	@Override
@@ -111,6 +128,15 @@ public class FabricAnnotationProcessor extends ModAnnotationProcessor {
 		}
 	}
 
+	/**
+	 * <p>
+	 *     Returns the value of the requested compiler option or the default value.
+	 * </p>
+	 *
+	 * @param option The option to get.
+	 * @param defaultValue The default value to use.
+	 * @return The value of the requested option or its default value.
+	 */
 	private String getOption(String option, String defaultValue) {
 		String value = this.processingEnv.getOptions().get(option);
 		if(value == null || value.isEmpty() || value.isBlank()) {

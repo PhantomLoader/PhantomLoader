@@ -2,7 +2,7 @@ package io.github.phantomloader.example;
 
 import io.github.phantomloader.example.block.ModChestBlock;
 import io.github.phantomloader.example.block.ModChestBlockEntity;
-import io.github.phantomloader.library.ModInitializer;
+import io.github.phantomloader.library.ModEntryPoint;
 import io.github.phantomloader.library.registry.ModRegistry;
 import io.github.phantomloader.library.utils.CreativeTabs;
 import net.minecraft.world.item.CreativeModeTab;
@@ -29,12 +29,12 @@ public class ExampleMod {
 
 	public static final Supplier<CreativeModeTab> CREATIVE_MODE_TAB = REGISTRY.registerCreativeTab("john", TEST_ITEM, "John");
 
-	@ModInitializer
+	@ModEntryPoint
 	public static void initialize() {
 		REGISTRY.register();
 	}
 
-	@ModInitializer(type = "client")
+	@ModEntryPoint(side = ModEntryPoint.Side.CLIENT)
 	public static void initializeClient() {
 		CreativeTabs.addToTab("example", "john", TEST_BLOCK);
 	}

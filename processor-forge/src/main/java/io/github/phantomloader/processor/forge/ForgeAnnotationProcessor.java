@@ -1,6 +1,6 @@
 package io.github.phantomloader.processor.forge;
 
-import io.github.phantomloader.library.ModInitializer;
+import io.github.phantomloader.library.ModEntryPoint;
 import io.github.phantomloader.processor.ModAnnotationProcessor;
 
 import javax.lang.model.element.Element;
@@ -15,8 +15,8 @@ import java.util.Set;
 public class ForgeAnnotationProcessor extends ModAnnotationProcessor {
 
 	@Override
-	protected ModInitializer.Loader loader() {
-		return ModInitializer.Loader.FORGE;
+	protected ModEntryPoint.Loader loader() {
+		return ModEntryPoint.Loader.FORGE;
 	}
 
 	@Override
@@ -27,8 +27,15 @@ public class ForgeAnnotationProcessor extends ModAnnotationProcessor {
 			writer.println("import net.minecraftforge.common.MinecraftForge;");
 			writer.println("import net.minecraftforge.eventbus.api.IEventBus;");
 			writer.println("import net.minecraftforge.fml.common.Mod;");
-			writer.println("import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;");
-			writer.println("import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;");
+			if(this.annotatedMethods.containsKey(ModEntryPoint.Side.COMMON)) {
+				writer.println("import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;");
+			}
+			if(this.annotatedMethods.containsKey(ModEntryPoint.Side.CLIENT)) {
+				writer.println("import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;");
+			}
+			if(this.annotatedMethods.containsKey(ModEntryPoint.Side.SERVER)) {
+				writer.println("import net.minecraftforge.fml.event.lifecycle.FMLDedicatedServerSetupEvent;");
+			}
 			writer.println("import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;");
 			for(HashSet<Element> elements : this.annotatedMethods.values()) {
 				for(Element element : elements) {
@@ -42,28 +49,40 @@ public class ForgeAnnotationProcessor extends ModAnnotationProcessor {
 			writer.println("	public ForgeInitializer() {");
 			if(!this.annotatedMethods.isEmpty()) {
 				writer.println("		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();");
-				if(this.annotatedMethods.containsKey("main")) {
+				if(this.annotatedMethods.containsKey(ModEntryPoint.Side.COMMON)) {
 					writer.println("		eventBus.addListener(this::commonSetup);");
 				}
-				if(this.annotatedMethods.containsKey("client")) {
+				if(this.annotatedMethods.containsKey(ModEntryPoint.Side.CLIENT)) {
 					writer.println("		eventBus.addListener(this::clientSetup);");
+				}
+				if(this.annotatedMethods.containsKey(ModEntryPoint.Side.SERVER)) {
+					writer.println("		eventBus.addListener(this::serverSetup);");
 				}
 			}
 			writer.println("		MinecraftForge.EVENT_BUS.register(this);");
 			writer.println("	}");
-			if(this.annotatedMethods.containsKey("main")) {
+			if(this.annotatedMethods.containsKey(ModEntryPoint.Side.COMMON)) {
 				writer.println("	private void commonSetup(final FMLCommonSetupEvent setupEvent) {");
 				writer.println("		setupEvent.enqueueWork(() -> {");
-				for(Element method : this.annotatedMethods.get("main")) {
+				for(Element method : this.annotatedMethods.get(ModEntryPoint.Side.COMMON)) {
 					writer.println("			" + method.getSimpleName() + "();");
 				}
 				writer.println("		});");
 				writer.println("	}");
 			}
-			if(this.annotatedMethods.containsKey("client")) {
+			if(this.annotatedMethods.containsKey(ModEntryPoint.Side.CLIENT)) {
 				writer.println("	private void clientSetup(final FMLClientSetupEvent setupEvent) {");
 				writer.println("		setupEvent.enqueueWork(() -> {");
-				for(Element method : this.annotatedMethods.get("client")) {
+				for(Element method : this.annotatedMethods.get(ModEntryPoint.Side.CLIENT)) {
+					writer.println("			" + method.getSimpleName() + "();");
+				}
+				writer.println("		});");
+				writer.println("	}");
+			}
+			if(this.annotatedMethods.containsKey(ModEntryPoint.Side.SERVER)) {
+				writer.println("	private void serverSetup(final FMLDedicatedServerSetupEvent setupEvent) {");
+				writer.println("		setupEvent.enqueueWork(() -> {");
+				for(Element method : this.annotatedMethods.get(ModEntryPoint.Side.SERVER)) {
 					writer.println("			" + method.getSimpleName() + "();");
 				}
 				writer.println("		});");
