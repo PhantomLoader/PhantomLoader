@@ -3,6 +3,7 @@ package io.github.phantomloader.library.fabric.registry;
 import io.github.phantomloader.library.fabric.FabricClientInitializer;
 import io.github.phantomloader.library.registry.ModRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -10,6 +11,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -107,6 +110,11 @@ public class FabricRegistry extends ModRegistry {
 	public <T extends Entity> Supplier<EntityType<T>> registerEntity(String name, EntityType.Builder<T> builder) {
 		EntityType<T> registered = Registry.register(BuiltInRegistries.ENTITY_TYPE, this.identifier(name), builder.build(name));
 		return () -> registered;
+	}
+
+	@Override
+	public void registerEntityAttributes(Supplier<EntityType<? extends LivingEntity>> entity, AttributeSupplier.Builder attributes) {
+		FabricDefaultAttributeRegistry.register(entity.get(), attributes);
 	}
 
 	@Override

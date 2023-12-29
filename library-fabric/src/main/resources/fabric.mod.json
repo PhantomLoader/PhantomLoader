@@ -14,9 +14,6 @@
   "license": "Apache-2.0 license",
   "icon": "icon.png",
   "entrypoints": {
-    "main": [
-      "io.github.phantomloader.library.fabric.FabricInitializer"
-    ],
     "client": [
       "io.github.phantomloader.library.fabric.FabricClientInitializer"
     ]

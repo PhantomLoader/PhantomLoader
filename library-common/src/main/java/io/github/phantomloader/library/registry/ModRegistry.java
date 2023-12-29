@@ -5,7 +5,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -402,6 +404,20 @@ public abstract class ModRegistry {
 	 * @param <T> The entity's class.
 	 */
 	public abstract <T extends Entity> Supplier<EntityType<T>> registerEntity(String name, EntityType.Builder<T> builder);
+
+	/**
+	 * <p>
+	 *     Registers entity attributes for the given entity.
+	 * </p>
+	 * <p>
+	 *     Instances of {@link LivingEntity} need attributes to be spawned.
+	 *     Use this method to give attributes to an entity.
+	 * </p>
+	 *
+	 * @param entity A supplier returning the registered entity type, the one returned by {@link ModRegistry#registerEntity(String, EntityType.Builder)}.
+	 * @param attributes A builder returning the entity's attributes. Typically created in a static method in the entity's class.
+	 */
+	public abstract void registerEntityAttributes(Supplier<EntityType<? extends LivingEntity>> entity, AttributeSupplier.Builder attributes);
 
 	/**
 	 * <p>

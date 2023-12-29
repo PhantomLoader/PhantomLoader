@@ -7,7 +7,9 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
@@ -17,12 +19,16 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraftforge.common.ForgeSpawnEggItem;
+import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
@@ -38,6 +44,7 @@ import java.util.function.Supplier;
  *
  * @author Nico
  */
+@Mod.EventBusSubscriber(modid = "phantom", bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ForgeRegistry extends ModRegistry {
 
 	/** Deferred register for items */
@@ -52,6 +59,9 @@ public class ForgeRegistry extends ModRegistry {
 	private final DeferredRegister<EntityType<?>> entities;
 	/** Deferred register for features */
 	private final DeferredRegister<Feature<?>> features;
+
+	/** Map to store entity attributes to register in the forge event */
+	private static final HashMap<Supplier<EntityType<? extends LivingEntity>>, AttributeSupplier.Builder> ENTITY_ATTRIBUTES = new HashMap<>();
 
 	/**
 	 * <p>
@@ -115,6 +125,23 @@ public class ForgeRegistry extends ModRegistry {
 	@Override
 	public <T extends Entity> Supplier<EntityType<T>> registerEntity(String name, EntityType.Builder<T> builder) {
 		return this.entities.register(name, () -> builder.build(name));
+	}
+
+	@Override
+	public void registerEntityAttributes(Supplier<EntityType<? extends LivingEntity>> entity, AttributeSupplier.Builder attributes) {
+		ENTITY_ATTRIBUTES.put(entity, attributes);
+	}
+
+	/**
+	 * <p>
+	 *     Forge event used to register entity attributes.
+	 * </p>
+	 *
+	 * @param event Forge event.
+	 */
+	@SubscribeEvent
+	public static void onCreateAttributesEvent(EntityAttributeCreationEvent event) {
+		ENTITY_ATTRIBUTES.forEach((entity, attributes) -> event.put(entity.get(), attributes.build()));
 	}
 
 	@Override
