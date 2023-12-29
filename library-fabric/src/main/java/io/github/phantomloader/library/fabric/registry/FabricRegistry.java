@@ -1,7 +1,8 @@
 package io.github.phantomloader.library.fabric.registry;
 
-import io.github.phantomloader.library.fabric.FabricClientInitializer;
+import io.github.phantomloader.library.fabric.renderers.BlockEntityItemRenderer;
 import io.github.phantomloader.library.registry.ModRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.minecraft.core.BlockPos;
@@ -83,7 +84,8 @@ public class FabricRegistry extends ModRegistry {
 	@Override
 	public Supplier<BlockItem> registerBlockItem(String name, Supplier<? extends Block> block) {
 		if(block.get() instanceof EntityBlock) {
-			FabricClientInitializer.registerEntityBlockRenderer(block.get());
+			// TODO: This should only happen on the client
+			BuiltinItemRendererRegistry.INSTANCE.register(block.get(), new BlockEntityItemRenderer(block.get()));
 		}
 		return super.registerBlockItem(name, block);
 	}

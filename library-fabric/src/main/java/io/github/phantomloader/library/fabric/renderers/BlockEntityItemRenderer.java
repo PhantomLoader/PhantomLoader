@@ -1,7 +1,6 @@
 package io.github.phantomloader.library.fabric.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import io.github.phantomloader.library.fabric.FabricClientInitializer;
 import io.github.phantomloader.library.fabric.registry.FabricRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 import net.minecraft.client.Minecraft;
@@ -18,9 +17,6 @@ import java.util.function.Supplier;
 /**
  * <p>
  *     Implements Fabric's way of rendering block entity items.
- * </p>
- * <p>
- *     Instances of {@code BlockEntityItemRenderer} are passed to Fabric's {@link BuiltinItemRendererRegistry} from {@link FabricClientInitializer#onInitializeClient()}.
  * </p>
  *
  * @author Nico
