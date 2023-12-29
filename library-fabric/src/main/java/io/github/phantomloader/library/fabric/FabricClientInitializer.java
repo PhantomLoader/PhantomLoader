@@ -2,13 +2,8 @@ package io.github.phantomloader.library.fabric;
 
 import io.github.phantomloader.library.fabric.registry.FabricRegistry;
 import io.github.phantomloader.library.fabric.renderers.BlockEntityItemRenderer;
-import io.github.phantomloader.library.utils.CreativeTabs;
-import io.github.phantomloader.library.utils.ModRenderers;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
-import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.world.level.block.Block;
 
 import java.util.HashSet;
@@ -41,8 +36,5 @@ public class FabricClientInitializer implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
 		ENTITY_BLOCKS.forEach(block -> BuiltinItemRendererRegistry.INSTANCE.register(block, new BlockEntityItemRenderer(block)));
-		CreativeTabs.accept((resourceKey, items) -> ItemGroupEvents.modifyEntriesEvent(resourceKey).register(listener -> items.forEach(item -> listener.accept(item.get()))));
-		ModRenderers.registerEntityRenderers(EntityRendererRegistry::register);
-		ModRenderers.registerBlockEntityRenderers(BlockEntityRenderers::register);
 	}
 }

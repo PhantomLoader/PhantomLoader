@@ -3,8 +3,8 @@ package io.github.phantomloader.example;
 import io.github.phantomloader.example.block.ModChestBlock;
 import io.github.phantomloader.example.block.ModChestBlockEntity;
 import io.github.phantomloader.library.ModEntryPoint;
+import io.github.phantomloader.library.registry.ClientRegistry;
 import io.github.phantomloader.library.registry.ModRegistry;
-import io.github.phantomloader.library.utils.CreativeTabs;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -36,8 +36,7 @@ public class ExampleMod {
 
 	@ModEntryPoint(side = ModEntryPoint.Side.CLIENT)
 	public static void initializeClient() {
-		// TODO: Order of dependencies is random in Fabric...
-		CreativeTabs.addToTab("example", "john", TEST_BLOCK);
-		CreativeTabs.addToTab("functional_blocks", Set.of(CHEST_1, CHEST_2));
+		ClientRegistry.INSTANCE.addItemToCreativeTab("example", "john", TEST_BLOCK);
+		ClientRegistry.INSTANCE.addItemsToCreativeTab("functional_blocks", Set.of(CHEST_1, CHEST_2));
 	}
 }

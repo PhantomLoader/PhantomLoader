@@ -325,10 +325,7 @@ public abstract class ModRegistry {
 	 * </p>
 	 * <p>
 	 *     This function is used to create creative tabs for mods. Items to display in that tab should be passed here.
-	 *     Alternatively, the {@link io.github.phantomloader.library.utils.CreativeTabs#addToTab(String, String, Supplier)} method can be used.
-	 * </p>
-	 * <p>
-	 *     Items can be added to vanilla creative tabs with {@link io.github.phantomloader.library.utils.CreativeTabs#addToTab(String, Supplier)}.
+	 *     Alternatively, the {@link ClientRegistry#addItemsToCreativeTab(String, String, Collection)} method can be used.
 	 * </p>
 	 *
 	 * @param name The creative tab's registry name. Note that this is different from the tab's title.
@@ -345,10 +342,7 @@ public abstract class ModRegistry {
 	 * </p>
 	 * <p>
 	 *     This function is used to create creative tabs for mods.
-	 *     Items can be added to the tab with {@link io.github.phantomloader.library.utils.CreativeTabs#addToTab(String, String, Supplier)}.
-	 * </p>
-	 * <p>
-	 *     Items can be added to vanilla creative tabs with {@link io.github.phantomloader.library.utils.CreativeTabs#addToTab(String, Supplier)}.
+	 *     Items can be added to the tab with {@link ClientRegistry#addItemsToCreativeTab(String, String, Collection)}.
 	 * </p>
 	 *
 	 * @param name The creative tab's registry name. Note that this is different from the tab's title.
@@ -366,10 +360,7 @@ public abstract class ModRegistry {
 	 * </p>
 	 * <p>
 	 *     This function is used to create creative tabs for mods. Items to display in that tab should be passed here.
-	 *     Alternatively, the {@link io.github.phantomloader.library.utils.CreativeTabs#addToTab(String, String, Supplier)} method can be used.
-	 * </p>
-	 * <p>
-	 *     Items can be added to vanilla creative tabs with {@link io.github.phantomloader.library.utils.CreativeTabs#addToTab(String, Supplier)}.
+	 *     Alternatively, the {@link ClientRegistry#addItemsToCreativeTab(String, String, Collection)} method can be used.
 	 * </p>
 	 *
 	 * @param name The creative tab's registry name. Note that this is different from the tab's title.
@@ -388,10 +379,7 @@ public abstract class ModRegistry {
 	 * </p>
 	 * <p>
 	 *     This function is used to create creative tabs for mods.
-	 *     Items can be added to the tab with {@link io.github.phantomloader.library.utils.CreativeTabs#addToTab(String, String, Supplier)}.
-	 * </p>
-	 * <p>
-	 *     Items can be added to vanilla creative tabs with {@link io.github.phantomloader.library.utils.CreativeTabs#addToTab(String, Supplier)}.
+	 *     Items can be added to the tab with {@link ClientRegistry#addItemToCreativeTab(String, String, Supplier)}.
 	 * </p>
 	 *
 	 * @param name The creative tab's registry name. Note that this is different from the tab's title.

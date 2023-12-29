@@ -21,8 +21,10 @@ tasks.withType(JavaCompile).configureEach {
 
 processResources {
     from project(':library-common').sourceSets.main.resources
-}
 
-jar {
-    destinationDirectory = file('../.minecraft/mods')
+    inputs.property "version", project.version
+
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version
+    }
 }
