@@ -1,14 +1,14 @@
 modLoader="javafml"
 loaderVersion="[47,)"
 license="Apache-2.0 license"
-#issueTrackerURL="https://github.com/HexagonNico"
+issueTrackerURL="https://github.com/PhantomLoader/PhantomLoader/issues"
 
 [[mods]]
 modId="phantom"
 version="${file.jarVersion}"
 displayName="Phantom Library"
 #updateJSONURL="https://mcforge.readthedocs.io/en/latest/gettingstarted/autoupdate/"
-#displayURL="https://github.com/HexagonNico"
+displayURL="https://github.com/PhantomLoader/PhantomLoader"
 logoFile="logo.png"
 #credits="Additional credits go here"
 authors="HexagonNico"

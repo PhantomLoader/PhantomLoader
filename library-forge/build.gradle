@@ -10,6 +10,17 @@ base {
 
 minecraft {
     mappings channel: 'official', version: minecraftVersion
+    runs {
+        client {
+            workingDirectory project.file('../.minecraft')
+            ideaModule "${rootProject.name}.${project.name}.main"
+            mods {
+                modClientRun {
+                    source sourceSets.main
+                }
+            }
+        }
+    }
 }
 
 sourceSets.main.resources.srcDir 'src/generated/resources'
@@ -26,10 +37,6 @@ tasks.withType(JavaCompile).configureEach {
 
 processResources {
     from project(':library-common').sourceSets.main.resources
-}
-
-jar {
-    destinationDirectory = file('../.minecraft/mods')
 }
 
 tasks.named('publish').configure {

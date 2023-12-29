@@ -15,6 +15,16 @@ dependencies {
     implementation project(':library-common')
 }
 
+loom {
+    runs {
+        client {
+            client()
+            ideConfigGenerated(true)
+            runDir("../.minecraft")
+        }
+    }
+}
+
 tasks.withType(JavaCompile).configureEach {
     source project(':library-common').sourceSets.main.allSource
 }
