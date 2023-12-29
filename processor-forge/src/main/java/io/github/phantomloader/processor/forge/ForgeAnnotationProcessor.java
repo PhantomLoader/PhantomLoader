@@ -50,7 +50,9 @@ public class ForgeAnnotationProcessor extends ModAnnotationProcessor {
 			if(!this.annotatedMethods.isEmpty()) {
 				writer.println("		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();");
 				if(this.annotatedMethods.containsKey(ModEntryPoint.Side.COMMON)) {
-					writer.println("		eventBus.addListener(this::commonSetup);");
+					for(Element method : this.annotatedMethods.get(ModEntryPoint.Side.COMMON)) {
+						writer.println("		" + method.getSimpleName() + "();");
+					}
 				}
 				if(this.annotatedMethods.containsKey(ModEntryPoint.Side.CLIENT)) {
 					writer.println("		eventBus.addListener(this::clientSetup);");
@@ -61,15 +63,6 @@ public class ForgeAnnotationProcessor extends ModAnnotationProcessor {
 			}
 			writer.println("		MinecraftForge.EVENT_BUS.register(this);");
 			writer.println("	}");
-			if(this.annotatedMethods.containsKey(ModEntryPoint.Side.COMMON)) {
-				writer.println("	private void commonSetup(final FMLCommonSetupEvent setupEvent) {");
-				writer.println("		setupEvent.enqueueWork(() -> {");
-				for(Element method : this.annotatedMethods.get(ModEntryPoint.Side.COMMON)) {
-					writer.println("			" + method.getSimpleName() + "();");
-				}
-				writer.println("		});");
-				writer.println("	}");
-			}
 			if(this.annotatedMethods.containsKey(ModEntryPoint.Side.CLIENT)) {
 				writer.println("	private void clientSetup(final FMLClientSetupEvent setupEvent) {");
 				writer.println("		setupEvent.enqueueWork(() -> {");

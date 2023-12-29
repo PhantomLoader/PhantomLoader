@@ -10,20 +10,6 @@ base {
 
 minecraft {
     mappings channel: 'official', version: minecraftVersion
-
-    runs {
-        client {
-            workingDirectory this.file('../.minecraft')
-            ideaModule "${rootProject.name}.${project.name}.main"
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
-            mods {
-                runClient {
-                    source this.sourceSets.main
-                }
-            }
-        }
-    }
 }
 
 sourceSets.main.resources.srcDir 'src/generated/resources'
@@ -43,5 +29,9 @@ processResources {
 }
 
 jar {
-    finalizedBy 'reobfJar'
+    destinationDirectory = file('../.minecraft/mods')
+}
+
+tasks.named('publish').configure {
+    dependsOn 'reobfJar'
 }

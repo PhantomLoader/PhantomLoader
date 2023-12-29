@@ -28,24 +28,15 @@ minecraft {
 
 sourceSets.main.resources.srcDir 'src/generated/resources'
 
-repositories {
-    flatDir {
-        dir '../library-forge/build/libs'
-    }
-}
-
 dependencies {
-    // Minecraft / Forge dependency
+    // MinecraftForge dependency
     minecraft "net.minecraftforge:forge:${minecraftVersion}-${forgeVersion}"
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
     // Common module dependency
     implementation project(':example-common')
     // Phantom library dependency
-    implementation fg.deobf("io.github.phantomloader:library-forge:${phantomVersion}")
+    implementation project(':library-forge')
     annotationProcessor project(':processor-forge')
-    // Example TerraBlender dependency
-    implementation fg.deobf('com.github.glitchfiend:TerraBlender-forge:1.20.1-3.0.0.169')
-    runtimeOnly fg.deobf('curse.maven:terralith-513688:4938254')
 }
 
 tasks.withType(JavaCompile).configureEach {

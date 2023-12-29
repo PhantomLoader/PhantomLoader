@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -119,5 +120,10 @@ public class CreativeTabs {
 		if(ITEMS_MAP.containsKey(resourceKey)) {
 			ITEMS_MAP.get(resourceKey).forEach(consumer);
 		}
+	}
+
+	public static void accept(BiConsumer<ResourceKey<CreativeModeTab>, Collection<Supplier<? extends ItemLike>>> consumer) {
+		System.out.println("ADESSO TI COSO " + ITEMS_MAP);
+		ITEMS_MAP.forEach(consumer);
 	}
 }

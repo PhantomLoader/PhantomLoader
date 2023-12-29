@@ -26,6 +26,9 @@ public @interface ModEntryPoint {
 	 *     Specifies that the annotated method may only be used by a specific mod loader.
 	 *     By default, entry point methods are called from both mod loaders.
 	 * </p>
+	 * <p>
+	 *     Default: {@link Loader#COMMON}.
+	 * </p>
 	 *
 	 * @return Whether this method should only be called in Forge, in Fabric, or both.
 	 */
@@ -38,6 +41,9 @@ public @interface ModEntryPoint {
 	 * </p>
 	 * <p>
 	 *     It is advised to keep client and common entry point methods in separate classes to avoid loading classes that are not needed on one side.
+	 * </p>
+	 * <p>
+	 *     Default: {@link Side#COMMON}.
 	 * </p>
 	 *
 	 * @return Whether this method should only be called on the client, on the server, or in the common setup
@@ -73,7 +79,7 @@ public @interface ModEntryPoint {
 		 *     Indicates the common setup.
 		 * </p>
 		 * <ul>
-		 *     <li>In Forge, indicates the {@code net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent} event.</li>
+		 *     <li>In Forge, indicates the constructor of the class with the {@code net.minecraftforge.fml.common.Mod} annotation.</li>
 		 *     <li>In Fabric, indicates a class that implements the {@code net.fabricmc.api.ModInitializer} interface.</li>
 		 * </ul>
 		 */

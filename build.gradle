@@ -11,12 +11,6 @@ subprojects {
         }
     }
 
-    repositories {
-        maven {
-            url = "https://www.cursemaven.com"
-        }
-    }
-
     jar {
         manifest {
             attributes([

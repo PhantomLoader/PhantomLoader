@@ -27,17 +27,17 @@ public class ExampleMod {
 
 	public static final Supplier<BlockEntityType<? extends ModChestBlockEntity>> CHEST_BLOCK_ENTITY = REGISTRY.registerBlockEntity("chest", ModChestBlockEntity::new, Set.of(CHEST_1, CHEST_2));
 
-	public static final Supplier<CreativeModeTab> CREATIVE_MODE_TAB = REGISTRY.registerCreativeTab("john", TEST_ITEM, "John");
+	public static final Supplier<CreativeModeTab> CREATIVE_MODE_TAB = REGISTRY.registerCreativeTab("john", TEST_ITEM, "John", Set.of(TEST_ITEM));
 
 	@ModEntryPoint
 	public static void initialize() {
-		// TODO: Suddenly stopped working in Forge...
 		REGISTRY.register();
 	}
 
 	@ModEntryPoint(side = ModEntryPoint.Side.CLIENT)
 	public static void initializeClient() {
-		// TODO: Suddenly stopped working in both loaders...
+		// TODO: Order of dependencies is random in Fabric...
 		CreativeTabs.addToTab("example", "john", TEST_BLOCK);
+		CreativeTabs.addToTab("functional_blocks", Set.of(CHEST_1, CHEST_2));
 	}
 }
