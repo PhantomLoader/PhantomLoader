@@ -56,7 +56,7 @@ public class FabricAnnotationProcessor extends ModAnnotationProcessor {
 	 */
 	private void generateFabricInitializer(ModEntryPoint.Side side, String className, String interfaceName) {
 		if(this.annotatedMethods.containsKey(side)) {
-			String packageName = this.processingEnv.getOptions().get("modGroupId") + ".fabric";
+			String packageName = this.processingEnv.getOptions().get("modGroupId") + "." + this.lowercaseModId() + ".fabric";
 			try(PrintWriter writer = new PrintWriter(this.processingEnv.getFiler().createSourceFile(packageName + "." + className).openWriter())) {
 				writer.println("package " + packageName + ";");
 				for(Element method : this.annotatedMethods.get(side)) {
@@ -178,7 +178,9 @@ public class FabricAnnotationProcessor extends ModAnnotationProcessor {
 			writer.println("  \"version\": \"" + this.processingEnv.getOptions().get("modVersion") + "\",");
 			writer.println("  \"name\": \"" + this.getOption("modName", "Unnamed") + "\",");
 			writer.println("  \"description\": \"" + this.getOption("modDescription") + "\",");
-			writer.println("  \"authors\": [" + Arrays.stream(this.getOption("modAuthors").split(",")).map(str -> "\"" + str + "\"").collect(Collectors.joining(", ")) + "],");
+			writer.println("  \"authors\": [");
+			writer.println("    " + Arrays.stream(this.getOption("modAuthors").split(",")).map(str -> "\"" + str.trim() + "\"").collect(Collectors.joining(",\n    ")));
+			writer.println("  ],");
 			writer.println("  \"contact\": {");
 			writer.println("    \"homepage\": \"" + this.getOption("modUrl") + "\",");
 			writer.println("    \"sources\": \"" + this.getOption("modSource") + "\"");
@@ -188,6 +190,19 @@ public class FabricAnnotationProcessor extends ModAnnotationProcessor {
 			writer.println("  \"entrypoints\": {");
 			writer.println(this.fabricInitializers.entrySet().stream().map(entry -> "    \"" + entry.getKey() + "\": [\n      \"" + entry.getValue() + "\"\n    ]").collect(Collectors.joining(",\n")));
 			writer.println("  },");
+			if(this.processingEnv.getOptions().containsKey("modMixin") || this.processingEnv.getOptions().containsKey("fabricMixin")) {
+				writer.println("  \"mixins\": [");
+				if(this.processingEnv.getOptions().containsKey("modMixin")) {
+					writer.print("    \"" + this.processingEnv.getOptions().get("modMixin") + "\"");
+				}
+				if(this.processingEnv.getOptions().containsKey("fabricMixin")) {
+					writer.println(",");
+					writer.println("    \"" + this.processingEnv.getOptions().get("fabricMixin") + "\"");
+				} else {
+					writer.println();
+				}
+				writer.println("  ],");
+			}
 			writer.println("  \"depends\": {");
 			writer.println("    \"phantom\": \"~" + this.processingEnv.getOptions().get("phantomVersion") + "\",");
 			writer.println("    \"fabricloader\": \">=" + this.processingEnv.getOptions().get("fabricVersion") + "\",");
@@ -237,6 +252,10 @@ public class FabricAnnotationProcessor extends ModAnnotationProcessor {
 	@Override
 	protected Set<String> getRequiredOptions() {
 		return Set.of("fabricVersion", "phantomVersion", "minecraftVersion", "modId", "modGroupId", "modVersion");
+	}
+
+	private String lowercaseModId() {
+		return this.processingEnv.getOptions().get("modId").toLowerCase().replace("_", "");
 	}
 
 	/**

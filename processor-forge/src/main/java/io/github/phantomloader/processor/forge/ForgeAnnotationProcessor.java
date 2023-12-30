@@ -27,7 +27,8 @@ public class ForgeAnnotationProcessor extends ModAnnotationProcessor {
 
 	@Override
 	protected void generateModClass() {
-		String packageName = this.processingEnv.getOptions().get("modGroupId") + ".forge";
+		String modId = this.processingEnv.getOptions().get("modId");
+		String packageName = this.processingEnv.getOptions().get("modGroupId") + "." + modId.toLowerCase().replace("_", "") + ".forge";
 		try(PrintWriter writer = new PrintWriter(this.processingEnv.getFiler().createSourceFile(packageName + ".ForgeInitializer").openWriter())) {
 			writer.println("package " + packageName + ";");
 			writer.println("import net.minecraftforge.common.MinecraftForge;");
@@ -47,7 +48,7 @@ public class ForgeAnnotationProcessor extends ModAnnotationProcessor {
 					writer.println("import static " + basePackage + "." + className + "." + element.getSimpleName() + ";");
 				}
 			}
-			writer.println("@Mod(\"" + this.processingEnv.getOptions().get("modId") + "\")");
+			writer.println("@Mod(\"" + modId + "\")");
 			writer.println("public class ForgeInitializer {");
 			writer.println("	public ForgeInitializer() {");
 			if(!this.annotatedMethods.isEmpty()) {

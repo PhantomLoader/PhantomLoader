@@ -40,5 +40,5 @@ processResources {
 }
 
 jar {
-    dependsOn 'reobfJar'
+    finalizedBy 'reobfJar'
 }
