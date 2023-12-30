@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
  * </p>
  * <p>
  *     Some library mods may use custom entry point other than {@code "main"}, {@code "client"}, or {@code "server"} for Fabric.
- *     This annotation tells Phantom loader to generate an additional class with the given data to be used as an entry point.
+ *     This annotation tells Phantom Loader to generate an additional class with the given data to be used as an entry point.
  * </p>
  * <p>
  *     Example usage:

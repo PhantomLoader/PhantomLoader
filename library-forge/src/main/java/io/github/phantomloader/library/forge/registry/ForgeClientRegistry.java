@@ -29,7 +29,6 @@ import java.util.function.Supplier;
  *
  * @author Nico
  */
-@SuppressWarnings("unused")
 @Mod.EventBusSubscriber(modid = "phantom", bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ForgeClientRegistry implements ClientRegistry {
 

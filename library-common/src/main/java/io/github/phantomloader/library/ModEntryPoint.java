@@ -7,6 +7,7 @@ import java.lang.annotation.Target;
  * <p>
  *     Annotation used by Phantom Loader that denotes the entry point of a mod.
  *     The annotation processor will generate classes for Forge and Fabric that will call every method with this annotation.
+ *     Those methods must be public static for them to be accessible from the mod loader's initializer class.
  * </p>
  * <ul>
  *     <li>In Forge, only one class is generated and these methods will be called from different fml setup events.</li>
@@ -14,6 +15,24 @@ import java.lang.annotation.Target;
  * </ul>
  * <p>
  *     Additionally, one may specify some entry points to only be called in a specific mod loader or only on the client or only on the server.
+ * </p>
+ * <p>
+ *     Example usage:
+ *     <pre>
+ *         {@code @ModEntryPoint}
+ *         public static void initialize() {
+ *             REGISTRY.register();
+ *         }
+ *     </pre>
+ *     <pre>
+ *         {@code @ModEntryPoint(side = ModEntryPoint.Side.CLIENT)}
+ *         public static void initializeClient() {
+ *             ClientRegistry.INSTANCE.registerEntityRenderer(...);
+ *         }
+ *     </pre>
+ * </p>
+ * <p>
+ *     For custom entry points see {@link io.github.phantomloader.library.integration.FabricCustomEntryPoint}.
  * </p>
  *
  * @author Nico

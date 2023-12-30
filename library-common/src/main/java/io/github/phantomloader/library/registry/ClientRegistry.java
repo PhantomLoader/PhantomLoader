@@ -1,5 +1,6 @@
 package io.github.phantomloader.library.registry;
 
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.core.registries.Registries;
@@ -9,6 +10,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
@@ -126,4 +128,21 @@ public interface ClientRegistry {
 	 * @param <T> The block entity's class.
 	 */
 	<T extends BlockEntity> void registerBlockEntityRenderer(Supplier<BlockEntityType<T>> blockEntity, BlockEntityRendererProvider<T> renderer);
+
+	/**
+	 * <p>
+	 *     Registers a render type for the given block.
+	 * </p>
+	 * <p>
+	 *     Note that this method is only implemented in Fabric.
+	 *     Forge uses a {@code "render_type"} option in the block's model file.
+	 *     See <a href="https://docs.minecraftforge.net/en/latest/rendering/modelextensions/rendertypes/">Forge docs</a>
+	 * </p>
+	 *
+	 * @param block A supplier returning the registered block, the one returned by {@link ModRegistry#registerBlock(String)}.
+	 * @param renderType The block's render type. See {@link RenderType}.
+	 */
+	default void registerRenderType(Supplier<? extends Block> block, RenderType renderType) {
+
+	}
 }
