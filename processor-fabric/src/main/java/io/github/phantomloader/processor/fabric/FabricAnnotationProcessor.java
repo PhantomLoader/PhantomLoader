@@ -82,7 +82,7 @@ public class FabricAnnotationProcessor extends ModAnnotationProcessor {
 			} catch (IOException e) {
 				throw new UncheckedIOException("Could not generate class " + packageName + "." + className, e);
 			} catch (ClassNotFoundException e) {
-				throw new RuntimeException("Could not find class " + interfaceName, e);
+				throw new RuntimeException("Could not find interface " + interfaceName, e);
 			}
 			this.fabricInitializers.put(sideName(side), packageName + "." + className);
 		}
@@ -148,7 +148,7 @@ public class FabricAnnotationProcessor extends ModAnnotationProcessor {
 		} catch (IOException e) {
 			throw new UncheckedIOException("Could not generate class " + packageName + "." + className, e);
 		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Could not find class " + interfaceName, e);
+			throw new RuntimeException("Could not find interface " + interfaceName, e);
 		}
 		this.fabricInitializers.put(name, packageName + "." + className);
 	}
@@ -175,7 +175,7 @@ public class FabricAnnotationProcessor extends ModAnnotationProcessor {
 			writer.println("{");
 			writer.println("  \"schemaVersion\": 1,");
 			writer.println("  \"id\": \"" + this.processingEnv.getOptions().get("modId") + "\",");
-			writer.println("  \"version\": \"" + this.getOption("modVersion", "${version}") + "\",");
+			writer.println("  \"version\": \"" + this.processingEnv.getOptions().get("modVersion") + "\",");
 			writer.println("  \"name\": \"" + this.getOption("modName", "Unnamed") + "\",");
 			writer.println("  \"description\": \"" + this.getOption("modDescription") + "\",");
 			writer.println("  \"authors\": [" + Arrays.stream(this.getOption("modAuthors").split(",")).map(str -> "\"" + str + "\"").collect(Collectors.joining(", ")) + "],");
@@ -189,7 +189,7 @@ public class FabricAnnotationProcessor extends ModAnnotationProcessor {
 			writer.println(this.fabricInitializers.entrySet().stream().map(entry -> "    \"" + entry.getKey() + "\": [\n      \"" + entry.getValue() + "\"\n    ]").collect(Collectors.joining(",\n")));
 			writer.println("  },");
 			writer.println("  \"depends\": {");
-			writer.println("    \"phantom\": \">=" + this.processingEnv.getOptions().get("phantomVersion") + "\",");
+			writer.println("    \"phantom\": \"~" + this.processingEnv.getOptions().get("phantomVersion") + "\",");
 			writer.println("    \"fabricloader\": \">=" + this.processingEnv.getOptions().get("fabricVersion") + "\",");
 			writer.println("    \"minecraft\": \"~" + this.processingEnv.getOptions().get("minecraftVersion") + "\",");
 			writer.println("    \"java\": \">=17\"");
@@ -217,6 +217,14 @@ public class FabricAnnotationProcessor extends ModAnnotationProcessor {
 		return value;
 	}
 
+	/**
+	 * <p>
+	 *     Returns the value of the requested compiler option or an empty string.
+	 * </p>
+	 *
+	 * @param option The option to get.
+	 * @return The value of the requested option or an empty string.
+	 */
 	private String getOption(String option) {
 		return this.getOption(option, "");
 	}
@@ -226,6 +234,19 @@ public class FabricAnnotationProcessor extends ModAnnotationProcessor {
 		return Set.of("fabricVersion", "phantomVersion", "minecraftVersion", "modId", "modGroupId", "modVersion", "modName", "modLicense", "modAuthors", "modDescription", "modUrl", "modSource", "modIcon");
 	}
 
+	@Override
+	protected Set<String> getRequiredOptions() {
+		return Set.of("fabricVersion", "phantomVersion", "minecraftVersion", "modId", "modGroupId", "modVersion");
+	}
+
+	/**
+	 * <p>
+	 *     Record used to pair the name of a custom entry point with its interface.
+	 * </p>
+	 *
+	 * @param name Entry point name.
+	 * @param interfaceName The interface's fully qualified name.
+	 */
 	private record NameInterfacePair(String name, String interfaceName) {
 
 	}

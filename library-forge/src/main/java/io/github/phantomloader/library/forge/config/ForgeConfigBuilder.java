@@ -1,5 +1,6 @@
 package io.github.phantomloader.library.forge.config;
 
+import io.github.phantomloader.library.ModEntryPoint;
 import io.github.phantomloader.library.config.ConfigBuilder;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -94,8 +95,23 @@ public class ForgeConfigBuilder implements ConfigBuilder {
 	}
 
 	@Override
-	public void register(String mod) {
-		// TODO: Differentiate between client and common
-		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, builder.build());
+	public void register(String mod, ModEntryPoint.Side side) {
+		ModLoadingContext.get().registerConfig(typeFromSide(side), builder.build());
+	}
+
+	/**
+	 * <p>
+	 *     Converts {@link ModEntryPoint.Side} to {@link ModConfig.Type}.
+	 * </p>
+	 *
+	 * @param side Side.
+	 * @return Mod config type.
+	 */
+	private static ModConfig.Type typeFromSide(ModEntryPoint.Side side) {
+		return switch (side) {
+			case COMMON -> ModConfig.Type.COMMON;
+			case CLIENT -> ModConfig.Type.CLIENT;
+			case SERVER -> ModConfig.Type.SERVER;
+		};
 	}
 }

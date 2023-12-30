@@ -33,9 +33,11 @@ public abstract class ModAnnotationProcessor extends AbstractProcessor {
 	@Override
 	public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnvironment) {
 		if(roundEnvironment.processingOver()) {
-			// Annotated methods have been found, generate code
-			this.generateModClass();
-			this.generateModFile();
+			if(this.checkRequiredOptions()) {
+				// Annotated methods have been found, generate code
+				this.generateModClass();
+				this.generateModFile();
+			}
 		} else {
 			// Look for annotated methods
 			for(TypeElement typeElement : annotations) {
@@ -105,16 +107,66 @@ public abstract class ModAnnotationProcessor extends AbstractProcessor {
 
 	/**
 	 * <p>
+	 *     Returns a set containing the required compiler options for this annotation processor to work correctly.
+	 *     An error will be logged and the compilation will fail if any of these is missing.
+	 * </p>
+	 *
+	 * @return A set containing the required compiler options for this annotation processor to work correctly.
+	 */
+	protected abstract Set<String> getRequiredOptions();
+
+	/**
+	 * <p>
 	 *     Helper function used to print an error message.
 	 * </p>
 	 *
 	 * @param message The message to print.
 	 * @param element The corresponding element.
-	 * @see javax.annotation.processing.Messager#printMessage(Diagnostic.Kind, CharSequence)
+	 * @see javax.annotation.processing.Messager#printMessage(Diagnostic.Kind, CharSequence, Element)
 	 */
 	public void printError(String message, Element element) {
 		this.processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, message, element);
 	}
 
-	// TODO: Check for required options
+	/**
+	 * <p>
+	 *     Helper function used to print an error message.
+	 * </p>
+	 *
+	 * @param message The message to print.
+	 * @see javax.annotation.processing.Messager#printMessage(Diagnostic.Kind, CharSequence)
+	 */
+	public void printError(String message) {
+		this.processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, message);
+	}
+
+	/**
+	 * <p>
+	 *     Helper function used to print an error message.
+	 * </p>
+	 *
+	 * @param message The message to print.
+	 * @see javax.annotation.processing.Messager#printMessage(Diagnostic.Kind, CharSequence)
+	 */
+	public void printWarning(String message) {
+		this.processingEnv.getMessager().printMessage(Diagnostic.Kind.WARNING, message);
+	}
+
+	/**
+	 * <p>
+	 *     Checks if all options listed in {@link ModAnnotationProcessor#getRequiredOptions()} are in the processing environment.
+	 *     Prints an error and returns false if they are not, otherwise true.
+	 * </p>
+	 *
+	 * @return False if an option is missing, true if they are all present.
+	 */
+	private boolean checkRequiredOptions() {
+		for(String option : this.getRequiredOptions()) {
+			if(!this.processingEnv.getOptions().containsKey(option)) {
+				this.printError(this.loader() + " annotation processor is missing the required option " + option + "\nAdd options by adding `compilerArgs.add \"-A" + option + "=${variable}\"` to gradle's compile task.");
+				return false;
+			}
+		}
+		return true;
+	}
 }

@@ -2,12 +2,12 @@ package io.github.phantomloader.library.fabric.config;
 
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import io.github.phantomloader.library.ModEntryPoint;
 import io.github.phantomloader.library.config.ConfigBuilder;
 import net.fabricmc.loader.api.FabricLoader;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.io.UncheckedIOException;
 import java.io.Writer;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
@@ -15,6 +15,8 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Stack;
 import java.util.function.Supplier;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * <p>
@@ -25,8 +27,11 @@ import java.util.function.Supplier;
  */
 public class FabricConfigBuilder implements ConfigBuilder {
 
+	/** Logger used to log errors in case the config file could not be read/written*/
+	private static final Logger LOGGER = Logger.getLogger("phantom");
+
 	/** Config json representation */
-	private HashMap<String, Object> config = new HashMap<>();
+	private final HashMap<String, Object> config = new HashMap<>();
 	/** Stack used to implement categories */
 	private final Stack<HashMap<String, Object>> currentCategory = new Stack<>();
 
@@ -111,22 +116,21 @@ public class FabricConfigBuilder implements ConfigBuilder {
 	}
 
 	@Override
-	public void register(String mod) {
-		Path configFile = Path.of(FabricLoader.getInstance().getConfigDir().toString(), mod + ".json");
+	public void register(String mod, ModEntryPoint.Side side) {
+		Path configFile = Path.of(FabricLoader.getInstance().getConfigDir().toString(), mod + "-" + side.name().toLowerCase() + ".json");
 		if(Files.exists(configFile)) {
 			try(Reader reader = Files.newBufferedReader(configFile)) {
 				Type type = new TypeToken<HashMap<String, Object>>(){}.getType();
-				this.config = new GsonBuilder().create().fromJson(reader, type);
+				HashMap<String, Object> loaded = new GsonBuilder().create().fromJson(reader, type);
+				this.config.putAll(loaded);
 			} catch (IOException e) {
-				// TODO: Better exception handling
-				throw new UncheckedIOException(e);
+				LOGGER.log(Level.WARNING, "Could not read config file " + configFile, e);
 			}
 		} else {
 			try(Writer writer = Files.newBufferedWriter(configFile)) {
 				new GsonBuilder().setPrettyPrinting().create().toJson(this.config, writer);
 			} catch (IOException e) {
-				// TODO: Better exception handling
-				throw new UncheckedIOException(e);
+				LOGGER.log(Level.WARNING, "Could not create config file " + configFile, e);
 			}
 		}
 	}

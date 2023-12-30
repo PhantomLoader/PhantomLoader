@@ -39,6 +39,6 @@ processResources {
     from project(':library-common').sourceSets.main.resources
 }
 
-tasks.named('publish').configure {
+jar {
     dependsOn 'reobfJar'
 }

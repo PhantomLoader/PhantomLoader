@@ -4,7 +4,6 @@ import io.github.phantomloader.library.ModEntryPoint;
 import io.github.phantomloader.processor.ModAnnotationProcessor;
 
 import javax.lang.model.element.Element;
-import javax.tools.Diagnostic;
 import javax.tools.StandardLocation;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -12,6 +11,13 @@ import java.io.UncheckedIOException;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * <p>
+ *     Implementation of {@link ModAnnotationProcessor} for Forge.
+ * </p>
+ *
+ * @author Nico
+ */
 public class ForgeAnnotationProcessor extends ModAnnotationProcessor {
 
 	@Override
@@ -27,9 +33,6 @@ public class ForgeAnnotationProcessor extends ModAnnotationProcessor {
 			writer.println("import net.minecraftforge.common.MinecraftForge;");
 			writer.println("import net.minecraftforge.eventbus.api.IEventBus;");
 			writer.println("import net.minecraftforge.fml.common.Mod;");
-			if(this.annotatedMethods.containsKey(ModEntryPoint.Side.COMMON)) {
-				writer.println("import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;");
-			}
 			if(this.annotatedMethods.containsKey(ModEntryPoint.Side.CLIENT)) {
 				writer.println("import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;");
 			}
@@ -127,6 +130,16 @@ public class ForgeAnnotationProcessor extends ModAnnotationProcessor {
 		}
 	}
 
+	/**
+	 * <p>
+	 *     Helper function used to generate a toml line.
+	 * </p>
+	 *
+	 * @param option The name of the option.
+	 * @param value The option's value.
+	 * @param defaultValue The default value to use in case {@code value} is null or an empty string.
+	 * @return The generated toml line.
+	 */
 	private static String tomlLine(String option, String value, String defaultValue) {
 		if(value == null || value.isEmpty() || value.isBlank()) {
 			if(defaultValue == null || defaultValue.isEmpty() || defaultValue.isBlank()) {
@@ -137,6 +150,15 @@ public class ForgeAnnotationProcessor extends ModAnnotationProcessor {
 		return option + "=\"" + value + "\"";
 	}
 
+	/**
+	 * <p>
+	 *     Helper function used to generate a toml line.
+	 * </p>
+	 *
+	 * @param option The name of the option.
+	 * @param value The option's value.
+	 * @return The generated toml line.
+	 */
 	private static String tomlLine(String option, String value) {
 		return tomlLine(option, value, "");
 	}
@@ -146,6 +168,18 @@ public class ForgeAnnotationProcessor extends ModAnnotationProcessor {
 		return Set.of("forgeVersion", "phantomVersion", "minecraftVersion", "modId", "modGroupId", "modVersion", "modName", "modLicense", "modAuthors", "modCredits", "modDescription", "modUrl", "modSource", "modLogo", "issueTracker");
 	}
 
+	@Override
+	protected Set<String> getRequiredOptions() {
+		return Set.of("forgeVersion", "phantomVersion", "minecraftVersion", "modId", "modGroupId", "modVersion");
+	}
+
+	/**
+	 * <p>
+	 *     Helper function used to generate Forge's version range.
+	 * </p>
+	 *
+	 * @return Forge's version range.
+	 */
 	private String forgeVersion() {
 		String forgeVersion = this.processingEnv.getOptions().get("forgeVersion");
 		String[] split = forgeVersion.split("\\.");
@@ -155,24 +189,38 @@ public class ForgeAnnotationProcessor extends ModAnnotationProcessor {
 		return "[" + forgeVersion + ",)";
 	}
 
+	/**
+	 * <p>
+	 *     Helper function used to generate Phantom's version range.
+	 * </p>
+	 *
+	 * @return Phantom's version range.
+	 */
 	private String phantomVersion() {
 		String version = this.processingEnv.getOptions().get("phantomVersion");
 		String[] split = version.split("\\.");
 		if(split.length > 0) try {
 			return "[" + version + "," + (Integer.parseInt(split[0]) + 1) + ".0)";
 		} catch (NumberFormatException e) {
-			this.processingEnv.getMessager().printMessage(Diagnostic.Kind.WARNING, "Invalid number format in " + version);
+			this.printWarning("Invalid number format in " + version);
 		}
 		return "[" + version + ",)";
 	}
 
+	/**
+	 * <p>
+	 *     Helper function used to generate Minecraft's version range.
+	 * </p>
+	 *
+	 * @return Minecraft's version range.
+	 */
 	private String minecraftVersion() {
 		String version = this.processingEnv.getOptions().get("minecraftVersion");
 		String[] split = version.split("\\.");
 		if(split.length > 1) try {
 			return "[" + version + ",1." + (Integer.parseInt(split[1]) + 1) + ")";
 		} catch (NumberFormatException e) {
-			this.processingEnv.getMessager().printMessage(Diagnostic.Kind.WARNING, "Invalid number format in " + version);
+			this.printWarning("Invalid number format in " + version);
 		}
 		return "[" + version + ",)";
 	}

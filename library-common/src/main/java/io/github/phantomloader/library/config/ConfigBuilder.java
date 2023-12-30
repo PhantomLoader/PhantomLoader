@@ -1,5 +1,7 @@
 package io.github.phantomloader.library.config;
 
+import io.github.phantomloader.library.ModEntryPoint;
+
 import java.util.NoSuchElementException;
 import java.util.ServiceLoader;
 import java.util.function.Supplier;
@@ -178,6 +180,7 @@ public interface ConfigBuilder {
 	 * </ul>
 	 *
 	 * @param mod Name of the config file used in Fabric
+	 * @param side Whether this is a client, common, or server config file.
 	 */
-	void register(String mod);
+	void register(String mod, ModEntryPoint.Side side);
 }
