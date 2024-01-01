@@ -9,16 +9,16 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 @Mod("test")
 public class ForgeInitializer {
 
-	public ForgeInitializer() {
-		com.example.test.TestMod.initialize();
-		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
-		eventBus.addListener(this::clientSetup);
-		MinecraftForge.EVENT_BUS.register(this);
-	}
+    public ForgeInitializer() {
+        com.example.test.TestMod.initialize();
+        IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        eventBus.addListener(this::clientSetup);
+        MinecraftForge.EVENT_BUS.register(this);
+    }
 
-	private void clientSetup(final FMLClientSetupEvent setupEvent) {
-		setupEvent.enqueueWork(() -> {
-			com.example.test.TestMod.initializeClient();
-		});
-	}
+    private void clientSetup(final FMLClientSetupEvent setupEvent) {
+        setupEvent.enqueueWork(() -> {
+            com.example.test.TestMod.initializeClient();
+        });
+    }
 }

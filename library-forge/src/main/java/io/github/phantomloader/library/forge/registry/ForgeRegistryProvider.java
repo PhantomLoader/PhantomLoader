@@ -12,8 +12,8 @@ import io.github.phantomloader.library.registry.RegistryProvider;
  */
 public class ForgeRegistryProvider implements RegistryProvider {
 
-	@Override
-	public ModRegistry instantiate(String mod) {
-		return new ForgeRegistry(mod);
-	}
+    @Override
+    public ModRegistry instantiate(String mod) {
+        return new ForgeRegistry(mod);
+    }
 }

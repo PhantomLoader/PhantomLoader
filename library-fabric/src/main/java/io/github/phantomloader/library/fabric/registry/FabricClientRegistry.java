@@ -29,23 +29,23 @@ import java.util.function.Supplier;
  */
 public class FabricClientRegistry implements ClientRegistry {
 
-	@Override
-	public void addItemsToCreativeTab(ResourceKey<CreativeModeTab> resourceKey, Collection<Supplier<? extends ItemLike>> items) {
-		ItemGroupEvents.modifyEntriesEvent(resourceKey).register(listener -> items.forEach(item -> listener.accept(item.get())));
-	}
+    @Override
+    public void addItemsToCreativeTab(ResourceKey<CreativeModeTab> resourceKey, Collection<Supplier<? extends ItemLike>> items) {
+        ItemGroupEvents.modifyEntriesEvent(resourceKey).register(listener -> items.forEach(item -> listener.accept(item.get())));
+    }
 
-	@Override
-	public <T extends Entity> void registerEntityRenderer(Supplier<EntityType<T>> entity, EntityRendererProvider<T> renderer) {
-		EntityRendererRegistry.register(entity.get(), renderer);
-	}
+    @Override
+    public <T extends Entity> void registerEntityRenderer(Supplier<EntityType<T>> entity, EntityRendererProvider<T> renderer) {
+        EntityRendererRegistry.register(entity.get(), renderer);
+    }
 
-	@Override
-	public <T extends BlockEntity> void registerBlockEntityRenderer(Supplier<BlockEntityType<T>> blockEntity, BlockEntityRendererProvider<T> renderer) {
-		BlockEntityRenderers.register(blockEntity.get(), renderer);
-	}
+    @Override
+    public <T extends BlockEntity> void registerBlockEntityRenderer(Supplier<BlockEntityType<T>> blockEntity, BlockEntityRendererProvider<T> renderer) {
+        BlockEntityRenderers.register(blockEntity.get(), renderer);
+    }
 
-	@Override
-	public void registerRenderType(Supplier<? extends Block> block, RenderType renderType) {
-		BlockRenderLayerMap.INSTANCE.putBlock(block.get(), renderType);
-	}
+    @Override
+    public void registerRenderType(Supplier<? extends Block> block, RenderType renderType) {
+        BlockRenderLayerMap.INSTANCE.putBlock(block.get(), renderType);
+    }
 }

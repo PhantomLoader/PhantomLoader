@@ -11,14 +11,14 @@ package io.github.phantomloader.library.registry;
  */
 public interface RegistryProvider {
 
-	/**
-	 * <p>
-	 *     Instantiates a {@link ModRegistry}.
-	 *     Loader-specific implementations of this interface should return the corresponding registry.
-	 * </p>
-	 *
-	 * @param mod Your mod id.
-	 * @return An instance of {@code ModRegistry} for the current loader.
-	 */
-	ModRegistry instantiate(String mod);
+    /**
+     * <p>
+     *     Instantiates a {@link ModRegistry}.
+     *     Loader-specific implementations of this interface should return the corresponding registry.
+     * </p>
+     *
+     * @param mod Your mod id.
+     * @return An instance of {@code ModRegistry} for the current loader.
+     */
+    ModRegistry instantiate(String mod);
 }

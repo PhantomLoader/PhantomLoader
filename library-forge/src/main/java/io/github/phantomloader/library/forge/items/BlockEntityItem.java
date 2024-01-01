@@ -26,33 +26,33 @@ import java.util.function.Consumer;
  */
 public class BlockEntityItem extends BlockItem {
 
-	/**
-	 * Constructs a {@code BlockEntityItem}.
-	 *
-	 * @param block The block corresponding to this item
-	 * @param properties Item properties
-	 */
-	public BlockEntityItem(Block block, Properties properties) {
-		super(block, properties);
-	}
+    /**
+     * Constructs a {@code BlockEntityItem}.
+     *
+     * @param block The block corresponding to this item
+     * @param properties Item properties
+     */
+    public BlockEntityItem(Block block, Properties properties) {
+        super(block, properties);
+    }
 
-	@Override
-	public void initializeClient(Consumer<IClientItemExtensions> consumer) {
-		consumer.accept(new IClientItemExtensions() {
-			@Override
-			public BlockEntityWithoutLevelRenderer getCustomRenderer() {
-				Minecraft minecraft = Minecraft.getInstance();
-				Block block = getBlock();
-				BlockEntity blockEntity = block instanceof EntityBlock entityBlock ? entityBlock.newBlockEntity(BlockPos.ZERO, block.defaultBlockState()) : null;
-				return new BlockEntityWithoutLevelRenderer(minecraft.getBlockEntityRenderDispatcher(), minecraft.getEntityModels()) {
-					@Override
-					public void renderByItem(@NotNull ItemStack itemStack, @NotNull ItemDisplayContext itemDisplayContext, @NotNull PoseStack poseStack, @NotNull MultiBufferSource multiBufferSource, int x, int y) {
-						if(blockEntity != null) {
-							minecraft.getBlockEntityRenderDispatcher().renderItem(blockEntity, poseStack, multiBufferSource, x, y);
-						}
-					}
-				};
-			}
-		});
-	}
+    @Override
+    public void initializeClient(Consumer<IClientItemExtensions> consumer) {
+        consumer.accept(new IClientItemExtensions() {
+            @Override
+            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
+                Minecraft minecraft = Minecraft.getInstance();
+                Block block = getBlock();
+                BlockEntity blockEntity = block instanceof EntityBlock entityBlock ? entityBlock.newBlockEntity(BlockPos.ZERO, block.defaultBlockState()) : null;
+                return new BlockEntityWithoutLevelRenderer(minecraft.getBlockEntityRenderDispatcher(), minecraft.getEntityModels()) {
+                    @Override
+                    public void renderByItem(@NotNull ItemStack itemStack, @NotNull ItemDisplayContext itemDisplayContext, @NotNull PoseStack poseStack, @NotNull MultiBufferSource multiBufferSource, int x, int y) {
+                        if(blockEntity != null) {
+                            minecraft.getBlockEntityRenderDispatcher().renderItem(blockEntity, poseStack, multiBufferSource, x, y);
+                        }
+                    }
+                };
+            }
+        });
+    }
 }

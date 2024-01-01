@@ -11,10 +11,10 @@ import net.minecraftforge.fml.common.Mod;
 @Mod("phantom")
 public class ForgeInitializer {
 
-	/**
-	 * Mod constructor.
-	 */
-	public ForgeInitializer() {
-		MinecraftForge.EVENT_BUS.register(this);
-	}
+    /**
+     * Mod constructor.
+     */
+    public ForgeInitializer() {
+        MinecraftForge.EVENT_BUS.register(this);
+    }
 }

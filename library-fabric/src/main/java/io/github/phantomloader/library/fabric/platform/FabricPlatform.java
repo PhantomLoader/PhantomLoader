@@ -12,18 +12,18 @@ import net.fabricmc.loader.api.FabricLoader;
  */
 public class FabricPlatform implements Platform {
 
-	@Override
-	public String platformName() {
-		return "Fabric";
-	}
+    @Override
+    public String platformName() {
+        return "Fabric";
+    }
 
-	@Override
-	public boolean isModLoaded(String mod) {
-		return FabricLoader.getInstance().isModLoaded(mod);
-	}
+    @Override
+    public boolean isModLoaded(String mod) {
+        return FabricLoader.getInstance().isModLoaded(mod);
+    }
 
-	@Override
-	public boolean isDevelopmentEnvironment() {
-		return FabricLoader.getInstance().isDevelopmentEnvironment();
-	}
+    @Override
+    public boolean isDevelopmentEnvironment() {
+        return FabricLoader.getInstance().isDevelopmentEnvironment();
+    }
 }

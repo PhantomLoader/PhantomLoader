@@ -12,8 +12,8 @@ import io.github.phantomloader.library.registry.RegistryProvider;
  */
 public class FabricRegistryProvider implements RegistryProvider {
 
-	@Override
-	public ModRegistry instantiate(String mod) {
-		return new FabricRegistry(mod);
-	}
+    @Override
+    public ModRegistry instantiate(String mod) {
+        return new FabricRegistry(mod);
+    }
 }

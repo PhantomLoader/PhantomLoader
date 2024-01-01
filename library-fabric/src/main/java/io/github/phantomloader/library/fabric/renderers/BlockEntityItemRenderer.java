@@ -24,27 +24,27 @@ import java.util.function.Supplier;
  */
 public class BlockEntityItemRenderer implements BuiltinItemRendererRegistry.DynamicItemRenderer {
 
-	/** The block to render */
-	private final Block baseBlock;
+    /** The block to render */
+    private final Block baseBlock;
 
-	/**
-	 * <p>
-	 *     Creates a renderer for the given block.
-	 * </p>
-	 *
-	 * @param baseBlock The base block
-	 */
-	public BlockEntityItemRenderer(Block baseBlock) {
-		this.baseBlock = baseBlock;
-	}
+    /**
+     * <p>
+     *     Creates a renderer for the given block.
+     * </p>
+     *
+     * @param baseBlock The base block
+     */
+    public BlockEntityItemRenderer(Block baseBlock) {
+        this.baseBlock = baseBlock;
+    }
 
-	@Override
-	public void render(ItemStack stack, ItemDisplayContext mode, PoseStack matrices, MultiBufferSource vertexConsumers, int light, int overlay) {
-		if(this.baseBlock instanceof EntityBlock entityBlock) {
-			BlockEntity blockEntity = entityBlock.newBlockEntity(BlockPos.ZERO, this.baseBlock.defaultBlockState());
-			if(blockEntity != null) {
-				Minecraft.getInstance().getBlockEntityRenderDispatcher().renderItem(blockEntity, matrices, vertexConsumers, light, overlay);
-			}
-		}
-	}
+    @Override
+    public void render(ItemStack stack, ItemDisplayContext mode, PoseStack matrices, MultiBufferSource vertexConsumers, int light, int overlay) {
+        if(this.baseBlock instanceof EntityBlock entityBlock) {
+            BlockEntity blockEntity = entityBlock.newBlockEntity(BlockPos.ZERO, this.baseBlock.defaultBlockState());
+            if(blockEntity != null) {
+                Minecraft.getInstance().getBlockEntityRenderDispatcher().renderItem(blockEntity, matrices, vertexConsumers, light, overlay);
+            }
+        }
+    }
 }

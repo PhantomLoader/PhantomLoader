@@ -32,63 +32,63 @@ import java.util.function.Supplier;
 @Mod.EventBusSubscriber(modid = "phantom", bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ForgeClientRegistry implements ClientRegistry {
 
-	private static final HashMap<ResourceKey<CreativeModeTab>, HashSet<Supplier<? extends ItemLike>>> CREATIVE_TABS = new HashMap<>();
-	private static final HashMap<Supplier<?>, EntityRendererProvider<?>> ENTITY_RENDERERS = new HashMap<>();
-	private static final HashMap<Supplier<?>, BlockEntityRendererProvider<?>> BLOCK_ENTITY_RENDERERS = new HashMap<>();
+    private static final HashMap<ResourceKey<CreativeModeTab>, HashSet<Supplier<? extends ItemLike>>> CREATIVE_TABS = new HashMap<>();
+    private static final HashMap<Supplier<?>, EntityRendererProvider<?>> ENTITY_RENDERERS = new HashMap<>();
+    private static final HashMap<Supplier<?>, BlockEntityRendererProvider<?>> BLOCK_ENTITY_RENDERERS = new HashMap<>();
 
-	/**
-	 * <p>
-	 *     Forge event handler used to add items to creative mode tabs.
-	 * </p>
-	 *
-	 * @param event Forge event
-	 */
-	@SubscribeEvent
-	public static void creativeTabEvent(BuildCreativeModeTabContentsEvent event) {
-		if(CREATIVE_TABS.containsKey(event.getTabKey())) {
-			CREATIVE_TABS.get(event.getTabKey()).forEach(item -> event.accept(item.get()));
-		}
-	}
+    /**
+     * <p>
+     *     Forge event handler used to add items to creative mode tabs.
+     * </p>
+     *
+     * @param event Forge event
+     */
+    @SubscribeEvent
+    public static void creativeTabEvent(BuildCreativeModeTabContentsEvent event) {
+        if(CREATIVE_TABS.containsKey(event.getTabKey())) {
+            CREATIVE_TABS.get(event.getTabKey()).forEach(item -> event.accept(item.get()));
+        }
+    }
 
-	/**
-	 * <p>
-	 *     Forge event handler used to register entity and block entity renderers.
-	 * </p>
-	 *
-	 * @param event Forge event
-	 */
-	@SubscribeEvent
-	public static void registerRenders(EntityRenderersEvent.RegisterRenderers event) {
-		registerEntityRenderers(event::registerEntityRenderer);
-		registerBlockEntityRenderers(event::registerBlockEntityRenderer);
-	}
+    /**
+     * <p>
+     *     Forge event handler used to register entity and block entity renderers.
+     * </p>
+     *
+     * @param event Forge event
+     */
+    @SubscribeEvent
+    public static void registerRenders(EntityRenderersEvent.RegisterRenderers event) {
+        registerEntityRenderers(event::registerEntityRenderer);
+        registerBlockEntityRenderers(event::registerBlockEntityRenderer);
+    }
 
-	@SuppressWarnings("unchecked")
-	private static <T extends Entity> void registerEntityRenderers(BiConsumer<EntityType<T>, EntityRendererProvider<T>> consumer) {
-		ENTITY_RENDERERS.forEach((entity, renderer) -> consumer.accept((EntityType<T>) entity.get(), (EntityRendererProvider<T>) renderer));
-	}
+    @SuppressWarnings("unchecked")
+    private static <T extends Entity> void registerEntityRenderers(BiConsumer<EntityType<T>, EntityRendererProvider<T>> consumer) {
+        ENTITY_RENDERERS.forEach((entity, renderer) -> consumer.accept((EntityType<T>) entity.get(), (EntityRendererProvider<T>) renderer));
+    }
 
-	@SuppressWarnings("unchecked")
-	private static <T extends BlockEntity> void registerBlockEntityRenderers(BiConsumer<BlockEntityType<? extends T>, BlockEntityRendererProvider<T>> consumer) {
-		BLOCK_ENTITY_RENDERERS.forEach((blockEntity, renderer) -> consumer.accept((BlockEntityType<? extends T>) blockEntity.get(), (BlockEntityRendererProvider<T>) renderer));
-	}
+    @SuppressWarnings("unchecked")
+    private static <T extends BlockEntity> void registerBlockEntityRenderers(BiConsumer<BlockEntityType<? extends T>, BlockEntityRendererProvider<T>> consumer) {
+        BLOCK_ENTITY_RENDERERS.forEach((blockEntity, renderer) -> consumer.accept((BlockEntityType<? extends T>) blockEntity.get(), (BlockEntityRendererProvider<T>) renderer));
+    }
 
-	@Override
-	public void addItemsToCreativeTab(ResourceKey<CreativeModeTab> resourceKey, Collection<Supplier<? extends ItemLike>> items) {
-		if(CREATIVE_TABS.containsKey(resourceKey)) {
-			CREATIVE_TABS.get(resourceKey).addAll(items);
-		} else {
-			CREATIVE_TABS.put(resourceKey, new HashSet<>(items));
-		}
-	}
+    @Override
+    public void addItemsToCreativeTab(ResourceKey<CreativeModeTab> resourceKey, Collection<Supplier<? extends ItemLike>> items) {
+        if(CREATIVE_TABS.containsKey(resourceKey)) {
+            CREATIVE_TABS.get(resourceKey).addAll(items);
+        } else {
+            CREATIVE_TABS.put(resourceKey, new HashSet<>(items));
+        }
+    }
 
-	@Override
-	public <T extends Entity> void registerEntityRenderer(Supplier<EntityType<T>> entity, EntityRendererProvider<T> renderer) {
-		ENTITY_RENDERERS.put(entity, renderer);
-	}
+    @Override
+    public <T extends Entity> void registerEntityRenderer(Supplier<EntityType<T>> entity, EntityRendererProvider<T> renderer) {
+        ENTITY_RENDERERS.put(entity, renderer);
+    }
 
-	@Override
-	public <T extends BlockEntity> void registerBlockEntityRenderer(Supplier<BlockEntityType<T>> blockEntity, BlockEntityRendererProvider<T> renderer) {
-		BLOCK_ENTITY_RENDERERS.put(blockEntity, renderer);
-	}
+    @Override
+    public <T extends BlockEntity> void registerBlockEntityRenderer(Supplier<BlockEntityType<T>> blockEntity, BlockEntityRendererProvider<T> renderer) {
+        BLOCK_ENTITY_RENDERERS.put(blockEntity, renderer);
+    }
 }
