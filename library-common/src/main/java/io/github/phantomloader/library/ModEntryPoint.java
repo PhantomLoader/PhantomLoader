@@ -27,7 +27,7 @@ import java.lang.annotation.Target;
  *     <pre>
  *         {@code @ModEntryPoint(side = ModEntryPoint.Side.CLIENT)}
  *         public static void initializeClient() {
- *             ClientRegistry.INSTANCE.registerEntityRenderer(...);
+ *             ....
  *         }
  *     </pre>
  * </p>

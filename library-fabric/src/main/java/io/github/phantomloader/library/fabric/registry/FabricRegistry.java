@@ -83,15 +83,15 @@ public class FabricRegistry extends ModRegistry {
 
     @Override
     public Supplier<BlockItem> registerBlockItem(String name, Supplier<? extends Block> block) {
-        if(block.get() instanceof EntityBlock) {
-            // TODO: This should only happen on the client
-            BuiltinItemRendererRegistry.INSTANCE.register(block.get(), new BlockEntityItemRenderer(block.get()));
-        }
+        // TODO: This does not work
+//        if(block.get() instanceof EntityBlock) {
+//            BuiltinItemRendererRegistry.INSTANCE.register(block.get(), new BlockEntityItemRenderer(block.get()));
+//        }
         return super.registerBlockItem(name, block);
     }
 
     @Override
-    public <T extends BlockEntity> Supplier<BlockEntityType<? extends T>> registerBlockEntity(String name, BiFunction<BlockPos, BlockState, T> blockEntity, Set<Supplier<? extends Block>> blocks) {
+    public <T extends BlockEntity> Supplier<BlockEntityType<T>> registerBlockEntity(String name, BiFunction<BlockPos, BlockState, T> blockEntity, Set<Supplier<? extends Block>> blocks) {
         // Block entity types must be created here because BlockEntityType.BlockEntitySupplier has private access in the common module
         BlockEntityType<T> registered = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, this.identifier(name), FabricBlockEntityTypeBuilder.create(blockEntity::apply, blocks.stream().map(Supplier::get).toArray(Block[]::new)).build());
         return () -> registered;

@@ -1,8 +1,10 @@
 package io.github.phantomloader.library.registry;
 
 import io.github.phantomloader.library.ModEntryPoint;
+import io.github.phantomloader.library.events.ClientEventHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -25,6 +27,7 @@ import java.util.NoSuchElementException;
 import java.util.ServiceLoader;
 import java.util.Set;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -300,7 +303,7 @@ public abstract class ModRegistry {
      * @return A supplier returning the registered block entity type.
      * @param <T> The block entity's class.
      */
-    public abstract <T extends BlockEntity> Supplier<BlockEntityType<? extends T>> registerBlockEntity(String name, BiFunction<BlockPos, BlockState, T> blockEntity, Set<Supplier<? extends Block>> blocks);
+    public abstract <T extends BlockEntity> Supplier<BlockEntityType<T>> registerBlockEntity(String name, BiFunction<BlockPos, BlockState, T> blockEntity, Set<Supplier<? extends Block>> blocks);
 
     /**
      * <p>
@@ -317,7 +320,7 @@ public abstract class ModRegistry {
      * @return A supplier returning the registered block entity type.
      * @param <T> The block entity's class.
      */
-    public <T extends BlockEntity> Supplier<BlockEntityType<? extends T>> registerBlockEntity(String name, BiFunction<BlockPos, BlockState, T> blockEntity, Supplier<? extends Block> block) {
+    public <T extends BlockEntity> Supplier<BlockEntityType<T>> registerBlockEntity(String name, BiFunction<BlockPos, BlockState, T> blockEntity, Supplier<? extends Block> block) {
         return this.registerBlockEntity(name, blockEntity, Set.of(block));
     }
 
@@ -326,8 +329,8 @@ public abstract class ModRegistry {
      *     Registers a {@link CreativeModeTab}.
      * </p>
      * <p>
-     *     This function is used to create creative tabs for mods. Items to display in that tab should be passed here.
-     *     Alternatively, the {@link ClientRegistry#addItemsToCreativeTab(String, String, Collection)} method can be used.
+     *     This function is used to create creative tabs for mods. The preferred method for adding items to creative tabs is passing them here.
+     *     Alternatively, the {@link ClientEventHandler#addItemsToCreativeTab(ResourceKey, Consumer)} method can be used.
      * </p>
      *
      * @param name The creative tab's registry name. Note that this is different from the tab's title.
@@ -343,8 +346,8 @@ public abstract class ModRegistry {
      *     Registers a {@link CreativeModeTab}.
      * </p>
      * <p>
-     *     This function is used to create creative tabs for mods.
-     *     Items can be added to the tab with {@link ClientRegistry#addItemsToCreativeTab(String, String, Collection)}.
+     *     This function is used to create creative tabs for mods. The preferred method for adding items to creative tabs is the {@link #registerCreativeTab(String, Supplier, String, Collection)} method.
+     *     Alternatively, the {@link ClientEventHandler#addItemsToCreativeTab(ResourceKey, Consumer)} method can be used.
      * </p>
      *
      * @param name The creative tab's registry name. Note that this is different from the tab's title.
@@ -361,8 +364,8 @@ public abstract class ModRegistry {
      *     Registers a {@link CreativeModeTab}.
      * </p>
      * <p>
-     *     This function is used to create creative tabs for mods. Items to display in that tab should be passed here.
-     *     Alternatively, the {@link ClientRegistry#addItemsToCreativeTab(String, String, Collection)} method can be used.
+     *     This function is used to create creative tabs for mods. The preferred method for adding items to creative tabs is passing them here.
+     *     Alternatively, the {@link ClientEventHandler#addItemsToCreativeTab(ResourceKey, Consumer)} method can be used.
      * </p>
      *
      * @param name The creative tab's registry name. Note that this is different from the tab's title.
@@ -380,8 +383,8 @@ public abstract class ModRegistry {
      *     Registers a {@link CreativeModeTab}.
      * </p>
      * <p>
-     *     This function is used to create creative tabs for mods.
-     *     Items can be added to the tab with {@link ClientRegistry#addItemToCreativeTab(String, String, Supplier)}.
+     *     This function is used to create creative tabs for mods. The preferred method for adding items to creative tabs is the {@link #registerCreativeTab(String, Supplier, String, Collection)} method.
+     *     Alternatively, the {@link ClientEventHandler#addItemsToCreativeTab(ResourceKey, Consumer)} method can be used.
      * </p>
      *
      * @param name The creative tab's registry name. Note that this is different from the tab's title.

@@ -107,7 +107,7 @@ public class ForgeRegistry extends ModRegistry {
 
     @Override
     @SuppressWarnings("DataFlowIssue")
-    public <T extends BlockEntity> Supplier<BlockEntityType<? extends T>> registerBlockEntity(String name, BiFunction<BlockPos, BlockState, T> blockEntity, Set<Supplier<? extends Block>> blocks) {
+    public <T extends BlockEntity> Supplier<BlockEntityType<T>> registerBlockEntity(String name, BiFunction<BlockPos, BlockState, T> blockEntity, Set<Supplier<? extends Block>> blocks) {
         // Block entity types must be created here because BlockEntityType.BlockEntitySupplier has private access in the common module
         return this.blockEntities.register(name, () -> BlockEntityType.Builder.of(blockEntity::apply, blocks.stream().map(Supplier::get).toArray(Block[]::new)).build(null));
     }
