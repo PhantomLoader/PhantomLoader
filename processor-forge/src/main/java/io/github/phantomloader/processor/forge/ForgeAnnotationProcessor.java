@@ -8,7 +8,6 @@ import javax.tools.StandardLocation;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UncheckedIOException;
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -32,32 +31,29 @@ public class ForgeAnnotationProcessor extends ModAnnotationProcessor {
 		try(PrintWriter writer = new PrintWriter(this.processingEnv.getFiler().createSourceFile(packageName + ".ForgeInitializer").openWriter())) {
 			writer.println("package " + packageName + ";");
 			writer.println("import net.minecraftforge.common.MinecraftForge;");
-			writer.println("import net.minecraftforge.eventbus.api.IEventBus;");
 			writer.println("import net.minecraftforge.fml.common.Mod;");
+			if(this.annotatedMethods.containsKey(ModEntryPoint.Side.CLIENT) || this.annotatedMethods.containsKey(ModEntryPoint.Side.SERVER)) {
+				writer.println("import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;");
+				writer.println("import net.minecraftforge.eventbus.api.IEventBus;");
+			}
 			if(this.annotatedMethods.containsKey(ModEntryPoint.Side.CLIENT)) {
 				writer.println("import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;");
 			}
 			if(this.annotatedMethods.containsKey(ModEntryPoint.Side.SERVER)) {
 				writer.println("import net.minecraftforge.fml.event.lifecycle.FMLDedicatedServerSetupEvent;");
 			}
-			writer.println("import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;");
-			for(HashSet<Element> elements : this.annotatedMethods.values()) {
-				for(Element element : elements) {
-					String className = element.getEnclosingElement().getSimpleName().toString();
-					String basePackage = this.processingEnv.getElementUtils().getPackageOf(element).getQualifiedName().toString();
-					writer.println("import static " + basePackage + "." + className + "." + element.getSimpleName() + ";");
-				}
-			}
 			writer.println("@Mod(\"" + modId + "\")");
 			writer.println("public class ForgeInitializer {");
 			writer.println("	public ForgeInitializer() {");
-			if(!this.annotatedMethods.isEmpty()) {
-				writer.println("		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();");
-				if(this.annotatedMethods.containsKey(ModEntryPoint.Side.COMMON)) {
-					for(Element method : this.annotatedMethods.get(ModEntryPoint.Side.COMMON)) {
-						writer.println("		" + method.getSimpleName() + "();");
-					}
+			if(this.annotatedMethods.containsKey(ModEntryPoint.Side.COMMON)) {
+				for(Element method : this.annotatedMethods.get(ModEntryPoint.Side.COMMON)) {
+					String methodClass = method.getEnclosingElement().getSimpleName().toString();
+					String methodPackage = this.processingEnv.getElementUtils().getPackageOf(method).getQualifiedName().toString();
+					writer.println("		" + methodPackage + "." + methodClass + "." + method.getSimpleName() + "();");
 				}
+			}
+			if(this.annotatedMethods.containsKey(ModEntryPoint.Side.CLIENT) || this.annotatedMethods.containsKey(ModEntryPoint.Side.SERVER)) {
+				writer.println("		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();");
 				if(this.annotatedMethods.containsKey(ModEntryPoint.Side.CLIENT)) {
 					writer.println("		eventBus.addListener(this::clientSetup);");
 				}
@@ -71,7 +67,9 @@ public class ForgeAnnotationProcessor extends ModAnnotationProcessor {
 				writer.println("	private void clientSetup(final FMLClientSetupEvent setupEvent) {");
 				writer.println("		setupEvent.enqueueWork(() -> {");
 				for(Element method : this.annotatedMethods.get(ModEntryPoint.Side.CLIENT)) {
-					writer.println("			" + method.getSimpleName() + "();");
+					String methodClass = method.getEnclosingElement().getSimpleName().toString();
+					String methodPackage = this.processingEnv.getElementUtils().getPackageOf(method).getQualifiedName().toString();
+					writer.println("			" + methodPackage + "." + methodClass + "." + method.getSimpleName() + "();");
 				}
 				writer.println("		});");
 				writer.println("	}");
@@ -80,7 +78,9 @@ public class ForgeAnnotationProcessor extends ModAnnotationProcessor {
 				writer.println("	private void serverSetup(final FMLDedicatedServerSetupEvent setupEvent) {");
 				writer.println("		setupEvent.enqueueWork(() -> {");
 				for(Element method : this.annotatedMethods.get(ModEntryPoint.Side.SERVER)) {
-					writer.println("			" + method.getSimpleName() + "();");
+					String methodClass = method.getEnclosingElement().getSimpleName().toString();
+					String methodPackage = this.processingEnv.getElementUtils().getPackageOf(method).getQualifiedName().toString();
+					writer.println("			" + methodPackage + "." + methodClass + "." + method.getSimpleName() + "();");
 				}
 				writer.println("		});");
 				writer.println("	}");
@@ -98,7 +98,7 @@ public class ForgeAnnotationProcessor extends ModAnnotationProcessor {
 			String forgeVersion = this.forgeVersion();
 			writer.println(tomlLine("loaderVersion", forgeVersion));
 			writer.println(tomlLine("license", this.processingEnv.getOptions().get("modLicense"), "All rights reserved"));
-			writer.println(tomlLine("issueTrackerURL", this.processingEnv.getOptions().get("issueTracker")));
+			writer.println(tomlLine("issueTrackerURL", this.processingEnv.getOptions().get("issueTracker"), this.processingEnv.getOptions().get("modSource")));
 			writer.println("[[mods]]");
 			writer.println(tomlLine("modId", this.processingEnv.getOptions().get("modId")));
 			writer.println(tomlLine("version", this.processingEnv.getOptions().get("modVersion"), "${file.jarVersion}"));
@@ -144,7 +144,7 @@ public class ForgeAnnotationProcessor extends ModAnnotationProcessor {
 	private static String tomlLine(String option, String value, String defaultValue) {
 		if(value == null || value.isEmpty() || value.isBlank()) {
 			if(defaultValue == null || defaultValue.isEmpty() || defaultValue.isBlank()) {
-				return "#" + option + "=\"" + defaultValue + "\"";
+				return "#" + option + "=\"\"";
 			}
 			return option + "=\"" + defaultValue + "\"";
 		}
@@ -171,7 +171,7 @@ public class ForgeAnnotationProcessor extends ModAnnotationProcessor {
 
 	@Override
 	protected Set<String> getRequiredOptions() {
-		return Set.of("forgeVersion", "phantomVersion", "minecraftVersion", "modId", "modGroupId", "modVersion");
+		return Set.of("forgeVersion", "phantomVersion", "minecraftVersion", "modId", "modGroupId");
 	}
 
 	/**

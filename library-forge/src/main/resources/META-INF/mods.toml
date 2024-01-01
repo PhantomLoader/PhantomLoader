@@ -14,13 +14,13 @@ logoFile="logo.png"
 authors="HexagonNico"
 description="A library to automate part of the process of creating mods for multiple loaders"
 
-[[dependencies.test]]
+[[dependencies.phantom]]
     modId="forge"
     mandatory=true
     versionRange="[47,)"
     ordering="NONE"
     side="BOTH"
-[[dependencies.test]]
+[[dependencies.phantom]]
     modId="minecraft"
     mandatory=true
     versionRange="[1.20.1,1.21)"
