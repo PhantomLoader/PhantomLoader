@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "test",
+  "version": "1.0",
+  "name": "Example Mod",
+  "description": "This mod was created from a unit test",
+  "authors": [
+    "TestAuthor1",
+    "TestAuthor2",
+    "TestAuthor3"
+  ],
+  "contact": {
+    "homepage": "https://example.com",
+    "sources": "https://github.com"
+  },
+  "license": "MIT",
+  "icon": "icon.png",
+  "entrypoints": {
+    "main": [
+      "com.example.test.fabric.FabricInitializer"
+    ]
+  },
+  "depends": {
+    "phantom": "~0.1",
+    "fabricloader": ">=0.14.23",
+    "minecraft": "~1.20.1",
+    "java": ">=17"
+  }
+}

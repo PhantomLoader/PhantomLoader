@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'fabric-loom' version '0.12-SNAPSHOT'
 }
 
 base {
@@ -7,8 +8,27 @@ base {
 }
 
 dependencies {
+    // Common module
     implementation project(':library-common')
     implementation project(':processor-common')
+    // Test depdendencies
+    minecraft "com.mojang:minecraft:${minecraftVersion}"
+    mappings loom.officialMojangMappings()
+    modImplementation "net.fabricmc:fabric-loader:${fabricVersion}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabricApiVersion}+${minecraftVersion}"
+    testImplementation platform("org.junit:junit-bom:${junitVersion}")
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation "com.google.testing.compile:compile-testing:${googleCompileTestingVersion}"
+}
+
+loom {
+    runs {
+        client {
+            client()
+            ideConfigGenerated(true)
+            runDir("../.minecraft")
+        }
+    }
 }
 
 tasks.withType(JavaCompile).configureEach {
@@ -17,4 +37,26 @@ tasks.withType(JavaCompile).configureEach {
 
 processResources {
     from project(":processor-common").sourceSets.main.resources
+}
+
+test {
+    // Use Junit test
+    useJUnitPlatform()
+    // Workaround for google compile testing
+    jvmArgs '--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED'
+    jvmArgs '--add-exports=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED'
+    jvmArgs '--add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED'
+    // Annotation processor options used for testing
+    systemProperty 'fabricVersion', fabricVersion
+    systemProperty 'phantomVersion', phantomVersion
+    systemProperty 'minecraftVersion', minecraftVersion
+    systemProperty 'modId', 'test'
+    systemProperty 'modGroupId', 'com.example'
+    systemProperty 'modVersion', '1.0'
+    systemProperty 'modName', 'Example Mod'
+    systemProperty 'modLicense', 'MIT'
+    systemProperty 'modAuthors', 'TestAuthor1, TestAuthor2, TestAuthor3'
+    systemProperty 'modDescription', 'This mod was created from a unit test'
+    systemProperty 'modUrl', 'https://example.com'
+    systemProperty 'modSource', 'https://github.com'
 }

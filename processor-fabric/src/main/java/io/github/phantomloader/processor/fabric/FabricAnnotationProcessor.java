@@ -59,13 +59,6 @@ public class FabricAnnotationProcessor extends ModAnnotationProcessor {
 			String packageName = this.processingEnv.getOptions().get("modGroupId") + "." + this.lowercaseModId() + ".fabric";
 			try(PrintWriter writer = new PrintWriter(this.processingEnv.getFiler().createSourceFile(packageName + "." + className).openWriter())) {
 				writer.println("package " + packageName + ";");
-				for(Element method : this.annotatedMethods.get(side)) {
-					if(method.getAnnotation(FabricCustomEntryPoint.class) == null) {
-						String methodClass = method.getEnclosingElement().getSimpleName().toString();
-						String methodPackage = this.processingEnv.getElementUtils().getPackageOf(method).getQualifiedName().toString();
-						writer.println("import static " + methodPackage + "." + methodClass + "." + method.getSimpleName() + ";");
-					}
-				}
 				writer.println("public class " + className + " implements " + interfaceName + " {");
 				Method[] interfaceMethods = Class.forName(interfaceName).getMethods();
 				if(interfaceMethods.length > 0) {
@@ -73,7 +66,9 @@ public class FabricAnnotationProcessor extends ModAnnotationProcessor {
 					writer.println("	public void " + interfaceMethods[0].getName() + "() {");
 					for(Element method : this.annotatedMethods.get(side)) {
 						if(method.getAnnotation(FabricCustomEntryPoint.class) == null) {
-							writer.println("		" + method.getSimpleName() + "();");
+							String methodClass = method.getEnclosingElement().getSimpleName().toString();
+							String methodPackage = this.processingEnv.getElementUtils().getPackageOf(method).getQualifiedName().toString();
+							writer.println("		" + methodPackage + "." + methodClass + "." + method.getSimpleName() + "();");
 						}
 					}
 					writer.println("	}");

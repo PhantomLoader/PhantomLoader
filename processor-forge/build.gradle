@@ -21,9 +21,9 @@ dependencies {
     implementation project(':processor-common')
     // Test dependencies
     minecraft "net.minecraftforge:forge:${minecraftVersion}-${forgeVersion}"
-    testImplementation platform('org.junit:junit-bom:5.10.1')
+    testImplementation platform("org.junit:junit-bom:${junitVersion}")
     testImplementation 'org.junit.jupiter:junit-jupiter'
-    testImplementation 'com.google.testing.compile:compile-testing:0.21.0'
+    testImplementation "com.google.testing.compile:compile-testing:${googleCompileTestingVersion}"
 }
 
 tasks.withType(JavaCompile).configureEach {
