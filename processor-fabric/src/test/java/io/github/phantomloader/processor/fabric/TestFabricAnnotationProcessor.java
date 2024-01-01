@@ -76,6 +76,21 @@ public class TestFabricAnnotationProcessor {
         }
     }
 
+    @Test
+    public void testCustomEntryPoint() {
+        FabricAnnotationProcessor annotationProcessor = new FabricAnnotationProcessor();
+        JavaFileObject testModClass = JavaFileObjects.forResource("test3/TestMod.java");
+        Compilation compilation = Compiler.javac().withProcessors(annotationProcessor).withOptions(getOptions("fabricVersion", "phantomVersion", "minecraftVersion", "modId", "modGroupId", "modVersion", "modName", "modLicense", "modAuthors", "modDescription", "modUrl", "modSource")).compile(testModClass);
+        CompilationSubject.assertThat(compilation).succeeded();
+        JavaFileObject expectedModClass = JavaFileObjects.forResource("test3/FabricInitializer.java");
+        String expectedModClassName = System.getProperty("modGroupId") + "." + System.getProperty("modId").toLowerCase().replace("_", "") + ".fabric.FabricInitializer";
+        CompilationSubject.assertThat(compilation).generatedSourceFile(expectedModClassName).hasSourceEquivalentTo(expectedModClass);
+        JavaFileObject expectedIntegrationClass = JavaFileObjects.forResource("test3/TerrablenderInitializer.java");
+        String expectedIntegrationClassName = System.getProperty("modGroupId") + "." + System.getProperty("modId").toLowerCase().replace("_", "") + ".fabric.integration.TerrablenderInitializer";
+        CompilationSubject.assertThat(compilation).generatedSourceFile(expectedIntegrationClassName).hasSourceEquivalentTo(expectedIntegrationClass);
+        CompilationSubject.assertThat(compilation).generatedFile(StandardLocation.CLASS_OUTPUT, "fabric.mod.json").contentsAsUtf8String().isEqualTo(readResource("test3/fabric.mod.json") + "\n");
+    }
+
     private static List<String> getOptions(Collection<String> options) {
         return options.stream().map(str -> "-A" + str + "=" + System.getProperty(str)).toList();
     }

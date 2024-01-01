@@ -5,11 +5,7 @@ subprojects {
     group = 'io.github.phantomloader'
     version = '0.1'
 
-    java {
-        toolchain {
-            JavaLanguageVersion.of(17)
-        }
-    }
+    java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
     jar {
         manifest {

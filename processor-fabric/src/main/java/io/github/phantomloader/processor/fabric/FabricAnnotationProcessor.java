@@ -120,22 +120,19 @@ public class FabricAnnotationProcessor extends ModAnnotationProcessor {
      * @param methods Set of methods to call from this initializer.
      */
     private void generateCustomInitializer(String name, String interfaceName, HashSet<Element> methods) {
-        String packageName = this.processingEnv.getOptions().get("modGroupId") + ".fabric.integration";
+        String packageName = this.processingEnv.getOptions().get("modGroupId") + "." + this.lowercaseModId() + ".fabric.integration";
         String className = name.substring(0, 1).toUpperCase() + name.substring(1) + "Initializer";
         try(PrintWriter writer = new PrintWriter(this.processingEnv.getFiler().createSourceFile(packageName + "." + className).openWriter())) {
             writer.println("package " + packageName + ";");
-            for(Element method : methods) {
-                String methodClass = method.getEnclosingElement().getSimpleName().toString();
-                String methodPackage = this.processingEnv.getElementUtils().getPackageOf(method).getQualifiedName().toString();
-                writer.println("import static " + methodPackage + "." + methodClass + "." + method.getSimpleName() + ";");
-            }
             writer.println("public class " + className + " implements " + interfaceName + " {");
             Method[] interfaceMethods = Class.forName(interfaceName).getMethods();
             if(interfaceMethods.length > 0) {
                 writer.println("    @Override");
                 writer.println("    public void " + interfaceMethods[0].getName() + "() {");
                 for(Element method : methods) {
-                    writer.println("        " + method.getSimpleName() + "();");
+                    String methodClass = method.getEnclosingElement().getSimpleName().toString();
+                    String methodPackage = this.processingEnv.getElementUtils().getPackageOf(method).getQualifiedName().toString();
+                    writer.println("        " + methodPackage + "." + methodClass + "." + method.getSimpleName() + "();");
                 }
                 writer.println("    }");
             }
