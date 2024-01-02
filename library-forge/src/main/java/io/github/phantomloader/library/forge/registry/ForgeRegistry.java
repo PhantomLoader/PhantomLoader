@@ -6,6 +6,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.data.models.blockstates.PropertyDispatch;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
@@ -13,6 +15,9 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -26,11 +31,14 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraftforge.common.ForgeSpawnEggItem;
+import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.network.IContainerFactory;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
+import org.apache.commons.lang3.function.TriFunction;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -150,10 +158,10 @@ public class ForgeRegistry extends ModRegistry {
         return this.getRegister(ForgeRegistries.FEATURES).register(name, feature);
     }
 
-//    @Override
-//    public <T extends MenuType<?>> Supplier<T> registerMenu(String name, BiFunction<Integer, Inventory, T> menu) {
-//        return createOrGetRegistry(ForgeRegistries.MENU_TYPES).register(name, () -> IForgeMenuType.create(((windowId, inv, data) -> menu.apply(windowId, inv))));
-//    }
+    @Override
+    public <T extends AbstractContainerMenu> Supplier<MenuType<T>> registerMenu(String name, TriFunction<Integer, Inventory, FriendlyByteBuf, T> menu) {
+        return this.getRegister(ForgeRegistries.MENU_TYPES).register(name, () -> IForgeMenuType.create(menu::apply));
+    }
 
     @Override
     public <T extends ParticleType<?>> Supplier<T> registerParticles(String name, Supplier<T> particles) {

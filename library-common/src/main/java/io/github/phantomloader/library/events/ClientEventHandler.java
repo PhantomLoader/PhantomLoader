@@ -43,6 +43,9 @@ public interface ClientEventHandler {
      *         }
      *     </pre>
      * </p>
+     * <p>
+     *     See {@link io.github.phantomloader.library.utils.CreativeTabsUtils} for helper functions about creative tabs.
+     * </p>
      *
      * @param resourceKey The creative tab's resource key.
      * @param event Use {@code event.accept(ExampleMod.MY_ITEM)} to add an item to this creative tab.

@@ -20,7 +20,7 @@ import java.util.function.Supplier;
  * </ul>
  * <p>
  *     Config files are normally created from static initializers, so that options can be retrieved from anywhere in the code.
- *     After defining the config options, the config must be registered by calling {@link ConfigBuilder#register(String)}.
+ *     After defining the config options, the config must be registered by calling {@link ConfigBuilder#register(String, ModEntryPoint.Side)}.
  * </p>
  *
  * @author Nico
@@ -34,7 +34,7 @@ public interface ConfigBuilder {
      * </p>
      * <p>
      *     Config files are normally created from static initializers, so that options can be retrieved from anywhere in the code.
-     *     After defining the config options, the config must be registered by calling {@link ConfigBuilder#register(String)}.
+     *     After defining the config options, the config must be registered by calling {@link ConfigBuilder#register(String, ModEntryPoint.Side)}.
      * </p>
      *
      * @return An instance of {@code ConfigBuilder} for the current mod loader.

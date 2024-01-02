@@ -4,6 +4,7 @@ import io.github.phantomloader.library.ModEntryPoint;
 import io.github.phantomloader.library.events.ClientEventHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleType;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -12,6 +13,9 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -27,6 +31,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
+import org.apache.commons.lang3.function.TriFunction;
 
 import java.util.Collection;
 import java.util.NoSuchElementException;
@@ -433,24 +438,128 @@ public abstract class ModRegistry {
         return this.registerItem(name, () -> new SpawnEggItem(entity.get(), primaryColor, secondaryColor, new Item.Properties()));
     }
 
+    /**
+     * <p>
+     *     Registers a {@link MobEffect}.
+     * </p>
+     *
+     * @param name Registry name of the effect
+     * @param effect A supplier returning an instance of {@code MobEffect}.
+     * @return A supplier returning the registered effect.
+     * @param <T> The mob effect's class.
+     */
     public abstract <T extends MobEffect> Supplier<T> registerEffect(String name, Supplier<T> effect);
 
+    /**
+     * <p>
+     *     Registers an {@link Enchantment}.
+     * </p>
+     *
+     * @param name Registry name of the enchantment.
+     * @param enchantment A supplier returning an instance of {@code Enchantment}.
+     * @return A supplier returning the registered enchantment.
+     * @param <T> The enchantment's class.
+     */
     public abstract <T extends Enchantment> Supplier<T> registerEnchantment(String name, Supplier<T> enchantment);
 
+    /**
+     * <p>
+     *     Registers a {@link LootItemFunctionType}.
+     * </p>
+     *
+     * @param name Registry name of the loot item function.
+     * @param lootItemFunction A supplier returning an instance of {@code LootItemFunctionType}.
+     * @return A supplier returning the registered loot item function.
+     * @param <T> The loot item function's class.
+     */
     public abstract <T extends LootItemFunctionType> Supplier<T> registerLootItemFunction(String name, Supplier<T> lootItemFunction);
 
+    /**
+     * <p>
+     *     Registers a world generation {@link Feature} type.
+     * </p>
+     * <p>
+     *     Features registered here can be used to create configured features through json files.
+     *     The registry name passed here can then be used as the {@code "type"} parameter in the configured feature file.
+     * </p>
+     * <p>
+     *     Example:
+     *     <pre>
+     *         REGISTRY.registerFeature("my_feature", MyFeature::new);
+     *     </pre>
+     *     data/example/worldgen/configured_feature/my_feature.json
+     *     <pre>
+     *         {
+     *             "type": "example:my_feature",
+     *             ...
+     *         }
+     *     </pre>
+     * </p>
+     *
+     * @param name Registry name of the feature.
+     * @param feature A supplier returning an instance of {@code Feature}.
+     * @return A supplier returning the registered feature.
+     * @param <T> The feature's class.
+     */
     public abstract <T extends Feature<?>> Supplier<T> registerFeature(String name, Supplier<T> feature);
 
-    // TODO: Implement menu types
-//    public abstract <T extends MenuType<?>> Supplier<T> registerMenu(String name, BiFunction<Integer, Inventory, T> menu);
+    /**
+     * <p>
+     *     Registers a {@link MenuType} needed to create guis.
+     * </p>
+     *
+     * @param name Registry name of the menu.
+     * @param menu A function returning an {@link AbstractContainerMenu}, ideally the constructor of a class that extends {@code AbstractContainerMenu} passed as a method reference.
+     * @return A supplier returning the registered menu type.
+     * @param <T> The container menu class.
+     */
+    public abstract <T extends AbstractContainerMenu> Supplier<MenuType<T>> registerMenu(String name, TriFunction<Integer, Inventory, FriendlyByteBuf, T> menu);
 
+    /**
+     * <p>
+     *     Registers a {@link ParticleType}.
+     * </p>
+     *
+     * @param name Registry name of the particles.
+     * @param particles A supplier returning an instance of {@code ParticleType}.
+     * @return A supplier returning the registered particles.
+     * @param <T> The particles' class.
+     */
     public abstract <T extends ParticleType<?>> Supplier<T> registerParticles(String name, Supplier<T> particles);
 
+    /**
+     * <p>
+     *     Registers a {@link RecipeSerializer}.
+     * </p>
+     *
+     * @param name Registry name of the recipe serializer.
+     * @param recipeSerializer A supplier returning an instance of {@code RecipeSerializer}.
+     * @return A supplier returning the registered recipe serializer.
+     * @param <T> The recipe serializer's class.
+     */
     public abstract <T extends RecipeSerializer<?>> Supplier<T> registerRecipeSerializer(String name, Supplier<T> recipeSerializer);
 
+    /**
+     * <p>
+     *     Registers a {@link RecipeType}.
+     * </p>
+     *
+     * @param name Registry name of the recipe type.
+     * @param recipeType A supplier returning an instance of {@code RecipeType}.
+     * @return A supplier returning the registered recipe type.
+     * @param <T> The recipe type's class.
+     */
     public abstract <T extends RecipeType<?>> Supplier<T> registerRecipeType(String name, Supplier<T> recipeType);
 
-    public Supplier<? extends RecipeType<?>> registerRecipeType(String name) {
+    /**
+     * <p>
+     *     Registers a {@link RecipeType}.
+     * </p>
+     *
+     * @param name Registry name of the recipe type.
+     * @return A supplier returning the registered recipe type.
+     */
+    public Supplier<RecipeType<?>> registerRecipeType(String name) {
         String identifier = this.mod + ":" + name;
         return this.registerRecipeType(name, () -> new RecipeType<>() {
             @Override
@@ -460,8 +569,26 @@ public abstract class ModRegistry {
         });
     }
 
+    /**
+     * <p>
+     *     Registers a {@link SoundEvent}.
+     * </p>
+     *
+     * @param name Registry name of the sound event.
+     * @param sound A supplier returning an instance of {@code SoundEvent}.
+     * @return A supplier returning the registered sound event.
+     * @param <T> The sound event's class.
+     */
     public abstract <T extends SoundEvent> Supplier<T> registerSound(String name, Supplier<T> sound);
 
+    /**
+     * <p>
+     *     Registers a {@link SoundEvent}.
+     * </p>
+     *
+     * @param name Registry name of the sound event.
+     * @return A supplier returning the registered sound event.
+     */
     public Supplier<SoundEvent> registerSound(String name) {
         return this.registerSound(name, () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(this.mod, name)));
     }
