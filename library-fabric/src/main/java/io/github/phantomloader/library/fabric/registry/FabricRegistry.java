@@ -4,6 +4,7 @@ import io.github.phantomloader.library.fabric.renderers.BlockEntityItemRenderer;
 import io.github.phantomloader.library.registry.ModRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleType;
@@ -32,8 +33,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
-import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.function.TriFunction;
 
 import java.util.Collection;
@@ -153,7 +154,8 @@ public class FabricRegistry extends ModRegistry {
 
     @Override
     public <T extends AbstractContainerMenu> Supplier<MenuType<T>> registerMenu(String name, TriFunction<Integer, Inventory, FriendlyByteBuf, T> menu) {
-        throw new NotImplementedException(); // TODO: https://fabricmc.net/wiki/tutorial:screenhandler
+        MenuType<T> registered = Registry.register(BuiltInRegistries.MENU, this.identifier(name), new ExtendedScreenHandlerType<>(menu::apply));
+        return () -> registered;
     }
 
     @Override
@@ -177,6 +179,12 @@ public class FabricRegistry extends ModRegistry {
     @Override
     public <T extends SoundEvent> Supplier<T> registerSound(String name, Supplier<T> sound) {
         T registered = Registry.register(BuiltInRegistries.SOUND_EVENT, this.identifier(name), sound.get());
+        return () -> registered;
+    }
+
+    @Override
+    public <T extends Fluid> Supplier<T> registerFluid(String name, Supplier<T> fluid) {
+        T registered = Registry.register(BuiltInRegistries.FLUID, this.identifier(name), fluid.get());
         return () -> registered;
     }
 

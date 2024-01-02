@@ -30,6 +30,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import org.apache.commons.lang3.function.TriFunction;
 
@@ -592,6 +593,18 @@ public abstract class ModRegistry {
     public Supplier<SoundEvent> registerSound(String name) {
         return this.registerSound(name, () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(this.mod, name)));
     }
+
+    /**
+     * <p>
+     *     Registers a {@link Fluid}.
+     * </p>
+     *
+     * @param name Registry name of the fluid.
+     * @param fluid A supplier returning the fluid to register.
+     * @return A supplier returning the registered fluid.
+     * @param <T> Fluid class.
+     */
+    public abstract <T extends Fluid> Supplier<T> registerFluid(String name, Supplier<T> fluid);
 
     /**
      * <p>

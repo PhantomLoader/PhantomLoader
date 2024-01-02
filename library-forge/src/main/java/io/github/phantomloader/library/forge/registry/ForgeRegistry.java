@@ -6,7 +6,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.models.blockstates.PropertyDispatch;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -29,12 +28,12 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.network.IContainerFactory;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
@@ -75,11 +74,29 @@ public class ForgeRegistry extends ModRegistry {
     public ForgeRegistry(String mod) {
         super(mod);
     }
-    
+
+    /**
+     * <p>
+     *     Creates a {@link DeferredRegister} for the given registry or return an already existing one.
+     * </p>
+     *
+     * @param type Registry type.
+     * @return The requested {@code DeferredRegister}.
+     * @param <T> Registry object type.
+     */
     private <T> DeferredRegister<T> getRegister(IForgeRegistry<T> type) {
         return this.getRegister(type.getRegistryKey());
     }
 
+    /**
+     * <p>
+     *     Creates a {@link DeferredRegister} for the given registry or return an already existing one.
+     * </p>
+     *
+     * @param type Registry type.
+     * @return The requested {@code DeferredRegister}.
+     * @param <T> Registry object type.
+     */
     @SuppressWarnings("unchecked")
     private <T> DeferredRegister<T> getRegister(ResourceKey<Registry<T>> type) {
         if(this.registerMap.containsKey(type)) {
@@ -181,6 +198,11 @@ public class ForgeRegistry extends ModRegistry {
     @Override
     public <T extends SoundEvent> Supplier<T> registerSound(String name, Supplier<T> sound) {
         return this.getRegister(ForgeRegistries.SOUND_EVENTS).register(name, sound);
+    }
+
+    @Override
+    public <T extends Fluid> Supplier<T> registerFluid(String name, Supplier<T> fluid) {
+        return this.getRegister(ForgeRegistries.FLUIDS).register(name, fluid);
     }
 
     @Override

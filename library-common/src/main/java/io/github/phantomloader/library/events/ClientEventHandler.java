@@ -120,4 +120,15 @@ public interface ClientEventHandler {
     default void registerBlockRenderType(BiConsumer<Supplier<? extends Block>, RenderType> event) {
 
     }
+
+    /**
+     * <p>
+     *     Method call when a particle renderer can be registered.
+     * </p>
+     *
+     * @param event Wraps a Forge or a Fabric event.
+     */
+    default void registerParticles(RegisterParticlesEvent event) {
+
+    }
 }
