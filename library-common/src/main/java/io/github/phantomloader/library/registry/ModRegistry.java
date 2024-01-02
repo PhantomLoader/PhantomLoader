@@ -3,17 +3,28 @@ package io.github.phantomloader.library.registry;
 import io.github.phantomloader.library.ModEntryPoint;
 import io.github.phantomloader.library.events.ClientEventHandler;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.SpawnEggItem;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -21,6 +32,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 
 import java.util.Collection;
 import java.util.NoSuchElementException;
@@ -441,7 +453,38 @@ public abstract class ModRegistry {
         return this.registerItem(name, () -> new SpawnEggItem(entity.get(), primaryColor, secondaryColor, new Item.Properties()));
     }
 
+    public abstract <T extends MobEffect> Supplier<T> registerEffect(String name, Supplier<T> effect);
+
+    public abstract <T extends Enchantment> Supplier<T> registerEnchantment(String name, Supplier<T> enchantment);
+
+    public abstract <T extends LootItemFunctionType> Supplier<T> registerLootItemFunction(String name, Supplier<T> lootItemFunction);
+
     public abstract <T extends Feature<?>> Supplier<T> registerFeature(String name, Supplier<T> feature);
+
+    // TODO: Implement menu types
+//    public abstract <T extends MenuType<?>> Supplier<T> registerMenu(String name, BiFunction<Integer, Inventory, T> menu);
+
+    public abstract <T extends ParticleType<?>> Supplier<T> registerParticles(String name, Supplier<T> particles);
+
+    public abstract <T extends RecipeSerializer<?>> Supplier<T> registerRecipeSerializer(String name, Supplier<T> recipeSerializer);
+
+    public abstract <T extends RecipeType<?>> Supplier<T> registerRecipeType(String name, Supplier<T> recipeType);
+
+    public Supplier<? extends RecipeType<?>> registerRecipeType(String name) {
+        String identifier = this.mod + ":" + name;
+        return this.registerRecipeType(name, () -> new RecipeType<>() {
+            @Override
+            public String toString() {
+                return identifier;
+            }
+        });
+    }
+
+    public abstract <T extends SoundEvent> Supplier<T> registerSound(String name, Supplier<T> sound);
+
+    public Supplier<SoundEvent> registerSound(String name) {
+        return this.registerSound(name, () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(this.mod, name)));
+    }
 
     /**
      * <p>

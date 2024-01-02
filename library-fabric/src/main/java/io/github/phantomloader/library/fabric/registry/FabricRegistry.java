@@ -1,15 +1,16 @@
 package io.github.phantomloader.library.fabric.registry;
 
-import io.github.phantomloader.library.fabric.renderers.BlockEntityItemRenderer;
 import io.github.phantomloader.library.registry.ModRegistry;
-import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
+import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -18,13 +19,16 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 
 import java.util.Collection;
 import java.util.Set;
@@ -120,8 +124,50 @@ public class FabricRegistry extends ModRegistry {
     }
 
     @Override
+    public <T extends MobEffect> Supplier<T> registerEffect(String name, Supplier<T> effect) {
+        T registered = Registry.register(BuiltInRegistries.MOB_EFFECT, this.identifier(name), effect.get());
+        return () -> registered;
+    }
+
+    @Override
+    public <T extends Enchantment> Supplier<T> registerEnchantment(String name, Supplier<T> enchantment) {
+        T registered = Registry.register(BuiltInRegistries.ENCHANTMENT, this.identifier(name), enchantment.get());
+        return () -> registered;
+    }
+
+    @Override
+    public <T extends LootItemFunctionType> Supplier<T> registerLootItemFunction(String name, Supplier<T> lootItemFunction) {
+        T registered = Registry.register(BuiltInRegistries.LOOT_FUNCTION_TYPE, this.identifier(name), lootItemFunction.get());
+        return () -> registered;
+    }
+
+    @Override
     public <T extends Feature<?>> Supplier<T> registerFeature(String name, Supplier<T> feature) {
         T registered = Registry.register(BuiltInRegistries.FEATURE, this.identifier(name), feature.get());
+        return () -> registered;
+    }
+
+    @Override
+    public <T extends ParticleType<?>> Supplier<T> registerParticles(String name, Supplier<T> particles) {
+        T registered = Registry.register(BuiltInRegistries.PARTICLE_TYPE, this.identifier(name), particles.get());
+        return () -> registered;
+    }
+
+    @Override
+    public <T extends RecipeSerializer<?>> Supplier<T> registerRecipeSerializer(String name, Supplier<T> recipeSerializer) {
+        T registered = Registry.register(BuiltInRegistries.RECIPE_SERIALIZER, this.identifier(name), recipeSerializer.get());
+        return () -> registered;
+    }
+
+    @Override
+    public <T extends RecipeType<?>> Supplier<T> registerRecipeType(String name, Supplier<T> recipeType) {
+        T registered = Registry.register(BuiltInRegistries.RECIPE_TYPE, this.identifier(name), recipeType.get());
+        return () -> registered;
+    }
+
+    @Override
+    public <T extends SoundEvent> Supplier<T> registerSound(String name, Supplier<T> sound) {
+        T registered = Registry.register(BuiltInRegistries.SOUND_EVENT, this.identifier(name), sound.get());
         return () -> registered;
     }
 
