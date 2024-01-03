@@ -1,6 +1,7 @@
 package io.github.phantomloader.library.events;
 
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
@@ -27,4 +28,19 @@ public interface RegisterBlockEntityRenderersEvent {
      * @param <T> The block entity type
      */
     <T extends BlockEntity> void register(Supplier<BlockEntityType<T>> blockEntity, BlockEntityRendererProvider<T> renderer);
+
+    /**
+     * <p>
+     *     This method must be called from an event handler to register a render for a {@link net.minecraft.world.item.BlockItem} that uses a block entity.
+     *     Tells the mod loader to use the same renderer as the block entity to render the item.
+     * </p>
+     * <p>
+     *     Note that this method is only implemented in Fabric. In Forge, item renderers are registered by Forge's {@code IClientItemExtensions} hook.
+     * </p>
+     *
+     * @param block A supplier returning the relevant registered block, the one returned by {@link io.github.phantomloader.library.registry.ModRegistry#registerBlock(String)}.
+     */
+    default void registerItemRenderer(Supplier<Block> block) {
+
+    }
 }

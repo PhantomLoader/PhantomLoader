@@ -4,10 +4,12 @@ import io.github.phantomloader.library.events.ClientEventHandler;
 import io.github.phantomloader.library.events.RegisterBlockEntityRenderersEvent;
 import io.github.phantomloader.library.events.RegisterEntityRenderersEvent;
 import io.github.phantomloader.library.events.RegisterParticlesEvent;
+import io.github.phantomloader.library.fabric.renderers.BlockEntityItemRenderer;
 import io.github.phantomloader.library.utils.CreativeTabsUtils;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.client.particle.ParticleProvider;
@@ -18,6 +20,7 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
@@ -47,7 +50,6 @@ public class FabricClientInitializer implements ClientModInitializer {
     /**
      * <p>
      *     Implementation of {@link RegisterBlockEntityRenderersEvent}.
-     *     Method reference cannot be used because generics in java are weird.
      * </p>
      *
      * @author Nico
@@ -57,6 +59,11 @@ public class FabricClientInitializer implements ClientModInitializer {
         @Override
         public <T extends BlockEntity> void register(Supplier<BlockEntityType<T>> blockEntity, BlockEntityRendererProvider<T> renderer) {
             BlockEntityRenderers.register(blockEntity.get(), renderer);
+        }
+
+        @Override
+        public void registerItemRenderer(Supplier<Block> block) {
+            BuiltinItemRendererRegistry.INSTANCE.register(block.get(), new BlockEntityItemRenderer(block.get()));
         }
     }
 

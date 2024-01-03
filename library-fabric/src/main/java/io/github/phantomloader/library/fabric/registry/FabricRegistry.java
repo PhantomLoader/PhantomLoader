@@ -1,8 +1,6 @@
 package io.github.phantomloader.library.fabric.registry;
 
-import io.github.phantomloader.library.fabric.renderers.BlockEntityItemRenderer;
 import io.github.phantomloader.library.registry.ModRegistry;
-import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
 import net.minecraft.core.BlockPos;
@@ -19,7 +17,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -28,7 +25,6 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -90,18 +86,6 @@ public class FabricRegistry extends ModRegistry {
     public <T extends Block> Supplier<T> registerBlock(String name, Supplier<T> block) {
         T registered = Registry.register(BuiltInRegistries.BLOCK, this.identifier(name), block.get());
         return () -> registered;
-    }
-
-    @Override
-    public Supplier<BlockItem> registerBlockItem(String name, Supplier<? extends Block> block) {
-        return super.registerBlockItem(name, () -> {
-            Block instance = block.get();
-            if(instance instanceof EntityBlock) {
-                // TODO: This should only happen on the client
-                BuiltinItemRendererRegistry.INSTANCE.register(instance, new BlockEntityItemRenderer(instance));
-            }
-            return instance;
-        });
     }
 
     @Override
