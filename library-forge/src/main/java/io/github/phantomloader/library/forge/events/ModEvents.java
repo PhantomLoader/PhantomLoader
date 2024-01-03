@@ -23,7 +23,7 @@ public class ModEvents {
     @SubscribeEvent
     public static void onCreateAttributesEvent(EntityAttributeCreationEvent event) {
         for(ModEventHandler handler : HANDLERS) {
-            handler.registerEntityAttributes((entity, attributes) -> event.put(entity.get(), attributes.build()));
+            handler.registerEntityAttributes((entity, attributes) -> event.put(entity, attributes.build()));
         }
     }
 }

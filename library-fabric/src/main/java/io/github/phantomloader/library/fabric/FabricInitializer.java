@@ -11,7 +11,7 @@ public class FabricInitializer implements ModInitializer {
     @Override
     public void onInitialize() {
         for(ModEventHandler handler : ServiceLoader.load(ModEventHandler.class)) {
-            handler.registerEntityAttributes((entity, attributes) -> FabricDefaultAttributeRegistry.register(entity.get(), attributes));
+            handler.registerEntityAttributes(FabricDefaultAttributeRegistry::register);
         }
     }
 }

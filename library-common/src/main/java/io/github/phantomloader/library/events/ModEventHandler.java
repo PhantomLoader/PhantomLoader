@@ -40,7 +40,7 @@ public interface ModEventHandler {
      *
      * @param event Use {@code event.accept(ExampleMod.MY_ITEM)} to add an item to this creative tab.
      */
-    default void registerEntityAttributes(BiConsumer<Supplier<EntityType<? extends LivingEntity>>, AttributeSupplier.Builder> event) {
+    default void registerEntityAttributes(BiConsumer<EntityType<? extends LivingEntity>, AttributeSupplier.Builder> event) {
 
     }
 }

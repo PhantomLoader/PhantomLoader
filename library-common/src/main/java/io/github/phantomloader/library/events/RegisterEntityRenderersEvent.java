@@ -25,5 +25,5 @@ public interface RegisterEntityRenderersEvent {
      * @param renderer A function returning the entity renderer. If you have created a class that extends {@link net.minecraft.client.renderer.entity.EntityRenderer}, this should be that class' constructor passed as a method reference.
      * @param <T> The entity type
      */
-    <T extends Entity> void register(Supplier<EntityType<T>> entity, EntityRendererProvider<T> renderer);
+    <T extends Entity> void register(EntityType<? extends T> entity, EntityRendererProvider<T> renderer);
 }

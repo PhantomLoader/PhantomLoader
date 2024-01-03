@@ -27,7 +27,7 @@ public interface RegisterBlockEntityRenderersEvent {
      * @param renderer A function returning the block entity renderer. If you have created a class that extends {@link net.minecraft.client.renderer.blockentity.BlockEntityRenderer}, this should be that class' constructor passed as a method reference.
      * @param <T> The block entity type
      */
-    <T extends BlockEntity> void register(Supplier<BlockEntityType<T>> blockEntity, BlockEntityRendererProvider<T> renderer);
+    <T extends BlockEntity> void register(BlockEntityType<? extends T> blockEntity, BlockEntityRendererProvider<T> renderer);
 
     /**
      * <p>
@@ -40,7 +40,7 @@ public interface RegisterBlockEntityRenderersEvent {
      *
      * @param block A supplier returning the relevant registered block, the one returned by {@link io.github.phantomloader.library.registry.ModRegistry#registerBlock(String)}.
      */
-    default void registerItemRenderer(Supplier<Block> block) {
+    default void registerItemRenderer(Supplier<? extends Block> block) {
 
     }
 }

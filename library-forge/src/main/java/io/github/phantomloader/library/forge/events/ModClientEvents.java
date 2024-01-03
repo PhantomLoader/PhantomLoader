@@ -20,7 +20,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.ServiceLoader;
-import java.util.function.Supplier;
 
 /**
  * <p>
@@ -103,8 +102,8 @@ public class ModClientEvents {
         }
 
         @Override
-        public <T extends BlockEntity> void register(Supplier<BlockEntityType<T>> blockEntity, BlockEntityRendererProvider<T> renderer) {
-            this.forgeEvent.registerBlockEntityRenderer(blockEntity.get(), renderer);
+        public <T extends BlockEntity> void register(BlockEntityType<? extends T> blockEntity, BlockEntityRendererProvider<T> renderer) {
+            this.forgeEvent.registerBlockEntityRenderer(blockEntity, renderer);
         }
     }
 
@@ -133,8 +132,8 @@ public class ModClientEvents {
         }
 
         @Override
-        public <T extends Entity> void register(Supplier<EntityType<T>> entity, EntityRendererProvider<T> renderer) {
-            this.forgeEvent.registerEntityRenderer(entity.get(), renderer);
+        public <T extends Entity> void register(EntityType<? extends T> entity, EntityRendererProvider<T> renderer) {
+            this.forgeEvent.registerEntityRenderer(entity, renderer);
         }
     }
 
@@ -163,8 +162,8 @@ public class ModClientEvents {
         }
 
         @Override
-        public <T extends ParticleOptions> void register(Supplier<ParticleType<T>> type, ParticleProvider<T> provider) {
-            this.forgeEvent.registerSpecial(type.get(), provider);
+        public <T extends ParticleOptions> void register(ParticleType<T> type, ParticleProvider<T> provider) {
+            this.forgeEvent.registerSpecial(type, provider);
         }
     }
 }

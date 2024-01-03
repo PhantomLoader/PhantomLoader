@@ -1,7 +1,6 @@
 package io.github.phantomloader.library.fabric.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import io.github.phantomloader.library.fabric.registry.FabricRegistry;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
@@ -14,15 +13,12 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
-import java.util.function.Supplier;
-
 /**
  * <p>
  *     Implements Fabric's way of rendering block entity items.
  * </p>
  *
  * @author Nico
- * @see FabricRegistry#registerBlockItem(String, Supplier)
  */
 @Environment(EnvType.CLIENT)
 public class BlockEntityItemRenderer implements BuiltinItemRendererRegistry.DynamicItemRenderer {

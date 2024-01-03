@@ -57,12 +57,12 @@ public class FabricClientInitializer implements ClientModInitializer {
     public static class RegisterBlockEntityRenderersEventFabric implements RegisterBlockEntityRenderersEvent {
 
         @Override
-        public <T extends BlockEntity> void register(Supplier<BlockEntityType<T>> blockEntity, BlockEntityRendererProvider<T> renderer) {
-            BlockEntityRenderers.register(blockEntity.get(), renderer);
+        public <T extends BlockEntity> void register(BlockEntityType<? extends T> blockEntity, BlockEntityRendererProvider<T> renderer) {
+            BlockEntityRenderers.register(blockEntity, renderer);
         }
 
         @Override
-        public void registerItemRenderer(Supplier<Block> block) {
+        public void registerItemRenderer(Supplier<? extends Block> block) {
             BuiltinItemRendererRegistry.INSTANCE.register(block.get(), new BlockEntityItemRenderer(block.get()));
         }
     }
@@ -78,8 +78,8 @@ public class FabricClientInitializer implements ClientModInitializer {
     public static class RegisterEntityRenderersEventFabric implements RegisterEntityRenderersEvent {
 
         @Override
-        public <T extends Entity> void register(Supplier<EntityType<T>> entity, EntityRendererProvider<T> renderer) {
-            EntityRendererRegistry.register(entity.get(), renderer);
+        public <T extends Entity> void register(EntityType<? extends T> entity, EntityRendererProvider<T> renderer) {
+            EntityRendererRegistry.register(entity, renderer);
         }
     }
 
@@ -94,8 +94,8 @@ public class FabricClientInitializer implements ClientModInitializer {
     public static class RegisterParticlesEventFabric implements RegisterParticlesEvent {
 
         @Override
-        public <T extends ParticleOptions> void register(Supplier<ParticleType<T>> type, ParticleProvider<T> provider) {
-            ParticleFactoryRegistry.getInstance().register(type.get(), provider);
+        public <T extends ParticleOptions> void register(ParticleType<T> type, ParticleProvider<T> provider) {
+            ParticleFactoryRegistry.getInstance().register(type, provider);
         }
     }
 }

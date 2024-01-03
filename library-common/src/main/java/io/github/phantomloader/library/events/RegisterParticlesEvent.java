@@ -3,7 +3,6 @@ package io.github.phantomloader.library.events;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
-import net.minecraft.world.entity.EntityType;
 
 import java.util.function.Supplier;
 
@@ -26,5 +25,5 @@ public interface RegisterParticlesEvent {
      * @param provider A function returning the particle renderer. If you have created a class that extends {@link net.minecraft.core.particles.ParticleOptions}, this should be that class' constructor passed as a method reference.
      * @param <T> The particles type
      */
-    <T extends ParticleOptions> void register(Supplier<ParticleType<T>> type, ParticleProvider<T> provider);
+    <T extends ParticleOptions> void register(ParticleType<T> type, ParticleProvider<T> provider);
 }
