@@ -45,4 +45,24 @@ public interface Platform {
      * @see PlatformHelper#isDevelopmentEnvironment()
      */
     boolean isDevelopmentEnvironment();
+
+    /**
+     * <p>
+     *     Checks if the current physical side the code is running on is the client.
+     * </p>
+     *
+     * @return True if the code is running on the client side, otherwise false.
+     * @see PlatformHelper#isClientSide()
+     */
+    boolean isClientSide();
+
+    /**
+     * <p>
+     *     Checks if the current physical side the code is running on is a dedicated server.
+     * </p>
+     *
+     * @return True if the code is running on the server side, otherwise false.
+     * @see PlatformHelper#isServerSide()
+     */
+    boolean isServerSide();
 }

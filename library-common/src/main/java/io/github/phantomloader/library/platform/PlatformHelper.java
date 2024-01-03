@@ -59,4 +59,26 @@ public class PlatformHelper {
     public static boolean isDevelopmentEnvironment() {
         return PLATFORM.isDevelopmentEnvironment();
     }
+
+    /**
+     * <p>
+     *     Checks if the current physical side the code is running on is the client.
+     * </p>
+     *
+     * @return True if the code is running on the client side, otherwise false.
+     */
+    public static boolean isClientSide() {
+        return PLATFORM.isClientSide();
+    }
+
+    /**
+     * <p>
+     *     Checks if the current physical side the code is running on is a dedicated server.
+     * </p>
+     *
+     * @return True if the code is running on the server side, otherwise false.
+     */
+    public static boolean isServerSide() {
+        return PLATFORM.isServerSide();
+    }
 }
