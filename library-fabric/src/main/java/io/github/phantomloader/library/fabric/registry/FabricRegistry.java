@@ -67,109 +67,101 @@ public class FabricRegistry extends ModRegistry {
     }
 
     /**
-     * Helper function used to create a {@link ResourceLocation}.
+     * <p>
+     *     Helper function used to register objects.
+     * </p>
      *
-     * @param name Identifier name.
-     * @return A {@code ResourceLocation} identifier.
+     * @param registry Which registry to use.
+     * @param name Name of the object to register.
+     * @param object A supplier returning the object to register.
+     * @return A supplier returning the registered object.
+     * @param <V> Type of the registry.
+     * @param <T> Type of the object.
      */
-    private ResourceLocation identifier(String name) {
-        return new ResourceLocation(this.mod, name);
+    private <V, T extends V> Supplier<T> register(Registry<V> registry, String name, Supplier<T> object) {
+        T registered = Registry.register(registry, new ResourceLocation(this.mod, name), object.get());
+        return () -> registered;
     }
 
     @Override
     public <T extends Item> Supplier<T> registerItem(String name, Supplier<T> item) {
-        T registered = Registry.register(BuiltInRegistries.ITEM, this.identifier(name), item.get());
-        return () -> registered;
+        return this.register(BuiltInRegistries.ITEM, name, item);
     }
 
     @Override
     public <T extends Block> Supplier<T> registerBlock(String name, Supplier<T> block) {
-        T registered = Registry.register(BuiltInRegistries.BLOCK, this.identifier(name), block.get());
-        return () -> registered;
+        return this.register(BuiltInRegistries.BLOCK, name, block);
     }
 
     @Override
     public <T extends BlockEntity> Supplier<BlockEntityType<T>> registerBlockEntity(String name, BiFunction<BlockPos, BlockState, T> blockEntity, Set<Supplier<? extends Block>> blocks) {
         // Block entity types must be created here because BlockEntityType.BlockEntitySupplier has private access in the common module
-        BlockEntityType<T> registered = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, this.identifier(name), FabricBlockEntityTypeBuilder.create(blockEntity::apply, blocks.stream().map(Supplier::get).toArray(Block[]::new)).build());
-        return () -> registered;
+        return this.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, name, () -> FabricBlockEntityTypeBuilder.create(blockEntity::apply, blocks.stream().map(Supplier::get).toArray(Block[]::new)).build());
     }
 
     @Override
     public Supplier<CreativeModeTab> registerCreativeTab(String name, Supplier<? extends ItemLike> icon, Component title, Collection<Supplier<? extends ItemLike>> items) {
-        CreativeModeTab registered = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, this.identifier(name), CreativeModeTab.builder(CreativeModeTab.Row.TOP, 0)
+        return this.register(BuiltInRegistries.CREATIVE_MODE_TAB, name, () -> CreativeModeTab.builder(CreativeModeTab.Row.TOP, 0)
                 .title(title)
                 .icon(() -> new ItemStack(icon.get()))
                 .displayItems((params, output) -> items.forEach(item -> output.accept(item.get())))
                 .build()
         );
-        return () -> registered;
     }
 
     @Override
     public <T extends Entity> Supplier<EntityType<T>> registerEntity(String name, EntityType.Builder<T> builder) {
-        EntityType<T> registered = Registry.register(BuiltInRegistries.ENTITY_TYPE, this.identifier(name), builder.build(name));
-        return () -> registered;
+        return this.register(BuiltInRegistries.ENTITY_TYPE, name, () -> builder.build(name));
     }
 
     @Override
     public <T extends MobEffect> Supplier<T> registerEffect(String name, Supplier<T> effect) {
-        T registered = Registry.register(BuiltInRegistries.MOB_EFFECT, this.identifier(name), effect.get());
-        return () -> registered;
+        return this.register(BuiltInRegistries.MOB_EFFECT, name, effect);
     }
 
     @Override
     public <T extends Enchantment> Supplier<T> registerEnchantment(String name, Supplier<T> enchantment) {
-        T registered = Registry.register(BuiltInRegistries.ENCHANTMENT, this.identifier(name), enchantment.get());
-        return () -> registered;
+        return this.register(BuiltInRegistries.ENCHANTMENT, name, enchantment);
     }
 
     @Override
     public <T extends LootItemFunctionType> Supplier<T> registerLootItemFunction(String name, Supplier<T> lootItemFunction) {
-        T registered = Registry.register(BuiltInRegistries.LOOT_FUNCTION_TYPE, this.identifier(name), lootItemFunction.get());
-        return () -> registered;
+        return this.register(BuiltInRegistries.LOOT_FUNCTION_TYPE, name, lootItemFunction);
     }
 
     @Override
     public <T extends Feature<?>> Supplier<T> registerFeature(String name, Supplier<T> feature) {
-        T registered = Registry.register(BuiltInRegistries.FEATURE, this.identifier(name), feature.get());
-        return () -> registered;
+        return this.register(BuiltInRegistries.FEATURE, name, feature);
     }
 
     @Override
     public <T extends AbstractContainerMenu> Supplier<MenuType<T>> registerMenu(String name, TriFunction<Integer, Inventory, FriendlyByteBuf, T> menu) {
-        MenuType<T> registered = Registry.register(BuiltInRegistries.MENU, this.identifier(name), new ExtendedScreenHandlerType<>(menu::apply));
-        return () -> registered;
+        return this.register(BuiltInRegistries.MENU, name, () -> new ExtendedScreenHandlerType<>(menu::apply));
     }
 
     @Override
     public <T extends ParticleType<?>> Supplier<T> registerParticles(String name, Supplier<T> particles) {
-        T registered = Registry.register(BuiltInRegistries.PARTICLE_TYPE, this.identifier(name), particles.get());
-        return () -> registered;
+        return this.register(BuiltInRegistries.PARTICLE_TYPE, name, particles);
     }
 
     @Override
     public <T extends RecipeSerializer<?>> Supplier<T> registerRecipeSerializer(String name, Supplier<T> recipeSerializer) {
-        T registered = Registry.register(BuiltInRegistries.RECIPE_SERIALIZER, this.identifier(name), recipeSerializer.get());
-        return () -> registered;
+        return this.register(BuiltInRegistries.RECIPE_SERIALIZER, name, recipeSerializer);
     }
 
     @Override
     public <T extends RecipeType<?>> Supplier<T> registerRecipeType(String name, Supplier<T> recipeType) {
-        T registered = Registry.register(BuiltInRegistries.RECIPE_TYPE, this.identifier(name), recipeType.get());
-        return () -> registered;
+        return this.register(BuiltInRegistries.RECIPE_TYPE, name, recipeType);
     }
 
     @Override
     public <T extends SoundEvent> Supplier<T> registerSound(String name, Supplier<T> sound) {
-        T registered = Registry.register(BuiltInRegistries.SOUND_EVENT, this.identifier(name), sound.get());
-        return () -> registered;
+        return this.register(BuiltInRegistries.SOUND_EVENT, name, sound);
     }
 
     @Override
     public <T extends Fluid> Supplier<T> registerFluid(String name, Supplier<T> fluid) {
-        T registered = Registry.register(BuiltInRegistries.FLUID, this.identifier(name), fluid.get());
-        return () -> registered;
+        return this.register(BuiltInRegistries.FLUID, name, fluid);
     }
 
     @Override
