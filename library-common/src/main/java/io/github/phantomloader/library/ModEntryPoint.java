@@ -1,5 +1,7 @@
 package io.github.phantomloader.library;
 
+import io.github.phantomloader.library.integration.FabricCustomEntryPoint;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Target;
 
@@ -32,7 +34,7 @@ import java.lang.annotation.Target;
  *     </pre>
  * </p>
  * <p>
- *     For custom entry points see {@link io.github.phantomloader.library.integration.FabricCustomEntryPoint}.
+ *     For custom entry points see {@link FabricCustomEntryPoint}.
  * </p>
  *
  * @author Nico

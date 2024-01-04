@@ -1,3 +1,7 @@
+# Java
+*.class
+hs_err_pid*
+
 # Gradle
 .gradle
 build/
@@ -11,9 +15,9 @@ build/
 # VS Code
 .vscode/
 
+# Minecraft
+.minecraft/
+
 # Directories
 .DS_Store
 .directory
-
-# Minecraft
-.minecraft/

@@ -50,14 +50,18 @@ import java.util.function.Supplier;
  *     Forge implementation of {@link ModRegistry}.
  * </p>
  * <p>
- *     Note that registries should not be instantiated directly, one should call {@link ModRegistry#instantiate(String)}
- *     from the common module instead.
+ *     Note that registries should not be instantiated directly, one should call {@link ModRegistry#instantiate(String)} from the common module instead.
  * </p>
  *
  * @author Nico
  */
 public class ForgeRegistry extends ModRegistry {
 
+    /**
+     * <p>
+     *     Map used to make sure no registry gets created twice and no unused registries get created.
+     * </p>
+     */
     private final HashMap<ResourceKey<?>, DeferredRegister<?>> registerMap = new HashMap<>();
 
     /**
@@ -65,8 +69,7 @@ public class ForgeRegistry extends ModRegistry {
      *     Creates a {@code ForgeRegistry}.
      * </p>
      * <p>
-     *     Note that registries should not be instantiated directly, one should call {@link ModRegistry#instantiate(String)}
-     *     from the common module instead.
+     *     Note that registries should not be instantiated directly, one should call {@link ModRegistry#instantiate(String)} from the common module instead.
      * </p>
      *
      * @param mod Id of the mod that instantiated this registry.

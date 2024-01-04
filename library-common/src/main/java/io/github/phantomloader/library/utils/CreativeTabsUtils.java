@@ -4,12 +4,13 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CreativeModeTabs;
 
 import java.util.stream.Stream;
 
 /**
  * <p>
- *     Utility class needed because resource keys in {@link net.minecraft.world.item.CreativeModeTabs} have private access for no reason.
+ *     Utility class needed because resource keys in {@link CreativeModeTabs} have private access for no reason.
  * </p>
  *
  * @author Nico

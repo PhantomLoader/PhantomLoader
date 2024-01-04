@@ -5,7 +5,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 
 import java.util.function.BiConsumer;
-import java.util.function.Supplier;
 
 /**
  * <p>

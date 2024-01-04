@@ -7,6 +7,13 @@ import net.minecraftforge.fml.common.Mod;
 
 import java.util.ServiceLoader;
 
+/**
+ * <p>
+ *     Forge event handler for mod events.
+ * </p>
+ *
+ * @author Nico
+ */
 @Mod.EventBusSubscriber(modid = "phantom", bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModEvents {
 

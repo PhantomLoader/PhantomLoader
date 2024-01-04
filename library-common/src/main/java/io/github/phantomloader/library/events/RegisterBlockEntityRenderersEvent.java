@@ -1,5 +1,7 @@
 package io.github.phantomloader.library.events;
 
+import io.github.phantomloader.library.registry.ModRegistry;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -23,8 +25,8 @@ public interface RegisterBlockEntityRenderersEvent {
      *     See {@link ClientEventHandler#registerBlockEntityRenderers(RegisterBlockEntityRenderersEvent)} for details.
      * </p>
      *
-     * @param blockEntity A supplier returning the registered block entity type, the one returned by {@link io.github.phantomloader.library.registry.ModRegistry#registerBlockEntity(String, BiFunction, Supplier)}.
-     * @param renderer A function returning the block entity renderer. If you have created a class that extends {@link net.minecraft.client.renderer.blockentity.BlockEntityRenderer}, this should be that class' constructor passed as a method reference.
+     * @param blockEntity A supplier returning the registered block entity type, the one returned by {@link ModRegistry#registerBlockEntity(String, BiFunction, Supplier)}.
+     * @param renderer A function returning the block entity renderer. If you have created a class that extends {@link BlockEntityRenderer}, this should be that class' constructor passed as a method reference.
      * @param <T> The block entity type
      */
     <T extends BlockEntity> void register(BlockEntityType<? extends T> blockEntity, BlockEntityRendererProvider<T> renderer);
@@ -38,7 +40,7 @@ public interface RegisterBlockEntityRenderersEvent {
      *     Note that this method is only implemented in Fabric. In Forge, item renderers are registered by Forge's {@code IClientItemExtensions} hook.
      * </p>
      *
-     * @param block A supplier returning the relevant registered block, the one returned by {@link io.github.phantomloader.library.registry.ModRegistry#registerBlock(String)}.
+     * @param block A supplier returning the relevant registered block, the one returned by {@link ModRegistry#registerBlock(String)}.
      */
     default void registerItemRenderer(Supplier<? extends Block> block) {
 

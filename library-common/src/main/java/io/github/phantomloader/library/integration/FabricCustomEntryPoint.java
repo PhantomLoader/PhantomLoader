@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 /**
  * <p>
- *     Annotation to use along {@link io.github.phantomloader.library.ModEntryPoint} to specify additional data for the Fabric entry point.
+ *     Annotation to use along {@link ModEntryPoint} to specify additional data for the Fabric entry point.
  * </p>
  * <p>
  *     Some library mods may use custom entry point other than {@code "main"}, {@code "client"}, or {@code "server"} for Fabric.

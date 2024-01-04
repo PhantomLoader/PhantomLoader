@@ -43,8 +43,7 @@ import java.util.function.Supplier;
  *     Fabric implementation of {@link ModRegistry}.
  * </p>
  * <p>
- *     Note that registries should not be instantiated directly, one should call {@link ModRegistry#instantiate(String)}
- *     from the common module instead.
+ *     Note that registries should not be instantiated directly, one should call {@link ModRegistry#instantiate(String)} from the common module instead.
  * </p>
  *
  * @author Nico
@@ -56,8 +55,7 @@ public class FabricRegistry extends ModRegistry {
      *     Creates a {@code FabricRegistry}.
      * </p>
      * <p>
-     *     Note that registries should not be instantiated directly, one should call {@link ModRegistry#instantiate(String)}
-     *     from the common module instead.
+     *     Note that registries should not be instantiated directly, one should call {@link ModRegistry#instantiate(String)} from the common module instead.
      * </p>
      *
      * @param mod Id of the mod that instantiated this registry.

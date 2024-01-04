@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
@@ -18,8 +19,7 @@ import java.util.function.Consumer;
 
 /**
  * <p>
- *     Extension of {@link BlockItem} that implements Forge's method
- *     {@link net.minecraft.world.item.Item#initializeClient(Consumer)} needed to render block entity items.
+ *     Extension of {@link BlockItem} that implements Forge's method {@link Item#initializeClient(Consumer)} needed to render block entity items.
  * </p>
  *
  * @author Nico

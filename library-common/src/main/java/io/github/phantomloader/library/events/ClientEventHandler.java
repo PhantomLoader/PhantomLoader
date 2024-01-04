@@ -1,12 +1,15 @@
 package io.github.phantomloader.library.events;
 
+import io.github.phantomloader.library.utils.CreativeTabsUtils;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -44,7 +47,7 @@ public interface ClientEventHandler {
      *     </pre>
      * </p>
      * <p>
-     *     See {@link io.github.phantomloader.library.utils.CreativeTabsUtils} for helper functions about creative tabs.
+     *     See {@link CreativeTabsUtils} for helper functions about creative tabs.
      * </p>
      *
      * @param resourceKey The creative tab's resource key.
@@ -57,7 +60,7 @@ public interface ClientEventHandler {
     /**
      * <p>
      *     Method called when a block entity renderer can be registered.
-     *     Renderers can be added by calling {@link RegisterBlockEntityRenderersEvent#register(Supplier, BlockEntityRendererProvider)}.
+     *     Renderers can be added by calling {@link RegisterBlockEntityRenderersEvent#register(BlockEntityType, BlockEntityRendererProvider)}.
      * </p>
      * <p>
      *     Example usage:
@@ -78,7 +81,7 @@ public interface ClientEventHandler {
     /**
      * <p>
      *     Method called when an entity renderer can be registered.
-     *     Renderers can be added by calling {@link RegisterEntityRenderersEvent#register(Supplier, EntityRendererProvider)}.
+     *     Renderers can be added by calling {@link RegisterEntityRenderersEvent#register(EntityType, EntityRendererProvider)}.
      * </p>
      * <p>
      *     Example usage:

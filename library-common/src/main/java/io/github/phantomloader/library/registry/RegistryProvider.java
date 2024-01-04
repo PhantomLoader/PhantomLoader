@@ -1,8 +1,10 @@
 package io.github.phantomloader.library.registry;
 
+import java.util.ServiceLoader;
+
 /**
  * <p>
- *     Interface loaded using {@link java.util.ServiceLoader} to allow loader-specific modules to create their {@link ModRegistry}.
+ *     Interface loaded using {@link ServiceLoader} to allow loader-specific modules to create their {@link ModRegistry}.
  * </p>
  *
  * @see ModRegistry#instantiate(String)

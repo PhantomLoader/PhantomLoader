@@ -6,6 +6,13 @@ import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRe
 
 import java.util.ServiceLoader;
 
+/**
+ * <p>
+ *     Fabric initializer used by the Phantom Library mod.
+ * </p>
+ *
+ * @author Nico
+ */
 public class FabricInitializer implements ModInitializer {
 
     @Override

@@ -1,9 +1,8 @@
 subprojects {
     apply plugin: 'java'
-    apply plugin: 'maven-publish'
 
     group = 'io.github.phantomloader'
-    version = '0.1'
+    version = '20.1.0'
 
     java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
@@ -18,19 +17,6 @@ subprojects {
                     "Implementation-Vendor": 'HexagonNico',
                     "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
             ])
-        }
-    }
-
-    publishing {
-        publications {
-            register('mavenJava', MavenPublication) {
-                artifact jar
-            }
-        }
-        repositories {
-            maven {
-                url "file://${project.projectDir}/mcmodsrepo"
-            }
         }
     }
 }

@@ -70,7 +70,6 @@ public class FabricClientInitializer implements ClientModInitializer {
     /**
      * <p>
      *     Implementation of {@link RegisterEntityRenderersEvent}.
-     *     Method reference cannot be used because generics in java are weird.
      * </p>
      *
      * @author Nico
@@ -86,7 +85,6 @@ public class FabricClientInitializer implements ClientModInitializer {
     /**
      * <p>
      *     Implementation of {@link RegisterParticlesEvent}.
-     *     Method reference cannot be used because generics in java are weird.
      * </p>
      *
      * @author Nico

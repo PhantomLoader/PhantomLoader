@@ -48,9 +48,8 @@ import java.util.function.Supplier;
  *     Abstract registry class. Every mod loader should provide an implementation of this class.
  * </p>
  * <p>
- *     The correct loader can be instantiated by calling {@link ModRegistry#instantiate(String)} from your mod's main
- *     class. The method will return an instance of {@link ModRegistry} for the current platform that can be used to
- *     register registry objects for the mod.
+ *     The correct loader can be instantiated by calling {@link ModRegistry#instantiate(String)} from your mod's main class.
+ *     The method will return an instance of {@link ModRegistry} for the current platform that can be used to register registry objects for the mod.
  * </p>
  *
  * @author Nico
@@ -62,9 +61,8 @@ public abstract class ModRegistry {
      *     Instantiates a {@link ModRegistry}.
      * </p>
      * <p>
-     *     Loads a {@link RegistryProvider} using {@link ServiceLoader} to create an instance of the registry for the
-     *     current platform. Note that a {@code RegistryProvider} must be defined in {@code META-INF/services} for this
-     *     to work, therefore the library mod for the correct loader must be present at runtime.
+     *     Loads a {@link RegistryProvider} using {@link ServiceLoader} to create an instance of the registry for the current platform.
+     *     Note that a {@code RegistryProvider} must be defined in {@code META-INF/services} for this to work, therefore the library mod for the correct loader must be present at runtime.
      * </p>
      *
      * @param mod Mod id of the mod needed to instantiate the {@link ModRegistry#ModRegistry(String)}
@@ -169,8 +167,7 @@ public abstract class ModRegistry {
      *     Registers a {@link BlockItem} from the given {@link Block}.
      * </p>
      * <p>
-     *     This method should be preferred to {@link ModRegistry#registerItem(String, Supplier)} for registering
-     *     {@code BlockItem}s because different mod loaders have different rendering methods for block entity items.
+     *     This method should be preferred to {@link ModRegistry#registerItem(String, Supplier)} for registering {@code BlockItem}s because different mod loaders have different rendering methods for block entity items.
      * </p>
      *
      * @param name Name of the item to register.
@@ -226,8 +223,7 @@ public abstract class ModRegistry {
 
     /**
      * <p>
-     *     Registers a {@link Block} with the same properties as the given one using
-     *     {@link BlockBehaviour.Properties#copy(BlockBehaviour)}.
+     *     Registers a {@link Block} with the same properties as the given one using {@link BlockBehaviour.Properties#copy(BlockBehaviour)}.
      * </p>
      * <p>
      *     Useful for creating blocks that have many variants such as bricks, cracked bricks, mossy bricks etc.
@@ -244,9 +240,8 @@ public abstract class ModRegistry {
 
     /**
      * <p>
-     *     Registers a {@link Block} with the same properties as the given one using
-     *     {@link BlockBehaviour.Properties#copy(BlockBehaviour)}. The block to register is created using the given
-     *     {@link Function} as a constructor.
+     *     Registers a {@link Block} with the same properties as the given one using {@link BlockBehaviour.Properties#copy(BlockBehaviour)}.
+     *     The block to register is created using the given {@link Function} as a constructor.
      * </p>
      * <p>
      *     Useful for creating slabs, stairs, and walls by copying the properties of their base block.
@@ -264,8 +259,7 @@ public abstract class ModRegistry {
 
     /**
      * <p>
-     *     Registers a {@link Block} with the same properties as the given one using
-     *     {@link BlockBehaviour.Properties#copy(BlockBehaviour)} and an {@link Item}.
+     *     Registers a {@link Block} with the same properties as the given one using {@link BlockBehaviour.Properties#copy(BlockBehaviour)} and an {@link Item}.
      * </p>
      * <p>
      *     Useful for creating blocks that have many variants such as bricks, cracked bricks, mossy bricks etc.
@@ -282,9 +276,8 @@ public abstract class ModRegistry {
 
     /**
      * <p>
-     *     Registers a {@link Block} with the same properties as the given one using
-     *     {@link BlockBehaviour.Properties#copy(BlockBehaviour)} and an {@link Item}. The block to register is created
-     *     using the given {@link Function} as a constructor.
+     *     Registers a {@link Block} with the same properties as the given one using {@link BlockBehaviour.Properties#copy(BlockBehaviour)} and an {@link Item}.
+     *     The block to register is created using the given {@link Function} as a constructor.
      * </p>
      * <p>
      *     Useful for creating slabs, stairs, and walls by copying the properties of their base block.
@@ -341,7 +334,8 @@ public abstract class ModRegistry {
      *     Registers a {@link CreativeModeTab}.
      * </p>
      * <p>
-     *     This function is used to create creative tabs for mods. The preferred method for adding items to creative tabs is passing them here.
+     *     This function is used to create creative tabs for mods.
+     *     The preferred method for adding items to creative tabs is passing them here.
      *     Alternatively, the {@link ClientEventHandler#addItemsToCreativeTab(ResourceKey, Consumer)} method can be used.
      * </p>
      *
@@ -358,7 +352,8 @@ public abstract class ModRegistry {
      *     Registers a {@link CreativeModeTab}.
      * </p>
      * <p>
-     *     This function is used to create creative tabs for mods. The preferred method for adding items to creative tabs is the {@link #registerCreativeTab(String, Supplier, String, Collection)} method.
+     *     This function is used to create creative tabs for mods.
+     *     The preferred method for adding items to creative tabs is the {@link #registerCreativeTab(String, Supplier, String, Collection)} method.
      *     Alternatively, the {@link ClientEventHandler#addItemsToCreativeTab(ResourceKey, Consumer)} method can be used.
      * </p>
      *
@@ -376,7 +371,8 @@ public abstract class ModRegistry {
      *     Registers a {@link CreativeModeTab}.
      * </p>
      * <p>
-     *     This function is used to create creative tabs for mods. The preferred method for adding items to creative tabs is passing them here.
+     *     This function is used to create creative tabs for mods.
+     *     The preferred method for adding items to creative tabs is passing them here.
      *     Alternatively, the {@link ClientEventHandler#addItemsToCreativeTab(ResourceKey, Consumer)} method can be used.
      * </p>
      *
@@ -395,7 +391,8 @@ public abstract class ModRegistry {
      *     Registers a {@link CreativeModeTab}.
      * </p>
      * <p>
-     *     This function is used to create creative tabs for mods. The preferred method for adding items to creative tabs is the {@link #registerCreativeTab(String, Supplier, String, Collection)} method.
+     *     This function is used to create creative tabs for mods.
+     *     The preferred method for adding items to creative tabs is the {@link #registerCreativeTab(String, Supplier, String, Collection)} method.
      *     Alternatively, the {@link ClientEventHandler#addItemsToCreativeTab(ResourceKey, Consumer)} method can be used.
      * </p>
      *
@@ -425,8 +422,7 @@ public abstract class ModRegistry {
      *     Registers a {@link SpawnEggItem}.
      * </p>
      * <p>
-     *     This function must be used instead of {@link ModRegistry#registerItem(String, Supplier)} to register spawn
-     *     eggs because the {@link SpawnEggItem} constructor is deprecated by Forge.
+     *     This function must be used instead of {@link ModRegistry#registerItem(String, Supplier)} to register spawn eggs because the {@link SpawnEggItem} constructor is deprecated by Forge.
      * </p>
      *
      * @param name The spawn egg's full registry name.
