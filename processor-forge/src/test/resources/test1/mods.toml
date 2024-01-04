@@ -20,7 +20,7 @@ side="BOTH"
 [[dependencies.test]]
 modId="phantom"
 mandatory=true
-versionRange="[0.1,1.0)"
+versionRange="[20.1.0,21.0)"
 ordering="NONE"
 side="BOTH"
 [[dependencies.test]]
