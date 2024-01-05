@@ -27,15 +27,12 @@ public interface ModEventHandler {
      *     Instances of {@link LivingEntity} needs their attributes to be registered to be spawned.
      *     Attributes are typically created from a static method in the entity's class that returns a {@link AttributeSupplier.Builder}.
      * </p>
-     * <p>
-     *     Example usage:
-     *     <pre>
-     *         {@code @Override}
-     *         public void registerEntityAttributes(BiConsumer<Supplier<EntityType<? extends LivingEntity>>, AttributeSupplier.Builder> event) {
-     *             event.accept(ExampleMod.MY_ENTITY, MyEntity.createAttributes());
-     *         }
-     *     </pre>
-     * </p>
+     * <pre>
+     *     {@code @Override}
+     *     public void registerEntityAttributes(BiConsumer event) {
+     *         event.accept(ExampleMod.MY_ENTITY, MyEntity.createAttributes());
+     *     }
+     * </pre>
      *
      * @param event Use {@code event.accept(ExampleMod.MY_ITEM)} to add an item to this creative tab.
      */

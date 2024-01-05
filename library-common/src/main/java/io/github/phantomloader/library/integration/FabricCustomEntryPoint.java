@@ -13,16 +13,13 @@ import java.lang.annotation.Target;
  *     Some library mods may use custom entry point other than {@code "main"}, {@code "client"}, or {@code "server"} for Fabric.
  *     This annotation tells Phantom Loader to generate an additional class with the given data to be used as an entry point.
  * </p>
- * <p>
- *     Example usage:
- *     <pre>
- *         {@code @ModEntryPoint}
- *         {@code @FabricCustomEntryPoint(name = "terrablender", interfaceName = "terrablender.api.TerraBlenderApi")}
- *         public static void addTerraBlenderRegions() {
- *             ...
- *         }
- *     </pre>
- * </p>
+ * <pre>
+ *     {@code @ModEntryPoint}
+ *     {@code @FabricCustomEntryPoint(name = "terrablender", interfaceName = "terrablender.api.TerraBlenderApi")}
+ *     public static void addTerraBlenderRegions() {
+ *         ...
+ *     }
+ * </pre>
  * <p>
  *     Note that the value of {@link ModEntryPoint#side()} will be ignored if this annotation is used.
  * </p>

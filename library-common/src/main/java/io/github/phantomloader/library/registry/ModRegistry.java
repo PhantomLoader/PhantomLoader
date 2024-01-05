@@ -479,19 +479,15 @@ public abstract class ModRegistry {
      *     Features registered here can be used to create configured features through json files.
      *     The registry name passed here can then be used as the {@code "type"} parameter in the configured feature file.
      * </p>
-     * <p>
-     *     Example:
-     *     <pre>
-     *         REGISTRY.registerFeature("my_feature", MyFeature::new);
-     *     </pre>
-     *     data/example/worldgen/configured_feature/my_feature.json
-     *     <pre>
-     *         {
-     *             "type": "example:my_feature",
-     *             ...
-     *         }
-     *     </pre>
-     * </p>
+     * <pre>
+     *     REGISTRY.registerFeature("my_feature", MyFeature::new);
+     * </pre>
+     * <pre>
+     *     {
+     *         "type": "example:my_feature",
+     *         ...
+     *     }
+     * </pre>
      *
      * @param name Registry name of the feature.
      * @param feature A supplier returning an instance of {@code Feature}.

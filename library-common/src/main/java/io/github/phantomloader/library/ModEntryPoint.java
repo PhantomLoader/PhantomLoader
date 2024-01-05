@@ -18,21 +18,18 @@ import java.lang.annotation.Target;
  * <p>
  *     Additionally, one may specify some entry points to only be called in a specific mod loader or only on the client or only on the server.
  * </p>
- * <p>
- *     Example usage:
- *     <pre>
- *         {@code @ModEntryPoint}
- *         public static void initialize() {
- *             REGISTRY.register();
- *         }
- *     </pre>
- *     <pre>
- *         {@code @ModEntryPoint(side = ModEntryPoint.Side.CLIENT)}
- *         public static void initializeClient() {
- *             ....
- *         }
- *     </pre>
- * </p>
+ * <pre>
+ *     {@code @ModEntryPoint}
+ *     public static void initialize() {
+ *         REGISTRY.register();
+ *     }
+ * </pre>
+ * <pre>
+ *     {@code @ModEntryPoint(side = ModEntryPoint.Side.CLIENT)}
+ *     public static void initializeClient() {
+ *         ...
+ *     }
+ * </pre>
  * <p>
  *     For custom entry points see {@link FabricCustomEntryPoint}.
  * </p>

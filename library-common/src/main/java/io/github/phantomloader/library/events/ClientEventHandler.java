@@ -35,17 +35,14 @@ public interface ClientEventHandler {
      *     Method called when items can be added to a creative tab.
      *     Items can be added by calling {@link Consumer#accept(Object)} on the given consumer if the given {@link ResourceKey} matches the desired creative tab.
      * </p>
-     * <p>
-     *     Example usage:
-     *     <pre>
-     *         {@code @Override}
-     *         public void addItemsToCreativeTab(ResourceKey<CreativeModeTab> resourceKey, Consumer<Supplier<? extends ItemLike>> event) {
-     *             if(resourceKey.equals(CreativeTabUtils.BUILDING_BLOCKS) {
-     *                 event.accept(ExampleMod.MY_BLOCK);
-     *             }
+     * <pre>
+     *     {@code @Override}
+     *     public void addItemsToCreativeTab(ResourceKey resourceKey, Consumer event) {
+     *         if(resourceKey.equals(CreativeTabUtils.BUILDING_BLOCKS) {
+     *             event.accept(ExampleMod.MY_BLOCK);
      *         }
-     *     </pre>
-     * </p>
+     *     }
+     * </pre>
      * <p>
      *     See {@link CreativeTabsUtils} for helper functions about creative tabs.
      * </p>
@@ -62,15 +59,12 @@ public interface ClientEventHandler {
      *     Method called when a block entity renderer can be registered.
      *     Renderers can be added by calling {@link RegisterBlockEntityRenderersEvent#register(BlockEntityType, BlockEntityRendererProvider)}.
      * </p>
-     * <p>
-     *     Example usage:
-     *     <pre>
-     *         {@code @Override}
-     *         public void registerBlockEntityRenderers(RegisterBlockEntityRenderersEvent event) {
-     *             event.register(ExampleMod.CHEST_BLOCK_ENTITY, ChestRenderer::new);
-     *         }
-     *     </pre>
-     * </p>
+     * <pre>
+     *     {@code @Override}
+     *     public void registerBlockEntityRenderers(RegisterBlockEntityRenderersEvent event) {
+     *         event.register(ExampleMod.CHEST_BLOCK_ENTITY, ChestRenderer::new);
+     *     }
+     * </pre>
      *
      * @param event Wraps a Forge or a Fabric event.
      */
@@ -83,15 +77,12 @@ public interface ClientEventHandler {
      *     Method called when an entity renderer can be registered.
      *     Renderers can be added by calling {@link RegisterEntityRenderersEvent#register(EntityType, EntityRendererProvider)}.
      * </p>
-     * <p>
-     *     Example usage:
-     *     <pre>
-     *         {@code @Override}
-     *         public void registerEntityRenderers(RegisterEntityRenderersEvent event) {
-     *             event.register(ExampleMod.MY_ENTITY, MyEntityRenderer::new);
-     *         }
-     *     </pre>
-     * </p>
+     * <pre>
+     *     {@code @Override}
+     *     public void registerEntityRenderers(RegisterEntityRenderersEvent event) {
+     *         event.register(ExampleMod.MY_ENTITY, MyEntityRenderer::new);
+     *     }
+     * </pre>
      *
      * @param event Wraps a Forge or a Fabric event.
      */
@@ -104,15 +95,12 @@ public interface ClientEventHandler {
      *     Method called when a block can be added to a render layer type.
      *     This can be used to implement translucent or transparent blocks.
      * </p>
-     * <p>
-     *     Example usage:
-     *     <pre>
-     *         {@code @Override}
-     *         public void registerBlockRenderType(BiConsumer<Supplier<? extends Block>, RenderType> consumer) {
-     *             consumer.accept(ExampleMod.CUSTOM_VINES, RenderType.cutout());
-     *         }
-     *     </pre>
-     * </p>
+     * <pre>
+     *     {@code @Override}
+     *     public void registerBlockRenderType(BiConsumer consumer) {
+     *         consumer.accept(ExampleMod.CUSTOM_VINES, RenderType.cutout());
+     *     }
+     * </pre>
      * <p>
      *     Note that this method is only called in Fabric.
      *     For Forge, an additional {@code "render_type"} field should be added to the block's model json file.
