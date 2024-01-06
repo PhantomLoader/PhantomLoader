@@ -3,7 +3,7 @@ plugins {
 }
 
 base {
-    archivesName = 'processor'
+    archivesName = 'processor-common'
 }
 
 dependencies {

@@ -4,7 +4,7 @@ plugins {
 }
 
 base {
-    archivesName = 'library'
+    archivesName = 'library-common'
 }
 
 minecraft {

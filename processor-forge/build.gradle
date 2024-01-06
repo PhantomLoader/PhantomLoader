@@ -1,57 +1,13 @@
 plugins {
-    id 'idea'
-    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
+    id 'java'
 }
 
 base {
     archivesName = 'processor-forge'
 }
 
-minecraft {
-    mappings channel: 'official', version: minecraftVersion
-}
-
-repositories {
-    mavenCentral()
-}
-
 dependencies {
     // Common module
     implementation project(':library-common')
     implementation project(':processor-common')
-    // Test dependencies
-    minecraft "net.minecraftforge:forge:${minecraftVersion}-${forgeVersion}"
-    testImplementation platform("org.junit:junit-bom:${junitVersion}")
-    testImplementation 'org.junit.jupiter:junit-jupiter'
-    testImplementation "com.google.testing.compile:compile-testing:${googleCompileTestingVersion}"
-}
-
-tasks.withType(JavaCompile).configureEach {
-    source project(":processor-common").sourceSets.main.allSource
-}
-
-processResources {
-    from project(":processor-common").sourceSets.main.resources
-}
-
-test {
-    // Use Junit test
-    useJUnitPlatform()
-    // Workaround for google compile testing
-    jvmArgs '--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED'
-    jvmArgs '--add-exports=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED'
-    jvmArgs '--add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED'
-    // Annotation processor options used for testing
-    systemProperty 'forgeVersion', forgeVersion
-    systemProperty 'phantomVersion', phantomVersion
-    systemProperty 'minecraftVersion', minecraftVersion
-    systemProperty 'modId', 'test'
-    systemProperty 'modGroupId', 'com.example'
-    systemProperty 'modVersion', '1.0'
-    systemProperty 'modName', 'Example Mod'
-    systemProperty 'modLicense', 'MIT'
-    systemProperty 'modAuthors', 'TestAuthor1, TestAuthor2, TestAuthor3'
-    systemProperty 'modDescription', 'This mod was created from a unit test'
-    systemProperty 'modUrl', 'https://example.com'
-    systemProperty 'modSource', 'https://github.com'
 }

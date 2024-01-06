@@ -4,7 +4,7 @@ subprojects {
     apply plugin: 'maven-publish'
 
     group = 'io.github.phantomloader'
-    version = '20.1.0'
+    version = phantomVersion
 
     java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
@@ -73,6 +73,10 @@ subprojects {
                 }
             }
         }
+    }
+
+    tasks.withType(GenerateModuleMetadata).configureEach {
+        enabled = false
     }
 
     signing {

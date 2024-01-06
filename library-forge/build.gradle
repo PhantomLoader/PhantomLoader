@@ -22,8 +22,6 @@ minecraft {
     }
 }
 
-sourceSets.main.resources.srcDir 'src/generated/resources'
-
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraftVersion}-${forgeVersion}"
     implementation project(':library-common')
