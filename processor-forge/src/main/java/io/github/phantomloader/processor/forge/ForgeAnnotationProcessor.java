@@ -30,30 +30,21 @@ public class ForgeAnnotationProcessor extends ModAnnotationProcessor {
         String packageName = this.processingEnv.getOptions().get("modGroupId") + "." + modId.toLowerCase().replace("_", "") + ".forge";
         try(PrintWriter writer = new PrintWriter(this.processingEnv.getFiler().createSourceFile(packageName + ".ForgeInitializer").openWriter())) {
             writer.println("package " + packageName + ";");
-            writer.println("import net.minecraftforge.common.MinecraftForge;");
-            writer.println("import net.minecraftforge.fml.common.Mod;");
-            if(this.annotatedMethods.containsKey(ModEntryPoint.Side.CLIENT) || this.annotatedMethods.containsKey(ModEntryPoint.Side.SERVER)) {
-                writer.println("import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;");
-                writer.println("import net.minecraftforge.eventbus.api.IEventBus;");
-            }
-            if(this.annotatedMethods.containsKey(ModEntryPoint.Side.CLIENT)) {
-                writer.println("import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;");
-            }
-            if(this.annotatedMethods.containsKey(ModEntryPoint.Side.SERVER)) {
-                writer.println("import net.minecraftforge.fml.event.lifecycle.FMLDedicatedServerSetupEvent;");
-            }
-            writer.println("@Mod(\"" + modId + "\")");
+            writer.println("@net.minecraftforge.fml.common.Mod(\"" + modId + "\")");
             writer.println("public class ForgeInitializer {");
             writer.println("    public ForgeInitializer() {");
-            if(this.annotatedMethods.containsKey(ModEntryPoint.Side.COMMON)) {
-                for(Element method : this.annotatedMethods.get(ModEntryPoint.Side.COMMON)) {
+            if(this.annotatedMethods.containsKey(ModEntryPoint.Side.INIT)) {
+                for(Element method : this.annotatedMethods.get(ModEntryPoint.Side.INIT)) {
                     String methodClass = method.getEnclosingElement().getSimpleName().toString();
                     String methodPackage = this.processingEnv.getElementUtils().getPackageOf(method).getQualifiedName().toString();
                     writer.println("        " + methodPackage + "." + methodClass + "." + method.getSimpleName() + "();");
                 }
             }
-            if(this.annotatedMethods.containsKey(ModEntryPoint.Side.CLIENT) || this.annotatedMethods.containsKey(ModEntryPoint.Side.SERVER)) {
-                writer.println("        IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();");
+            if(this.annotatedMethods.containsKey(ModEntryPoint.Side.COMMON) || this.annotatedMethods.containsKey(ModEntryPoint.Side.CLIENT) || this.annotatedMethods.containsKey(ModEntryPoint.Side.SERVER)) {
+                writer.println("        net.minecraftforge.eventbus.api.IEventBus eventBus = net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext.get().getModEventBus();");
+                if(this.annotatedMethods.containsKey(ModEntryPoint.Side.COMMON)) {
+                    writer.println("        eventBus.addListener(this::commonSetup);");
+                }
                 if(this.annotatedMethods.containsKey(ModEntryPoint.Side.CLIENT)) {
                     writer.println("        eventBus.addListener(this::clientSetup);");
                 }
@@ -61,10 +52,21 @@ public class ForgeAnnotationProcessor extends ModAnnotationProcessor {
                     writer.println("        eventBus.addListener(this::serverSetup);");
                 }
             }
-            writer.println("        MinecraftForge.EVENT_BUS.register(this);");
+            writer.println("        net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(this);");
             writer.println("    }");
+            if(this.annotatedMethods.containsKey(ModEntryPoint.Side.COMMON)) {
+                writer.println("    private void commonSetup(net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent setupEvent) {");
+                writer.println("        setupEvent.enqueueWork(() -> {");
+                for(Element method : this.annotatedMethods.get(ModEntryPoint.Side.COMMON)) {
+                    String methodClass = method.getEnclosingElement().getSimpleName().toString();
+                    String methodPackage = this.processingEnv.getElementUtils().getPackageOf(method).getQualifiedName().toString();
+                    writer.println("            " + methodPackage + "." + methodClass + "." + method.getSimpleName() + "();");
+                }
+                writer.println("        });");
+                writer.println("    }");
+            }
             if(this.annotatedMethods.containsKey(ModEntryPoint.Side.CLIENT)) {
-                writer.println("    private void clientSetup(final FMLClientSetupEvent setupEvent) {");
+                writer.println("    private void clientSetup(net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent setupEvent) {");
                 writer.println("        setupEvent.enqueueWork(() -> {");
                 for(Element method : this.annotatedMethods.get(ModEntryPoint.Side.CLIENT)) {
                     String methodClass = method.getEnclosingElement().getSimpleName().toString();
@@ -75,7 +77,7 @@ public class ForgeAnnotationProcessor extends ModAnnotationProcessor {
                 writer.println("    }");
             }
             if(this.annotatedMethods.containsKey(ModEntryPoint.Side.SERVER)) {
-                writer.println("    private void serverSetup(final FMLDedicatedServerSetupEvent setupEvent) {");
+                writer.println("    private void serverSetup(net.minecraftforge.fml.event.lifecycle.FMLDedicatedServerSetupEvent setupEvent) {");
                 writer.println("        setupEvent.enqueueWork(() -> {");
                 for(Element method : this.annotatedMethods.get(ModEntryPoint.Side.SERVER)) {
                     String methodClass = method.getEnclosingElement().getSimpleName().toString();

@@ -109,7 +109,7 @@ public class ForgeConfigBuilder implements ConfigBuilder {
      */
     private static ModConfig.Type typeFromSide(ModEntryPoint.Side side) {
         return switch (side) {
-            case COMMON -> ModConfig.Type.COMMON;
+            case INIT, COMMON -> ModConfig.Type.COMMON;
             case CLIENT -> ModConfig.Type.CLIENT;
             case SERVER -> ModConfig.Type.SERVER;
         };

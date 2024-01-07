@@ -61,12 +61,12 @@ public @interface ModEntryPoint {
      *     It is advised to keep client and common entry point methods in separate classes to avoid loading classes that are not needed on one side.
      * </p>
      * <p>
-     *     Default: {@link Side#COMMON}.
+     *     Default: {@link Side#INIT}.
      * </p>
      *
      * @return Whether this method should only be called on the client, on the server, or in the common setup
      */
-    Side side() default Side.COMMON;
+    Side side() default Side.INIT;
 
     /**
      * <p>
@@ -94,11 +94,21 @@ public @interface ModEntryPoint {
     enum Side {
         /**
          * <p>
-         *     Indicates the common setup.
+         *     Indicates the mod's initialization phase.
          * </p>
          * <ul>
          *     <li>In Forge, indicates the constructor of the class with the {@code net.minecraftforge.fml.common.Mod} annotation.</li>
          *     <li>In Fabric, indicates a class that implements the {@code net.fabricmc.api.ModInitializer} interface.</li>
+         * </ul>
+         */
+        INIT,
+        /**
+         * <p>
+         *     Indicates the common setup.
+         * </p>
+         * <ul>
+         *     <li>In Forge, indicates the {@code net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent} event.</li>
+         *     <li>In Fabric, indicates a class that implements the {@code net.fabricmc.api.ModInitializer} interface, but after {@link Side#INIT}.</li>
          * </ul>
          */
         COMMON,
