@@ -53,7 +53,7 @@ tasks.register('publishCurseForge', TaskPublishCurseForge) {
         changelogType = 'markdown'
         changelog = changelogText
         releaseType = 'release'
-        displayName = modName + ' - ' + modVersion + ' Forge'
+        displayName = 'Phantom Library - ' + phantomVersion + ' Forge'
         addGameVersion minecraftVersion
         addModLoader 'Forge'
     }
@@ -62,8 +62,8 @@ tasks.register('publishCurseForge', TaskPublishCurseForge) {
 modrinth {
     token = System.getenv('MODRINTH_TOKEN')
     projectId = 'phantom-loader'
-    versionNumber = modVersion
-    versionName = modName + ' - ' + modVersion + ' Forge'
+    versionNumber = phantomVersion
+    versionName = 'Phantom Library - ' + phantomVersion + ' Forge'
     versionType = 'release'
     uploadFile = jar
     gameVersions = [minecraftVersion]
