@@ -1,0 +1,35 @@
+name: Publish
+on:
+  push:
+    tags:
+      - 'v*'
+jobs:
+  setup:
+    environment: production
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: oracle
+          java-version: 17
+  publishMavenCentral:
+    needs: setup
+    environment: production
+    runs-on: ubuntu-latest
+      - name: Publish Maven Central
+        run: ./gradlew build sign publish
+  publishCurseForge:
+    needs: setup
+    environment: production
+    runs-on: ubuntu-latest
+      - name: Publish CurseForge
+        run: ./gradlew publishCurseForge
+  publishModrinth:
+    needs: setup
+    environment: production
+    runs-on: ubuntu-latest
+      - name: Publish Modrinth
+        run: ./gradlew modrinth

@@ -1,6 +1,10 @@
+import net.darkhax.curseforgegradle.TaskPublishCurseForge
+
 plugins {
     id 'java'
     id 'fabric-loom' version '1.2-SNAPSHOT'
+    id 'net.darkhax.curseforgegradle' version '1.1.15'
+    id 'com.modrinth.minotaur' version '2.+'
 }
 
 base {
@@ -36,5 +40,36 @@ processResources {
 
     filesMatching("fabric.mod.json") {
         expand "version": project.version
+    }
+}
+
+var changelogFile = rootProject.file('changelog.md')
+var changelogText = changelogFile.exists() ? changelogFile.text : ''
+
+tasks.register('publishCurseForge', TaskPublishCurseForge) {
+    apiToken = System.getenv('CURSEFORGE_TOKEN')
+    upload('958545', jar) {
+        changelogType = 'markdown'
+        changelog = changelogText
+        releaseType = 'release'
+        displayName = modName + ' - ' + modVersion + ' Fabric'
+        addRequirement 'fabric-api'
+        addModLoader 'Fabric'
+        addGameVersion minecraftVersion
+    }
+}
+
+modrinth {
+    token = System.getenv('MODRINTH_TOKEN')
+    projectId = 'phantom-loader'
+    versionNumber = modVersion
+    versionName = modName + ' - ' + modVersion + ' Fabric'
+    versionType = 'release'
+    uploadFile = remapJar
+    gameVersions = [minecraftVersion]
+    loaders = ['fabric']
+    changelog = changelogText
+    dependencies {
+        required.project 'fabric-api'
     }
 }

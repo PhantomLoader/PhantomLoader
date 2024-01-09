@@ -1,6 +1,10 @@
+import net.darkhax.curseforgegradle.TaskPublishCurseForge
+
 plugins {
     id 'idea'
     id 'net.minecraftforge.gradle' version '[6.0,6.2)'
+    id 'net.darkhax.curseforgegradle' version '1.1.15'
+    id 'com.modrinth.minotaur' version '2.+'
 }
 
 base {
@@ -38,4 +42,31 @@ processResources {
 
 jar {
     finalizedBy 'reobfJar'
+}
+
+var changelogFile = rootProject.file('changelog.md')
+var changelogText = changelogFile.exists() ? changelogFile.text : ''
+
+tasks.register('publishCurseForge', TaskPublishCurseForge) {
+    apiToken = System.getenv('CURSEFORGE_TOKEN')
+    upload('958545', jar) {
+        changelogType = 'markdown'
+        changelog = changelogText
+        releaseType = 'release'
+        displayName = modName + ' - ' + modVersion + ' Forge'
+        addGameVersion minecraftVersion
+        addModLoader 'Forge'
+    }
+}
+
+modrinth {
+    token = System.getenv('MODRINTH_TOKEN')
+    projectId = 'phantom-loader'
+    versionNumber = modVersion
+    versionName = modName + ' - ' + modVersion + ' Forge'
+    versionType = 'release'
+    uploadFile = jar
+    gameVersions = [minecraftVersion]
+    loaders = ['forge']
+    changelog = changelogText
 }
