@@ -19,17 +19,20 @@ jobs:
     needs: setup
     environment: production
     runs-on: ubuntu-latest
+    steps:
       - name: Publish Maven Central
         run: ./gradlew build sign publish
   publishCurseForge:
     needs: setup
     environment: production
     runs-on: ubuntu-latest
+    steps:
       - name: Publish CurseForge
         run: ./gradlew publishCurseForge
   publishModrinth:
     needs: setup
     environment: production
     runs-on: ubuntu-latest
+    steps:
       - name: Publish Modrinth
         run: ./gradlew modrinth
