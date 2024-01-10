@@ -5,7 +5,6 @@ import io.github.phantomloader.library.events.RegisterBlockEntityRenderersEvent;
 import io.github.phantomloader.library.events.RegisterEntityRenderersEvent;
 import io.github.phantomloader.library.events.RegisterParticlesEvent;
 import io.github.phantomloader.library.fabric.renderers.BlockEntityItemRenderer;
-import io.github.phantomloader.library.utils.CreativeTabsUtils;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
@@ -20,6 +19,8 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -39,7 +40,9 @@ public class FabricClientInitializer implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         ServiceLoader.load(ClientEventHandler.class).forEach(handler -> {
-            CreativeTabsUtils.allTabKeys().forEach(resourceKey -> handler.addItemsToCreativeTab(resourceKey, item -> ItemGroupEvents.modifyEntriesEvent(resourceKey).register(listener -> listener.accept(item.get()))));
+            for(CreativeModeTab creativeModeTab : CreativeModeTabs.allTabs()) {
+                ItemGroupEvents.modifyEntriesEvent(creativeModeTab).register(listener -> handler.addItemsToCreativeTab(creativeModeTab, item -> listener.accept(item.get())));
+            }
             handler.registerBlockEntityRenderers(new RegisterBlockEntityRenderersEventFabric());
             handler.registerEntityRenderers(new RegisterEntityRenderersEventFabric());
             handler.registerBlockRenderType((block, renderType) -> BlockRenderLayerMap.INSTANCE.putBlock(block.get(), renderType));

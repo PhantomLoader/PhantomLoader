@@ -7,7 +7,6 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.effect.MobEffect;
@@ -17,11 +16,12 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -39,7 +39,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
 import org.apache.commons.lang3.function.TriFunction;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.function.BiFunction;
@@ -136,16 +135,6 @@ public class ForgeRegistry extends ModRegistry {
     public <T extends BlockEntity> Supplier<BlockEntityType<T>> registerBlockEntity(String name, BiFunction<BlockPos, BlockState, T> blockEntity, Set<Supplier<? extends Block>> blocks) {
         // Block entity types must be created here because BlockEntityType.BlockEntitySupplier has private access in the common module
         return this.getRegister(ForgeRegistries.BLOCK_ENTITY_TYPES).register(name, () -> BlockEntityType.Builder.of(blockEntity::apply, blocks.stream().map(Supplier::get).toArray(Block[]::new)).build(null));
-    }
-
-    @Override
-    public Supplier<CreativeModeTab> registerCreativeTab(String name, Supplier<? extends ItemLike> icon, Component title, Collection<Supplier<? extends ItemLike>> items) {
-        return this.getRegister(Registries.CREATIVE_MODE_TAB).register(name, () -> CreativeModeTab.builder()
-                .title(title)
-                .icon(() -> new ItemStack(icon.get()))
-                .displayItems((params, output) -> items.forEach(item -> output.accept(item.get())))
-                .build()
-        );
     }
 
     @Override

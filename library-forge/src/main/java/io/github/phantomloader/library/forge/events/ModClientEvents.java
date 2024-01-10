@@ -15,7 +15,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
-import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
+import net.minecraftforge.event.CreativeModeTabEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -42,9 +42,9 @@ public class ModClientEvents {
      * @param event Forge event.
      */
     @SubscribeEvent
-    public static void creativeTabEvent(BuildCreativeModeTabContentsEvent event) {
+    public static void creativeTabEvent(CreativeModeTabEvent.BuildContents event) {
         for(ClientEventHandler handler : HANDLERS) {
-            handler.addItemsToCreativeTab(event.getTabKey(), event::accept);
+            handler.addItemsToCreativeTab(event.getTab(), event::accept);
         }
     }
 

@@ -1,15 +1,14 @@
 package io.github.phantomloader.library.utils;
 
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CreativeModeTabs;
 
-import java.util.stream.Stream;
+import java.lang.reflect.Field;
 
 /**
  * <p>
- *     Utility class used to store {@link CreativeModeTab} keys.
+ *     Utility class used to store a reference to creative mod tabs.
+ *     Needed because they have private access in {@link CreativeModeTabs}.
  * </p>
  *
  * @author Nico
@@ -17,59 +16,40 @@ import java.util.stream.Stream;
 public class CreativeTabsUtils {
 
     /** Building blocks creative tab */
-    public static final ResourceKey<CreativeModeTab> BUILDING_BLOCKS = createKey("building_blocks");
+    public static final CreativeModeTab BUILDING_BLOCKS = getTab("BUILDING_BLOCKS");
     /** Colored blocks creative tab */
-    public static final ResourceKey<CreativeModeTab> COLORED_BLOCKS = createKey("colored_blocks");
-    /** Natural block creative tab */
-    public static final ResourceKey<CreativeModeTab> NATURAL_BLOCKS = createKey("natural_blocks");
+    public static final CreativeModeTab COLORED_BLOCKS = getTab("COLORED_BLOCKS");
+    /** Natural blocks creative tab */
+    public static final CreativeModeTab NATURAL_BLOCKS = getTab("NATURAL_BLOCKS");
     /** Functional blocks creative tab */
-    public static final ResourceKey<CreativeModeTab> FUNCTIONAL_BLOCKS = createKey("functional_blocks");
+    public static final CreativeModeTab FUNCTIONAL_BLOCKS = getTab("FUNCTIONAL_BLOCKS");
     /** Redstone blocks creative tab */
-    public static final ResourceKey<CreativeModeTab> REDSTONE_BLOCKS = createKey("redstone_blocks");
-    /** Tools and utilities creative tab */
-    public static final ResourceKey<CreativeModeTab> TOOLS_AND_UTILITIES = createKey("tools_and_utilities");
+    public static final CreativeModeTab REDSTONE_BLOCKS = getTab("REDSTONE_BLOCKS");
+    /** Tools and items creative tab */
+    public static final CreativeModeTab TOOLS_AND_UTILITIES = getTab("TOOLS_AND_UTILITIES");
     /** Combat creative tab */
-    public static final ResourceKey<CreativeModeTab> COMBAT = createKey("combat");
+    public static final CreativeModeTab COMBAT = getTab("COMBAT");
     /** Food and potions creative tab */
-    public static final ResourceKey<CreativeModeTab> FOOD_AND_DRINKS = createKey("food_and_drinks");
+    public static final CreativeModeTab FOOD_AND_DRINKS = getTab("FOOD_AND_DRINKS");
     /** Materials creative tab */
-    public static final ResourceKey<CreativeModeTab> INGREDIENTS = createKey("ingredients");
+    public static final CreativeModeTab INGREDIENTS = getTab("INGREDIENTS");
     /** Spawn eggs creative tab */
-    public static final ResourceKey<CreativeModeTab> SPAWN_EGGS = createKey("spawn_eggs");
+    public static final CreativeModeTab SPAWN_EGGS = getTab("SPAWN_EGGS");
 
     /**
      * <p>
-     *     Creates a {@link ResourceKey} for a vanilla creative mode tab.
+     *     Gets the creative tab using reflection.
      * </p>
      *
-     * @param name Tab key name.
-     * @return The requested resource key.
+     * @param variableName Variable name
+     * @return The creative tab
      */
-    public static ResourceKey<CreativeModeTab> createKey(String name) {
-        return ResourceKey.create(Registries.CREATIVE_MODE_TAB, new ResourceLocation(name));
-    }
-
-    /**
-     * <p>
-     *     Creates a {@link ResourceKey} for a modded creative mode tab.
-     * </p>
-     *
-     * @param modId The mod id of the mod.
-     * @param name Tab key name.
-     * @return The requested resource key.
-     */
-    public static ResourceKey<CreativeModeTab> createKey(String modId, String name) {
-        return ResourceKey.create(Registries.CREATIVE_MODE_TAB, new ResourceLocation(modId, name));
-    }
-
-    /**
-     * <p>
-     *     Returns a {@link Stream} of all the vanilla creative tabs listed in {@link CreativeTabsUtils}.
-     * </p>
-     *
-     * @return A {@code Stream} of creative tab resource keys.
-     */
-    public static Stream<ResourceKey<CreativeModeTab>> allTabKeys() {
-        return Stream.of(BUILDING_BLOCKS, COLORED_BLOCKS, NATURAL_BLOCKS, FUNCTIONAL_BLOCKS, REDSTONE_BLOCKS, TOOLS_AND_UTILITIES, COMBAT, FOOD_AND_DRINKS, INGREDIENTS, SPAWN_EGGS);
+    private static CreativeModeTab getTab(String variableName) {
+        try {
+            Field field = CreativeModeTabs.class.getDeclaredField(variableName);
+            return (CreativeModeTab) field.get(null);
+        } catch(NoSuchFieldException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

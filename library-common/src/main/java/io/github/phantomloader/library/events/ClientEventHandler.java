@@ -1,10 +1,8 @@
 package io.github.phantomloader.library.events;
 
-import io.github.phantomloader.library.utils.CreativeTabsUtils;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.level.ItemLike;
@@ -33,24 +31,21 @@ public interface ClientEventHandler {
     /**
      * <p>
      *     Method called when items can be added to a creative tab.
-     *     Items can be added by calling {@link Consumer#accept(Object)} on the given consumer if the given {@link ResourceKey} matches the desired creative tab.
+     *     Items can be added by calling {@link Consumer#accept(Object)} on the given consumer if the given {@link CreativeModeTab} matches the desired one.
      * </p>
      * <pre>
      *     {@code @Override}
-     *     public void addItemsToCreativeTab(ResourceKey resourceKey, Consumer event) {
-     *         if(resourceKey.equals(CreativeTabUtils.BUILDING_BLOCKS) {
+     *     public void addItemsToCreativeTab(CreativeModeTab creativeTab, Consumer event) {
+     *         if(resourceKey.equals(CreativeTabsUtils.BUILDING_BLOCKS) {
      *             event.accept(ExampleMod.MY_BLOCK);
      *         }
      *     }
      * </pre>
-     * <p>
-     *     See {@link CreativeTabsUtils} for helper functions about creative tabs.
-     * </p>
      *
-     * @param resourceKey The creative tab's resource key.
+     * @param creativeTab The creative tab.
      * @param event Use {@code event.accept(ExampleMod.MY_ITEM)} to add an item to this creative tab.
      */
-    default void addItemsToCreativeTab(ResourceKey<CreativeModeTab> resourceKey, Consumer<Supplier<? extends ItemLike>> event) {
+    default void addItemsToCreativeTab(CreativeModeTab creativeTab, Consumer<Supplier<? extends ItemLike>> event) {
 
     }
 

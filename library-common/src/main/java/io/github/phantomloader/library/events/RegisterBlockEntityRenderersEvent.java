@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
@@ -40,7 +41,7 @@ public interface RegisterBlockEntityRenderersEvent {
      *     Note that this method is only implemented in Fabric. In Forge, item renderers are registered by Forge's {@code IClientItemExtensions} hook.
      * </p>
      *
-     * @param block A supplier returning the relevant registered block, the one returned by {@link ModRegistry#registerBlock(String)}.
+     * @param block A supplier returning the relevant registered block, the one returned by {@link ModRegistry#registerBlock(String, BlockBehaviour.Properties)}.
      */
     default void registerItemRenderer(Supplier<? extends Block> block) {
 
