@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[47,)"
+loaderVersion="[49,)"
 license="Apache-2.0 license"
 issueTrackerURL="https://github.com/PhantomLoader/PhantomLoader/issues"
 
@@ -17,12 +17,12 @@ description="A library to automate part of the process of creating mods for mult
 [[dependencies.phantom]]
     modId="forge"
     mandatory=true
-    versionRange="[47,)"
+    versionRange="[49,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.phantom]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.20.1,1.21)"
+    versionRange="[1.20.3,1.21)"
     ordering="NONE"
     side="BOTH"

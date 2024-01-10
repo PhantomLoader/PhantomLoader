@@ -223,7 +223,7 @@ public abstract class ModRegistry {
 
     /**
      * <p>
-     *     Registers a {@link Block} with the same properties as the given one using {@link BlockBehaviour.Properties#copy(BlockBehaviour)}.
+     *     Registers a {@link Block} with the same properties as the given one using {@link BlockBehaviour.Properties#ofFullCopy(BlockBehaviour)}.
      * </p>
      * <p>
      *     Useful for creating blocks that have many variants such as bricks, cracked bricks, mossy bricks etc.
@@ -235,12 +235,12 @@ public abstract class ModRegistry {
      * @see ModRegistry#registerBlockVariantAndItem(String, Supplier)
      */
     public Supplier<Block> registerBlockVariant(String name, Supplier<? extends Block> base) {
-        return this.registerBlock(name, () -> new Block(BlockBehaviour.Properties.copy(base.get())));
+        return this.registerBlock(name, () -> new Block(BlockBehaviour.Properties.ofFullCopy(base.get())));
     }
 
     /**
      * <p>
-     *     Registers a {@link Block} with the same properties as the given one using {@link BlockBehaviour.Properties#copy(BlockBehaviour)}.
+     *     Registers a {@link Block} with the same properties as the given one using {@link BlockBehaviour.Properties#ofFullCopy(BlockBehaviour)}.
      *     The block to register is created using the given {@link Function} as a constructor.
      * </p>
      * <p>
@@ -254,12 +254,12 @@ public abstract class ModRegistry {
      * @param <T> The block's class.
      */
     public  <T extends Block> Supplier<T> registerBlockVariant(String name, Function<BlockBehaviour.Properties, T> constructor, Supplier<? extends Block> base) {
-        return this.registerBlock(name, () -> constructor.apply(BlockBehaviour.Properties.copy(base.get())));
+        return this.registerBlock(name, () -> constructor.apply(BlockBehaviour.Properties.ofFullCopy(base.get())));
     }
 
     /**
      * <p>
-     *     Registers a {@link Block} with the same properties as the given one using {@link BlockBehaviour.Properties#copy(BlockBehaviour)} and an {@link Item}.
+     *     Registers a {@link Block} with the same properties as the given one using {@link BlockBehaviour.Properties#ofFullCopy(BlockBehaviour)} and an {@link Item}.
      * </p>
      * <p>
      *     Useful for creating blocks that have many variants such as bricks, cracked bricks, mossy bricks etc.
@@ -271,12 +271,12 @@ public abstract class ModRegistry {
      * @see ModRegistry#registerBlockVariant(String, Supplier)
      */
     public Supplier<Block> registerBlockVariantAndItem(String name, Supplier<? extends Block> base) {
-        return this.registerBlockAndItem(name, () -> new Block(BlockBehaviour.Properties.copy(base.get())));
+        return this.registerBlockAndItem(name, () -> new Block(BlockBehaviour.Properties.ofFullCopy(base.get())));
     }
 
     /**
      * <p>
-     *     Registers a {@link Block} with the same properties as the given one using {@link BlockBehaviour.Properties#copy(BlockBehaviour)} and an {@link Item}.
+     *     Registers a {@link Block} with the same properties as the given one using {@link BlockBehaviour.Properties#ofFullCopy(BlockBehaviour)} and an {@link Item}.
      *     The block to register is created using the given {@link Function} as a constructor.
      * </p>
      * <p>
@@ -290,7 +290,7 @@ public abstract class ModRegistry {
      * @param <T> The block's class.
      */
     public  <T extends Block> Supplier<T> registerBlockVariantAndItem(String name, Function<BlockBehaviour.Properties, T> constructor, Supplier<? extends Block> base) {
-        return this.registerBlockAndItem(name, () -> constructor.apply(BlockBehaviour.Properties.copy(base.get())));
+        return this.registerBlockAndItem(name, () -> constructor.apply(BlockBehaviour.Properties.ofFullCopy(base.get())));
     }
 
     /**
