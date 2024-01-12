@@ -20,6 +20,8 @@ jobs:
     environment: production
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
       - name: Publish Maven Central
         run: ./gradlew build sign publish
   publishCurseForge:
@@ -27,6 +29,8 @@ jobs:
     environment: production
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
       - name: Publish CurseForge
         run: ./gradlew publishCurseForge
   publishModrinth:
@@ -34,5 +38,7 @@ jobs:
     environment: production
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
       - name: Publish Modrinth
         run: ./gradlew modrinth
