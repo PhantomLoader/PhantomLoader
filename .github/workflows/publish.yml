@@ -16,6 +16,11 @@ jobs:
           distribution: oracle
           java-version: 17
       - name: Publish
+        env:
+          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+          ORG_GRADLE_PROJECT_signingKey: ${{ secrets.GPG_KEY }}
+          ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.GPG_PASSWORD }}
         run: ./gradlew build sign publish
   publishCurseForge:
     environment: production
@@ -29,6 +34,8 @@ jobs:
           distribution: oracle
           java-version: 17
       - name: Publish
+        env:
+          CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
         run: ./gradlew publishCurseForge
   publishModrinth:
     environment: production
@@ -42,4 +49,6 @@ jobs:
           distribution: oracle
           java-version: 17
       - name: Publish
+        env:
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
         run: ./gradlew modrinth
