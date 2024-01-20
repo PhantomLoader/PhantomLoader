@@ -33,6 +33,16 @@ minecraft {
                 }
             }
         }
+        server {
+            workingDirectory project.file('../.minecraft')
+            ideaModule "${rootProject.name}.${project.name}.main"
+            mods {
+                modServerRun {
+                    source sourceSets.main
+                    source project(':library-common').sourceSets.main
+                }
+            }
+        }
     }
 }
 
