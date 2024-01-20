@@ -1,11 +1,14 @@
 plugins {
+    // Java plugin
     id 'java'
 }
 
 base {
+    // Archive name for the common annotation processor module
     archivesName = 'processor-common'
 }
 
 dependencies {
+    // The annotation processor needs to access the annotation
     implementation project(':library-common')
 }
