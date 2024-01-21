@@ -70,8 +70,8 @@ subprojects {
                             name = "Sonatype"
                             url = 'https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/'
                             credentials {
-                                username = ossrhUsername
-                                password = ossrhPassword
+                                username = System.getenv('OSSRH_USERNAME')
+                                password = System.getenv('OSSRH_PASSWORD')
                             }
                         }
                     }
@@ -87,6 +87,9 @@ subprojects {
 
     // Code signing
     signing {
+        def signingKey = findProperty('signingKey')
+        def signingPassword = findProperty('signingPassword')
+        useInMemoryPgpKeys(signingKey, signingPassword)
         sign publishing.publications.maven
     }
 }
