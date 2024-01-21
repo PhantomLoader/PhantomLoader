@@ -1,25 +1,23 @@
 import net.darkhax.curseforgegradle.TaskPublishCurseForge
 
 plugins {
-    id 'java'
+    // Idea plugin
+    id 'idea'
+    // Fabric plugin
     id 'fabric-loom' version '1.2-SNAPSHOT'
+    // CurseForge publishing
     id 'net.darkhax.curseforgegradle' version '1.1.15'
+    // Modrinth publishing
     id 'com.modrinth.minotaur' version '2.+'
 }
 
 base {
+    // Archive name for the fabric mod
     archivesName = 'library-fabric'
 }
 
-dependencies {
-    minecraft "com.mojang:minecraft:${minecraftVersion}"
-    mappings loom.officialMojangMappings()
-    modImplementation "net.fabricmc:fabric-loader:${fabricVersion}"
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabricApiVersion}+${minecraftVersion}"
-    implementation project(':library-common')
-}
-
 loom {
+    // Fabric run configurations
     runs {
         client {
             client()
@@ -27,12 +25,32 @@ loom {
             runDir("../.minecraft")
         }
     }
+    // Add the common module to the classpath to allow fabric to find resources
+    mods {
+        phantom {
+            sourceSet sourceSets.main
+            sourceSet project(':library-common').sourceSets.main
+        }
+    }
 }
 
+dependencies {
+    // Minecraft dependency
+    minecraft "com.mojang:minecraft:${minecraftVersion}"
+    mappings loom.officialMojangMappings()
+    // Fabric loader and api dependency
+    modImplementation "net.fabricmc:fabric-loader:${fabricVersion}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabricApiVersion}+${minecraftVersion}"
+    // Common module dependency
+    compileOnly project(':library-common')
+}
+
+// Copy sources from the common module
 tasks.withType(JavaCompile).configureEach {
     source project(':library-common').sourceSets.main.allSource
 }
 
+// Copy resources from the common module and write the mod's version to fabric.mod.json
 processResources {
     from project(':library-common').sourceSets.main.resources
 
@@ -43,9 +61,11 @@ processResources {
     }
 }
 
+// Read the changelog
 var changelogFile = rootProject.file('changelog.md')
 var changelogText = changelogFile.exists() ? changelogFile.text : ''
 
+// Publish to CurseForge
 tasks.register('publishCurseForge', TaskPublishCurseForge) {
     apiToken = System.getenv('CURSEFORGE_TOKEN')
     upload('958545', jar) {
@@ -55,10 +75,11 @@ tasks.register('publishCurseForge', TaskPublishCurseForge) {
         displayName = 'Phantom Library - ' + phantomVersion + ' Fabric'
         addRequirement 'fabric-api'
         addModLoader 'Fabric'
-        addGameVersion minecraftVersion
+        addGameVersion supportedMinecraftVersions.split(',')
     }
 }
 
+// Publish to Modrinth
 modrinth {
     token = System.getenv('MODRINTH_TOKEN')
     projectId = 'phantom-loader'
@@ -66,7 +87,7 @@ modrinth {
     versionName = 'Phantom Library - ' + phantomVersion + ' Fabric'
     versionType = 'release'
     uploadFile = remapJar
-    gameVersions = [minecraftVersion]
+    gameVersions = supportedMinecraftVersions.split(',')
     loaders = ['fabric']
     changelog = changelogText
     dependencies {

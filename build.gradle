@@ -3,11 +3,14 @@ subprojects {
     apply plugin: 'signing'
     apply plugin: 'maven-publish'
 
+    // Group id and mod version
     group = 'io.github.phantomloader'
     version = phantomVersion
 
+    // Mojang ships Java 17 to end users in 1.18+
     java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
+    // Jar manifest attributes
     jar {
         manifest {
             attributes([
@@ -22,11 +25,13 @@ subprojects {
         }
     }
 
+    // Sources and javadoc jars
     java {
         withJavadocJar()
         withSourcesJar()
     }
 
+    // Maven central publication
     publishing {
         publications {
             maven(MavenPublication) {
@@ -75,10 +80,12 @@ subprojects {
         }
     }
 
+    // The metadata includes mapped dependencies which are not reasonably consumable by other mod developers.
     tasks.withType(GenerateModuleMetadata).configureEach {
         enabled = false
     }
 
+    // Code signing
     signing {
         def signingKey = findProperty('signingKey')
         def signingPassword = findProperty('signingPassword')
