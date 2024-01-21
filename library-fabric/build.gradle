@@ -75,7 +75,7 @@ tasks.register('publishCurseForge', TaskPublishCurseForge) {
         displayName = 'Phantom Library - ' + phantomVersion + ' Fabric'
         addRequirement 'fabric-api'
         addModLoader 'Fabric'
-        addGameVersion minecraftVersion
+        addGameVersion supportedMinecraftVersions.split(',')
     }
 }
 
@@ -87,7 +87,7 @@ modrinth {
     versionName = 'Phantom Library - ' + phantomVersion + ' Fabric'
     versionType = 'release'
     uploadFile = remapJar
-    gameVersions = [minecraftVersion]
+    gameVersions = supportedMinecraftVersions.split(',')
     loaders = ['fabric']
     changelog = changelogText
     dependencies {
