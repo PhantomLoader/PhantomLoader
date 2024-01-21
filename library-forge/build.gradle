@@ -89,7 +89,7 @@ modrinth {
     versionName = 'Phantom Library - ' + phantomVersion + ' Forge'
     versionType = 'release'
     uploadFile = jar
-    gameVersions = minecraftVersion
+    gameVersions = [minecraftVersion]
     loaders = ['forge']
     changelog = changelogText
 }

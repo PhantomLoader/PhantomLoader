@@ -87,7 +87,7 @@ modrinth {
     versionName = 'Phantom Library - ' + phantomVersion + ' Fabric'
     versionType = 'release'
     uploadFile = remapJar
-    gameVersions = minecraftVersion
+    gameVersions = [minecraftVersion]
     loaders = ['fabric']
     changelog = changelogText
     dependencies {
