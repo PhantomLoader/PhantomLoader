@@ -159,7 +159,7 @@ public class FabricAnnotationProcessor extends ModAnnotationProcessor {
                 writer.println("  ],");
             }
             writer.println("  \"depends\": {");
-            writer.println("    \"phantom\": \"~" + this.processingEnv.getOptions().get("phantomVersion") + "\",");
+            writer.println("    \"phantom\": \"^" + this.processingEnv.getOptions().get("phantomVersion") + "\",");
             writer.println("    \"fabricloader\": \">=" + this.processingEnv.getOptions().get("fabricVersion") + "\",");
             writer.println("    \"minecraft\": \"~" + this.processingEnv.getOptions().get("minecraftVersion") + "\",");
             writer.println("    \"java\": \">=17\"");

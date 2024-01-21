@@ -1,18 +1,25 @@
 import net.darkhax.curseforgegradle.TaskPublishCurseForge
 
 plugins {
+    // Idea plugin
     id 'idea'
+    // Forge gradle plugin
     id 'net.minecraftforge.gradle' version '[6.0,6.2)'
+    // CurseForge publishing
     id 'net.darkhax.curseforgegradle' version '1.1.15'
+    // Modrinth publishing
     id 'com.modrinth.minotaur' version '2.+'
 }
 
 base {
+    // Archive name for the forge mod
     archivesName = 'library-forge'
 }
 
 minecraft {
+    // Minecraft version
     mappings channel: 'official', version: minecraftVersion
+    // Forge run configurations
     runs {
         client {
             workingDirectory project.file('../.minecraft')
@@ -20,6 +27,17 @@ minecraft {
             mods {
                 modClientRun {
                     source sourceSets.main
+                    source project(':library-common').sourceSets.main
+                }
+            }
+        }
+        server {
+            workingDirectory project.file('../.minecraft')
+            ideaModule "${rootProject.name}.${project.name}.main"
+            mods {
+                modServerRun {
+                    source sourceSets.main
+                    source project(':library-common').sourceSets.main
                 }
             }
         }
@@ -27,26 +45,30 @@ minecraft {
 }
 
 dependencies {
+    // Minecraft forge dependency
     minecraft "net.minecraftforge:forge:${minecraftVersion}-${forgeVersion}"
-    implementation project(':library-common')
-    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+    // Common module dependency
+    compileOnly project(':library-common')
 }
 
+// Copy sources from the common module
 tasks.withType(JavaCompile).configureEach {
     source project(':library-common').sourceSets.main.allSource
 }
 
+// Copy resources from the common module
 processResources {
     from project(':library-common').sourceSets.main.resources
 }
 
-jar {
-    finalizedBy 'reobfJar'
-}
+// Re-obfuscate the jar
+jar.finalizedBy('reobfJar')
 
+// Read the changelog
 var changelogFile = rootProject.file('changelog.md')
 var changelogText = changelogFile.exists() ? changelogFile.text : ''
 
+// Publish to CurseForge
 tasks.register('publishCurseForge', TaskPublishCurseForge) {
     apiToken = System.getenv('CURSEFORGE_TOKEN')
     upload('958545', jar) {
@@ -59,6 +81,7 @@ tasks.register('publishCurseForge', TaskPublishCurseForge) {
     }
 }
 
+// Publish to Modrinth
 modrinth {
     token = System.getenv('MODRINTH_TOKEN')
     projectId = 'phantom-loader'
@@ -66,7 +89,7 @@ modrinth {
     versionName = 'Phantom Library - ' + phantomVersion + ' Forge'
     versionType = 'release'
     uploadFile = jar
-    gameVersions = [minecraftVersion]
+    gameVersions = minecraftVersion
     loaders = ['forge']
     changelog = changelogText
 }
