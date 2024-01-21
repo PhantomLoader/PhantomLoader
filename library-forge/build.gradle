@@ -78,8 +78,9 @@ tasks.register('publishCurseForge', TaskPublishCurseForge) {
         changelog = changelogText
         releaseType = 'release'
         displayName = 'Phantom Library - ' + phantomVersion + ' Forge'
-        addGameVersion supportedMinecraftVersions.split(',')
         addModLoader 'Forge'
+        addGameVersion minecraftVersion
+        addGameVersion '1.20.4'
     }
 }
 
@@ -91,7 +92,7 @@ modrinth {
     versionName = 'Phantom Library - ' + phantomVersion + ' Forge'
     versionType = 'release'
     uploadFile = jar
-    gameVersions = supportedMinecraftVersions.split(',')
+    gameVersions = [minecraftVersion, '1.20.4']
     loaders = ['forge']
     changelog = changelogText
 }
